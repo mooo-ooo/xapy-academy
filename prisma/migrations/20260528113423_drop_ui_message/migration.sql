@@ -5,4 +5,4 @@
 
 */
 -- DropTable
-DROP TABLE `uimessage`;
+DROP TABLE `UiMessage`;

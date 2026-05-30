@@ -1,9 +1,9 @@
 -- AlterTable
-ALTER TABLE `sitesetting` ADD COLUMN `allowSelfSignup` BOOLEAN NOT NULL DEFAULT true,
+ALTER TABLE `SiteSetting` ADD COLUMN `allowSelfSignup` BOOLEAN NOT NULL DEFAULT true,
     ADD COLUMN `signupRequiresApproval` BOOLEAN NOT NULL DEFAULT true;
 
 -- AlterTable
-ALTER TABLE `user` ADD COLUMN `emailVerified` DATETIME(3) NULL,
+ALTER TABLE `User` ADD COLUMN `emailVerified` DATETIME(3) NULL,
     ADD COLUMN `image` VARCHAR(191) NULL,
     MODIFY `passwordHash` VARCHAR(191) NULL;
 

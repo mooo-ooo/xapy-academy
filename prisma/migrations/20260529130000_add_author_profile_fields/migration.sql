@@ -1,5 +1,5 @@
 -- AlterTable
-ALTER TABLE `user` ADD COLUMN `bio` TEXT NULL,
+ALTER TABLE `User` ADD COLUMN `bio` TEXT NULL,
     ADD COLUMN `jobTitle` VARCHAR(191) NULL,
     ADD COLUMN `knowsAbout` JSON NULL,
     ADD COLUMN `sameAs` JSON NULL,
