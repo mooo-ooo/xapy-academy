@@ -1,0 +1,51 @@
+# Production stack: MySQL 8 + the Next.js app.
+#
+#   cp .env.example .env   # set AUTH_SECRET, SITE_URL, MYSQL_* (see below)
+#   docker compose up -d --build
+#
+# The app image runs `prisma migrate deploy` on start (entrypoint), then
+# `next start`. To create the first admin on first boot, set SEED_ON_START=true
+# in .env (the generated password is printed once in the app logs).
+
+services:
+  db:
+    image: mysql:8
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-change-me-root}
+      MYSQL_DATABASE: academy
+      MYSQL_USER: academy
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-change-me}
+    command:
+      - "--character-set-server=utf8mb4"
+      - "--collation-server=utf8mb4_unicode_ci"
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test:
+        ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-p${MYSQL_ROOT_PASSWORD:-change-me-root}"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+
+  app:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      # Point at the db service; overrides DATABASE_URL from .env.
+      DATABASE_URL: "mysql://academy:${MYSQL_PASSWORD:-change-me}@db:3306/academy"
+      NODE_ENV: production
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    volumes:
+      # Persist admin-uploaded images across restarts.
+      - uploads:/app/public/uploads
+
+volumes:
+  db_data:
+  uploads:

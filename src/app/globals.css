@@ -1,0 +1,411 @@
+@import "tailwindcss";
+@plugin "tailwindcss-animate";
+
+/* Dark mode = class strategy (next-themes) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---------------------------------------------------------------
+ * Design tokens — extracted from https://kiyotaka.ai/academy/
+ * via tools/extract-tokens.ts (Playwright). Do not invent values;
+ * if a token is missing, re-run the extractor and add it here.
+ * --------------------------------------------------------------- */
+
+:root {
+  /* Light theme (derived — target site is dark-first; light is our addition) */
+  --background: 0 0% 100%;
+  --surface: 240 5% 96%;
+  --foreground: 240 6% 10%;
+  --muted-foreground: 240 4% 46%;
+  --border: 240 5% 88%;
+  --border-strong: 240 5% 80%;
+  /* Semantic surfaces — adapt per theme so components don't hardcode
+     dark rgba() values. card = panel/card fill, card-hover = elevated /
+     hover state, inset = input/well bg, hover = faint interaction wash,
+     overlay = scrim behind badges/modals. */
+  --card: 0 0% 100%;
+  --card-hover: 240 5% 96%;
+  --inset: 0 0% 100%;
+  --hover: 240 6% 10% / 0.05;
+  --overlay: 0 0% 0% / 0.5;
+  --brand: 22 100% 50%;          /* #ff6a00 */
+  --brand-light: 27 100% 75%;    /* #ffb380 */
+  --brand-dark: 27 100% 30%;     /* #994000 */
+  --accent-emerald: 160 84% 39%; /* emerald-500 */
+}
+
+.dark {
+  /* Dark theme = source-of-truth values from kiyotaka.ai computed styles */
+  --background: 0 4% 5%;         /* #0e0d0d  page bg */
+  --surface: 240 6% 10%;         /* zinc-900 */
+  --surface-elev: 240 6% 10%;    /* rgba(24,24,27,.9) — applied via /90 utility */
+  --foreground: 240 5% 90%;      /* rgb(228,228,231) zinc-200 */
+  --muted-foreground: 240 5% 65%;/* rgb(161,161,170) zinc-400 */
+  --border: 0 0% 100% / 0.07;    /* #ffffff12 */
+  --border-strong: 0 0% 100% / 0.12;
+  --card: 240 6% 10% / 0.5;        /* rgba(24,24,27,.5) */
+  --card-hover: 240 6% 10% / 0.85; /* elevated / hover */
+  --inset: 0 4% 5% / 0.6;          /* rgba(9,9,11,.6) input well */
+  --hover: 0 0% 100% / 0.05;       /* faint white wash */
+  --overlay: 0 0% 0% / 0.6;
+  --brand: 22 100% 50%;
+  --brand-light: 27 100% 75%;
+  --brand-dark: 27 100% 30%;
+  --accent-emerald: 160 84% 39%;
+}
+
+@theme inline {
+  /* Map HSL tokens to Tailwind v4 color utilities */
+  --color-background: hsl(var(--background));
+  --color-surface: hsl(var(--surface));
+  --color-surface-elev: hsl(var(--surface-elev));
+  --color-foreground: hsl(var(--foreground));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-border: hsl(var(--border));
+  --color-border-strong: hsl(var(--border-strong));
+  --color-card: hsl(var(--card));
+  --color-card-hover: hsl(var(--card-hover));
+  --color-inset: hsl(var(--inset));
+  --color-overlay: hsl(var(--overlay));
+  --color-brand: hsl(var(--brand));
+  --color-brand-light: hsl(var(--brand-light));
+  --color-brand-dark: hsl(var(--brand-dark));
+  --color-accent-emerald: hsl(var(--accent-emerald));
+
+  /* Typography stacks — header uses Apple system font, body uses Tailwind default */
+  --font-system:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+
+  /* Type scale — exact values from extractor */
+  --text-hero: 72px;
+  --text-hero--line-height: 64.8px;
+  --text-hero--letter-spacing: -3.6px;
+
+  --text-subtitle: 22.4px;
+  --text-subtitle--line-height: 36.4px;
+  --text-subtitle--letter-spacing: 0.6px;
+
+  --text-nav: 14px;
+  --text-nav--line-height: 21px;
+  --text-nav--letter-spacing: 0.6px;
+
+  --text-input: 16px;
+  --text-input--line-height: 24px;
+  --text-input--letter-spacing: 0.4px;
+
+  --text-mono-xs: 12px;
+  --text-mono-xs--line-height: 18px;
+  --text-mono-xs--letter-spacing: 0.6px;
+
+  /* Shadows — from extracted search box shadow */
+  --shadow-search:
+    rgba(0, 0, 0, 0.1) 0px 20px 25px -5px,
+    rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+
+  /* Animations */
+  --animate-fade-in-up: fade-in-up 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  --animate-text-shine: text-shine 8s linear infinite;
+  --animate-pulse-slow: pulse-slow 8s ease-in-out infinite;
+  --animate-fade-in: fade-in 0.8s ease-out forwards;
+  --animate-gradient-shift: gradient-shift 3s infinite;
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes text-shine {
+  from { background-position: 0% center; }
+  to   { background-position: 200% center; }
+}
+@keyframes pulse-slow {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.8; }
+}
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0%   center; opacity: 0;   }
+  50%      { background-position: 100% center; opacity: 0.5; }
+}
+
+/* ---------------------------------------------------------------
+ * Explore Topics modal (Radix Dialog) open/close transitions —
+ * overlay fades, content fades + zooms from 96% with a slight lift.
+ * Matches the kiyotaka.ai modal feel. Radix keeps the node mounted
+ * through the `-closed` animation via animationend.
+ * --------------------------------------------------------------- */
+@keyframes dialog-overlay-in  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes dialog-overlay-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes dialog-content-in {
+  from { opacity: 0; transform: translate(-50%, -50%) scale(0.96); }
+  to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+@keyframes dialog-content-out {
+  from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  to   { opacity: 0; transform: translate(-50%, -50%) scale(0.96); }
+}
+.dialog-overlay[data-state="open"]  { animation: dialog-overlay-in 200ms ease-out; }
+.dialog-overlay[data-state="closed"] { animation: dialog-overlay-out 160ms ease-in; }
+.dialog-content[data-state="open"]  { animation: dialog-content-in 220ms cubic-bezier(0.16, 1, 0.3, 1); }
+.dialog-content[data-state="closed"] { animation: dialog-content-out 160ms ease-in; }
+@media (prefers-reduced-motion: reduce) {
+  .dialog-overlay[data-state],
+  .dialog-content[data-state] { animation: none; }
+}
+
+/* ---------------------------------------------------------------
+ * Loading skeletons — mirrors kiyotaka.ai's `skeleton-shimmer`.
+ * `.skeleton-block` is a static placeholder fill; `.skeleton-shimmer`
+ * adds the sweeping highlight on top.
+ * --------------------------------------------------------------- */
+@keyframes skeleton-sweep {
+  from { background-position: -200% 0; }
+  to   { background-position: 200% 0; }
+}
+.skeleton-block {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+}
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.04) 25%,
+    rgba(255, 255, 255, 0.10) 37%,
+    rgba(255, 255, 255, 0.04) 63%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-sweep 1.4s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-shimmer { animation: none; }
+}
+
+/* Base resets */
+html {
+  color-scheme: dark;
+  /* Always reserve the scrollbar gutter. Prevents the horizontal jolt
+     when navigating between a tall page and a short one. */
+  scrollbar-gutter: stable;
+}
+
+/* Radix (Select / DropdownMenu / Dialog / Popover modal) lock body
+   scroll via react-remove-scroll, which adds `margin-right: <scrollbar>px`
+   to <body> to compensate for the scrollbar it hides. But we already
+   reserve that space with `scrollbar-gutter: stable`, so the extra
+   margin double-counts and visibly shoves the whole page sideways on
+   every open/close. Neutralise it with a higher-specificity selector
+   (html body … beats the library's body[…]) — the overflow:hidden lock
+   itself is untouched, so scrolling is still suppressed while open. */
+html body[data-scroll-locked] {
+  margin-right: 0 !important;
+  padding-right: 0 !important;
+}
+body {
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  /* `--font-inter` is provided by next/font (root layout); fall back
+     to the Apple system stack used by the original target site. */
+  font-family: var(--font-inter), var(--font-system);
+  font-feature-settings: "rlig" 1, "calt" 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Hero robot illustration — animation values from the live site
+   (kiyotaka.ai/academy) via tools/extract-live-hero-svg.ts. */
+@keyframes robot-blink {
+  0%, 96%, 100% { transform: scaleY(1); }
+  98%           { transform: scaleY(0.1); }
+}
+@keyframes robot-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+@keyframes robot-rise {
+  0%   { opacity: 0; transform: translateY(0); }
+  20%  { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-40px); }
+}
+@keyframes robot-scan-opacity {
+  0%, 100% { opacity: 0.2; }
+  50%      { opacity: 0.5; }
+}
+@keyframes robot-antenna-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.5; }
+}
+@keyframes robot-glow-pulse {
+  0%, 100% { opacity: 0.1; }
+  50%      { opacity: 0.2; }
+}
+
+.robot-learning-svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(rgba(255, 255, 255, 0.05) 0 0 50px);
+}
+
+/* `stop-color="currentColor"` inherits from CSS `color` on the stop. */
+.robot-glow-stop   { color: rgb(255, 255, 255); }
+.robot-body-stop-1 { color: rgb(24, 24, 27); }
+.robot-body-stop-2 { color: rgb(9, 9, 11); }
+
+.robot-glow-circle { animation: robot-glow-pulse 8s ease-in-out infinite; }
+
+.robot-book-group  { animation: robot-float 5s ease-in-out infinite; }
+.robot-book-shadow { fill: rgba(0, 0, 0, 0.9); filter: blur(1.5rem); }
+.robot-book-cover  { fill: rgb(24, 24, 27); }
+.robot-book-pages  { fill: rgb(212, 212, 216); }
+.robot-book-spine  { fill: rgb(82, 82, 91); }
+.robot-book-line   { stroke: rgb(113, 113, 122); stroke-width: 1.5; }
+
+.robot-neck      { fill: rgb(9, 9, 11); }
+.robot-body      { stroke: rgb(39, 39, 42); stroke-width: 3; }
+.robot-arm-left,
+.robot-arm-right { fill: rgb(39, 39, 42); }
+.robot-screen    { fill: rgb(0, 0, 0); }
+
+.robot-eyes {
+  animation: robot-blink 4s ease infinite;
+  transform-origin: 200px 190px;
+}
+.robot-eye {
+  fill: rgb(255, 255, 255);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.9));
+}
+
+.robot-antenna     { stroke: rgb(39, 39, 42); stroke-width: 2; }
+.robot-antenna-tip {
+  animation: robot-antenna-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  fill: rgb(113, 113, 122);
+}
+
+.robot-scan-beam {
+  animation: robot-scan-opacity 2s ease-in-out infinite;
+  fill: rgba(255, 255, 255, 0.1);
+}
+
+.robot-particle {
+  animation: robot-rise 3s linear infinite;
+  fill: rgb(113, 113, 122);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .robot-glow-circle,
+  .robot-book-group,
+  .robot-eyes,
+  .robot-antenna-tip,
+  .robot-scan-beam,
+  .robot-particle { animation: none; }
+  .robot-particle { opacity: 0.6; }
+}
+
+/* ---------------------------------------------------------------
+ * Article body styling — applied to MDX output via .prose-academy.
+ * Server-rendered, no JS dependency. Mirrors the calm long-form
+ * reading aesthetic of kiyotaka.ai.
+ * --------------------------------------------------------------- */
+.prose-academy {
+  font-size: 17px;
+  line-height: 1.75;
+  color: hsl(var(--foreground));
+}
+.prose-academy > * + * { margin-top: 1.25em; }
+.prose-academy h2 {
+  margin-top: 2.5em;
+  margin-bottom: 0.6em;
+  padding-bottom: 0.5em;
+  font-size: 1.6em;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  scroll-margin-top: 100px;
+  /* Subtle horizontal rule under section headings — matches the
+     kiyotaka detail page's `border-bottom` on each H2. */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.prose-academy h3 {
+  margin-top: 2em;
+  margin-bottom: 0.5em;
+  font-size: 1.25em;
+  font-weight: 600;
+  scroll-margin-top: 100px;
+}
+.prose-academy p { color: hsl(var(--foreground)); }
+.prose-academy a {
+  color: hsl(var(--accent-emerald));
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+.prose-academy a:hover { text-decoration-thickness: 2px; }
+.prose-academy strong { color: hsl(var(--foreground)); font-weight: 600; }
+.prose-academy code:not(pre code) {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 0.15em 0.4em;
+  border-radius: 6px;
+  font-size: 0.9em;
+  font-family: var(--font-mono);
+}
+.prose-academy pre {
+  background: rgba(0, 0, 0, 0.4) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 18px 20px;
+  overflow-x: auto;
+  font-size: 0.9em;
+  line-height: 1.6;
+}
+.prose-academy pre code {
+  background: transparent;
+  padding: 0;
+  font-family: var(--font-mono);
+}
+.prose-academy ul, .prose-academy ol {
+  padding-left: 1.4em;
+  list-style-position: outside;
+}
+.prose-academy ul { list-style: disc; }
+.prose-academy ol { list-style: decimal; }
+.prose-academy li { margin: 0.4em 0; }
+.prose-academy blockquote {
+  border-left: 3px solid hsl(var(--accent-emerald));
+  padding-left: 1em;
+  color: hsl(var(--muted-foreground));
+  font-style: italic;
+}
+.prose-academy hr {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 3em 0;
+}
+.prose-academy table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95em;
+}
+.prose-academy th, .prose-academy td {
+  padding: 0.6em 0.8em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: left;
+}
+.prose-academy th { font-weight: 600; }
+.prose-academy img {
+  border-radius: 12px;
+  max-width: 100%;
+  height: auto;
+}
+.prose-academy figure { margin: 1.5em 0; }
+.prose-academy figcaption {
+  text-align: center;
+  font-size: 0.85em;
+  color: hsl(var(--muted-foreground));
+  margin-top: 0.5em;
+}

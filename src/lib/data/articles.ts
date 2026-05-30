@@ -1,0 +1,465 @@
+import { cache } from "react";
+import { prisma } from "@/lib/db";
+import type { Locale } from "@/i18n/routing";
+import {
+  computeReadingTimeMinutes,
+  countWordsInMdx,
+} from "@/lib/reading-time";
+
+export type Difficulty = "BEGINNER" | "INTERMEDIATE" | "ADVANCED";
+
+export type ArticleListItem = {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string | null;
+  coverImage: string | null;
+  publishedAt: Date | null;
+  locale: Locale;
+  moduleSlug: string;
+  moduleName: string;
+  difficulty: Difficulty;
+  likeCount: number;
+  readingTimeMinutes: number;
+  author: { name: string | null; email: string };
+  /** True when the rendered translation locale differs from the
+   *  requested locale (e.g. /vi page falling back to an EN-only
+   *  article). Card surfaces a small "EN" tag in that case. */
+  isFallback: boolean;
+};
+
+const ARTICLE_LIST_SELECT = {
+  id: true,
+  coverImage: true,
+  publishedAt: true,
+  difficulty: true,
+  likeCount: true,
+  sourceLocale: true,
+  module: {
+    select: {
+      slug: true,
+      translations: { select: { locale: true, name: true } },
+    },
+  },
+  author: { select: { name: true, email: true } },
+  translations: {
+    where: { status: "PUBLISHED" as const },
+    select: {
+      slug: true,
+      title: true,
+      excerpt: true,
+      bodyMdx: true,
+      publishedAt: true,
+      locale: true,
+    },
+  },
+} as const;
+
+type ArticleListRow = {
+  id: string;
+  coverImage: string | null;
+  publishedAt: Date | null;
+  difficulty: Difficulty;
+  likeCount: number;
+  sourceLocale: string;
+  module: {
+    slug: string;
+    translations: Array<{ locale: string; name: string }>;
+  };
+  author: { name: string | null; email: string };
+  translations: Array<{
+    slug: string;
+    title: string;
+    excerpt: string | null;
+    bodyMdx: string;
+    publishedAt: Date | null;
+    locale: string;
+  }>;
+};
+
+function moduleNameFor(
+  translations: Array<{ locale: string; name: string }>,
+  locale: Locale,
+): string {
+  return (
+    translations.find((t) => t.locale === locale)?.name ??
+    translations.find((t) => t.locale === "en")?.name ??
+    translations[0]?.name ??
+    ""
+  );
+}
+
+/**
+ * Pick the translation to render for a list card. Mirrors the
+ * fallback rule used by `loadArticleForReading`:
+ *   1) requested locale (if PUBLISHED translation exists)
+ *   2) article.sourceLocale (the original — usually `en`)
+ *   3) any PUBLISHED translation
+ */
+function pickListTranslation(
+  row: ArticleListRow,
+  locale: Locale,
+): ArticleListRow["translations"][number] | null {
+  return (
+    row.translations.find((t) => t.locale === locale) ??
+    row.translations.find((t) => t.locale === row.sourceLocale) ??
+    row.translations[0] ??
+    null
+  );
+}
+
+function toListItem(row: ArticleListRow, locale: Locale): ArticleListItem | null {
+  const tr = pickListTranslation(row, locale);
+  if (!tr) return null;
+  return {
+    id: row.id,
+    slug: tr.slug,
+    title: tr.title,
+    excerpt: tr.excerpt,
+    coverImage: row.coverImage,
+    publishedAt: tr.publishedAt ?? row.publishedAt,
+    locale: tr.locale as Locale,
+    moduleSlug: row.module.slug,
+    moduleName: moduleNameFor(row.module.translations, locale),
+    difficulty: row.difficulty,
+    likeCount: row.likeCount,
+    readingTimeMinutes: computeReadingTimeMinutes(tr.bodyMdx),
+    author: row.author,
+    isFallback: tr.locale !== locale,
+  };
+}
+
+/** Published articles in a module, ordered newest first.
+ *  Falls back to the article's sourceLocale (EN) when the requested
+ *  locale has no PUBLISHED translation yet. */
+export const listPublishedArticlesInModule = cache(
+  async (moduleId: string, locale: Locale): Promise<ArticleListItem[]> => {
+    const rows = await prisma.article.findMany({
+      where: {
+        status: "PUBLISHED",
+        moduleId,
+        translations: { some: { status: "PUBLISHED" } },
+      },
+      select: ARTICLE_LIST_SELECT,
+      orderBy: { publishedAt: "desc" },
+    });
+    return rows
+      .map((r) => toListItem(r as unknown as ArticleListRow, locale))
+      .filter((x): x is ArticleListItem => x !== null);
+  },
+);
+
+/** Most recent N published articles across all modules (for landing). */
+export const listLatestArticles = cache(
+  async (locale: Locale, limit = 12): Promise<ArticleListItem[]> => {
+    const rows = await prisma.article.findMany({
+      where: {
+        status: "PUBLISHED",
+        translations: { some: { status: "PUBLISHED" } },
+      },
+      select: ARTICLE_LIST_SELECT,
+      orderBy: { publishedAt: "desc" },
+      take: limit,
+    });
+    return rows
+      .map((r) => toListItem(r as unknown as ArticleListRow, locale))
+      .filter((x): x is ArticleListItem => x !== null);
+  },
+);
+
+/* ---------------------------------------------------------------
+ * Cursor-based pagination (keyset on publishedAt + id) for infinite
+ * scroll. Mirrors the live site's `?cursor=&limit=12` shape. The
+ * cursor string is `<publishedAt-ms-base36>:<id>` — opaque to the
+ * client. Returning `nextCursor: null` signals the feed is exhausted.
+ * --------------------------------------------------------------- */
+export type ArticleFeedPage = {
+  items: ArticleListItem[];
+  nextCursor: string | null;
+};
+type ArticleCursor = { publishedAt: Date; id: string };
+
+function encodeArticleCursor(item: ArticleListItem | null): string | null {
+  if (!item) return null;
+  const ms = item.publishedAt ? item.publishedAt.getTime() : 0;
+  return `${ms.toString(36)}:${item.id}`;
+}
+
+function decodeArticleCursor(raw: string | null | undefined): ArticleCursor | null {
+  if (!raw) return null;
+  const idx = raw.indexOf(":");
+  if (idx <= 0) return null;
+  const ms = parseInt(raw.slice(0, idx), 36);
+  const id = raw.slice(idx + 1);
+  if (!Number.isFinite(ms) || !id) return null;
+  return { publishedAt: new Date(ms), id };
+}
+
+function cursorWhereClause(c: ArticleCursor | null) {
+  if (!c) return {};
+  // Keyset: (publishedAt, id) DESC — strict-less by publishedAt OR
+  // equal publishedAt with strict-less id. Stable across pages.
+  return {
+    OR: [
+      { publishedAt: { lt: c.publishedAt } },
+      { AND: [{ publishedAt: c.publishedAt }, { id: { lt: c.id } }] },
+    ],
+  };
+}
+
+const FEED_ORDER = [{ publishedAt: "desc" as const }, { id: "desc" as const }];
+
+export async function listLatestArticlesPage(
+  locale: Locale,
+  opts: { cursor?: string | null; limit?: number } = {},
+): Promise<ArticleFeedPage> {
+  const limit = Math.min(50, Math.max(1, opts.limit ?? 12));
+  const cursor = decodeArticleCursor(opts.cursor);
+  const rows = await prisma.article.findMany({
+    where: {
+      status: "PUBLISHED",
+      translations: { some: { status: "PUBLISHED" } },
+      ...cursorWhereClause(cursor),
+    },
+    select: ARTICLE_LIST_SELECT,
+    orderBy: FEED_ORDER,
+    take: limit + 1,
+  });
+  const hasMore = rows.length > limit;
+  const slice = hasMore ? rows.slice(0, limit) : rows;
+  const items = slice
+    .map((r) => toListItem(r as unknown as ArticleListRow, locale))
+    .filter((x): x is ArticleListItem => x !== null);
+  return {
+    items,
+    nextCursor: hasMore ? encodeArticleCursor(items[items.length - 1] ?? null) : null,
+  };
+}
+
+export async function listPublishedArticlesInModulePage(
+  moduleId: string,
+  locale: Locale,
+  opts: { cursor?: string | null; limit?: number } = {},
+): Promise<ArticleFeedPage> {
+  const limit = Math.min(50, Math.max(1, opts.limit ?? 12));
+  const cursor = decodeArticleCursor(opts.cursor);
+  const rows = await prisma.article.findMany({
+    where: {
+      status: "PUBLISHED",
+      moduleId,
+      translations: { some: { status: "PUBLISHED" } },
+      ...cursorWhereClause(cursor),
+    },
+    select: ARTICLE_LIST_SELECT,
+    orderBy: FEED_ORDER,
+    take: limit + 1,
+  });
+  const hasMore = rows.length > limit;
+  const slice = hasMore ? rows.slice(0, limit) : rows;
+  const items = slice
+    .map((r) => toListItem(r as unknown as ArticleListRow, locale))
+    .filter((x): x is ArticleListItem => x !== null);
+  return {
+    items,
+    nextCursor: hasMore ? encodeArticleCursor(items[items.length - 1] ?? null) : null,
+  };
+}
+
+export type LoadedArticle = {
+  id: string;
+  moduleId: string;
+  moduleSlug: string;
+  moduleName: string;
+  authorId: string;
+  authorName: string;
+  /** Public author-profile slug, or null when the author has none. */
+  authorSlug: string | null;
+  /** Author avatar URL (OAuth) for Person.image, or null. */
+  authorImage: string | null;
+  sourceLocale: Locale;
+  /** Locale actually rendered — may differ from requested if fallback. */
+  renderedLocale: Locale;
+  /** True if the renderedLocale ≠ requestedLocale (display a banner). */
+  isFallback: boolean;
+  slug: string;
+  title: string;
+  excerpt: string | null;
+  bodyMdx: string;
+  metaTitle: string | null;
+  metaDescription: string | null;
+  ogImage: string | null;
+  publishedAt: Date | null;
+  /** Real last-edit timestamp of the rendered translation (Article schema dateModified). */
+  updatedAt: Date | null;
+  coverImage: string | null;
+  difficulty: Difficulty;
+  likeCount: number;
+  /** Localized tag names → Article.keywords. */
+  keywords: string[];
+  /** Reading time of the rendered translation (→ Article.timeRequired). */
+  readingTimeMinutes: number;
+  /** Word count of the rendered translation (→ Article.wordCount). */
+  wordCount: number;
+  /** Sibling translations that exist (locale → slug) for hreflang/switcher. */
+  alternates: Partial<Record<Locale, string>>;
+};
+
+/**
+ * Load an article + the best translation for the viewer's locale, falling
+ * back to the source locale when needed.
+ *
+ * Returns null if the slug doesn't match any published translation
+ * for either the requested locale OR the fallback source locale.
+ */
+export const loadArticleForReading = cache(
+  async (
+    moduleSlug: string,
+    articleSlug: string,
+    requestedLocale: Locale,
+  ): Promise<LoadedArticle | null> => {
+    // Step 1 — find ANY translation that matches the URL slug, regardless
+    // of locale, so we can resolve the article id even when the user
+    // landed on /en/<vi-slug> or /vi/<en-slug>.
+    const anyMatch = await prisma.articleTranslation.findFirst({
+      where: {
+        slug: articleSlug,
+        status: "PUBLISHED",
+        article: { status: "PUBLISHED", module: { slug: moduleSlug } },
+      },
+      select: { articleId: true },
+    });
+    if (!anyMatch) return null;
+
+    // Step 2 — load the article with ALL its published translations.
+    const article = await prisma.article.findUnique({
+      where: { id: anyMatch.articleId },
+      include: {
+        module: true,
+        author: {
+          select: { name: true, email: true, slug: true, image: true },
+        },
+        tags: { include: { tag: { include: { translations: true } } } },
+        translations: { where: { status: "PUBLISHED" } },
+      },
+    });
+    if (!article || article.status !== "PUBLISHED") return null;
+
+    // Step 3 — pick the translation to render. Prefer requestedLocale,
+    // then sourceLocale, then any.
+    const renderedTr =
+      article.translations.find((t) => t.locale === requestedLocale) ??
+      article.translations.find((t) => t.locale === article.sourceLocale) ??
+      article.translations[0] ??
+      null;
+    if (!renderedTr) return null;
+
+    // Step 4 — module display name for breadcrumb.
+    const [moduleTr, moduleEn] = await Promise.all([
+      prisma.moduleTranslation.findFirst({
+        where: { moduleId: article.moduleId, locale: requestedLocale },
+      }),
+      prisma.moduleTranslation.findFirst({
+        where: { moduleId: article.moduleId, locale: "en" },
+      }),
+    ]);
+    const moduleName =
+      moduleTr?.name ?? moduleEn?.name ?? article.module.slug;
+
+    const alternates: Partial<Record<Locale, string>> = {};
+    for (const sib of article.translations) {
+      alternates[sib.locale as Locale] = sib.slug;
+    }
+
+    // Localized tag names for the rendered locale (→ Article.keywords),
+    // falling back to en then any, then the slug. Deduped, order-stable.
+    const keywords = Array.from(
+      new Set(
+        article.tags.map((at) => {
+          const trs = at.tag.translations;
+          return (
+            trs.find((t) => t.locale === renderedTr.locale)?.name ??
+            trs.find((t) => t.locale === requestedLocale)?.name ??
+            trs.find((t) => t.locale === "en")?.name ??
+            trs[0]?.name ??
+            at.tag.slug
+          );
+        }),
+      ),
+    );
+
+    return {
+      id: article.id,
+      moduleId: article.moduleId,
+      moduleSlug: article.module.slug,
+      moduleName,
+      authorId: article.authorId,
+      authorName: article.author.name ?? article.author.email.split("@")[0],
+      authorSlug: article.author.slug,
+      authorImage: article.author.image,
+      sourceLocale: article.sourceLocale as Locale,
+      renderedLocale: renderedTr.locale as Locale,
+      isFallback: renderedTr.locale !== requestedLocale,
+      slug: renderedTr.slug,
+      title: renderedTr.title,
+      excerpt: renderedTr.excerpt,
+      bodyMdx: renderedTr.bodyMdx,
+      metaTitle: renderedTr.metaTitle,
+      metaDescription: renderedTr.metaDescription,
+      ogImage: renderedTr.ogImage,
+      publishedAt: renderedTr.publishedAt ?? article.publishedAt,
+      updatedAt: renderedTr.updatedAt ?? article.updatedAt,
+      coverImage: article.coverImage,
+      difficulty: article.difficulty,
+      likeCount: article.likeCount,
+      keywords,
+      readingTimeMinutes: computeReadingTimeMinutes(renderedTr.bodyMdx),
+      wordCount: countWordsInMdx(renderedTr.bodyMdx),
+      alternates,
+    };
+  },
+);
+
+/** Published articles authored by a given user, newest first (author page). */
+export const listPublishedArticlesByAuthor = cache(
+  async (authorId: string, locale: Locale): Promise<ArticleListItem[]> => {
+    const rows = await prisma.article.findMany({
+      where: {
+        status: "PUBLISHED",
+        authorId,
+        translations: { some: { status: "PUBLISHED" } },
+      },
+      select: ARTICLE_LIST_SELECT,
+      orderBy: { publishedAt: "desc" },
+    });
+    return rows
+      .map((r) => toListItem(r as unknown as ArticleListRow, locale))
+      .filter((x): x is ArticleListItem => x !== null);
+  },
+);
+
+/** Same module, latest N excluding the given article id.
+ *  Falls back to sourceLocale when the requested locale is missing. */
+export const listRelatedArticles = cache(
+  async (
+    moduleId: string,
+    excludeArticleId: string,
+    locale: Locale,
+    limit = 3,
+  ): Promise<ArticleListItem[]> => {
+    const rows = await prisma.article.findMany({
+      where: {
+        status: "PUBLISHED",
+        moduleId,
+        id: { not: excludeArticleId },
+        translations: { some: { status: "PUBLISHED" } },
+      },
+      select: ARTICLE_LIST_SELECT,
+      orderBy: { publishedAt: "desc" },
+      take: limit,
+    });
+    return rows
+      .map((r) => toListItem(r as unknown as ArticleListRow, locale))
+      .filter((x): x is ArticleListItem => x !== null);
+  },
+);
+

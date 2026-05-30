@@ -1,0 +1,266 @@
+// Kiyotaka Academy — MySQL schema
+// Single source of truth: PLAN.md §3. Update both files together.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  USER
+  CTV
+}
+
+enum ArticleStatus {
+  DRAFT
+  REVIEW
+  PUBLISHED
+  ARCHIVED
+}
+
+enum TranslationStatus {
+  PENDING
+  IN_PROGRESS
+  REVIEW
+  PUBLISHED
+}
+
+enum Difficulty {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+model User {
+  id              String   @id @default(cuid())
+  email           String   @unique
+  /// Nullable so OAuth-only users (Google / Twitter) can exist with no password.
+  passwordHash    String?
+  name            String?
+  /// OAuth profile picture URL (Auth.js writes this on first sign-in).
+  image           String?
+  /// Set on OAuth sign-in / email-token verify. NULL = unverified.
+  emailVerified   DateTime?
+  role            Role     @default(USER)
+  preferredLang   String   @default("en")
+  /// Public author-profile slug (E-E-A-T). NULL = no public /authors page.
+  slug            String?  @unique
+  /// Author bio — Person.description on the profile page + Article author.
+  bio             String?  @db.Text
+  /// Author role/title, e.g. "Senior Markets Analyst" — Person.jobTitle.
+  jobTitle        String?
+  /// External profile URLs (LinkedIn / X / Wikidata) — Person.sameAs (JSON string[]).
+  sameAs          Json?
+  /// Topics the author is expert in — Person.knowsAbout (JSON string[]).
+  knowsAbout      Json?
+  createdById     String?
+  createdBy       User?    @relation("CreatedAccounts", fields: [createdById], references: [id])
+  createdAccounts User[]   @relation("CreatedAccounts")
+  /// Self-signed-up users start with isActive=false until an admin approves.
+  isActive        Boolean  @default(true)
+  translations    ArticleTranslation[]
+  articles        Article[] @relation("AuthoredArticles")
+  likes           ArticleLike[]
+  views           ArticleView[]
+  accounts        Account[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+/// Auth.js OAuth linked accounts (Google, Twitter/X, …).
+/// One row per (provider, user) pair.
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+/// Auth.js verification tokens — used for email magic-link / verify flow.
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model SiteSetting {
+  id                     Int      @id @default(1)
+  publicLocale           String   @default("en")
+  supportedLocales       Json
+  siteName               String   @default("Kiyotaka Academy")
+  tagline                String?  @db.Text
+  logoUrl                String?
+  faviconUrl             String?
+  defaultOgImageUrl      String?
+  defaultMetaDescription String?  @db.Text
+  contactEmail           String?
+  twitterHandle          String?
+  /// Master switch for self-signup (credentials + OAuth). When false,
+  /// /register is hidden and OAuth callbacks for new accounts are blocked.
+  allowSelfSignup        Boolean  @default(true)
+  /// When true (default), newly-registered accounts land with
+  /// isActive=false until an admin approves in /admin/users.
+  signupRequiresApproval Boolean  @default(true)
+  updatedAt              DateTime @updatedAt
+}
+
+model Module {
+  id           String              @id @default(cuid())
+  slug         String              @unique
+  icon         String?
+  sortOrder    Int                 @default(0)
+  isPublic     Boolean             @default(true)
+  translations ModuleTranslation[]
+  articles     Article[]
+  createdAt    DateTime            @default(now())
+}
+
+model ModuleTranslation {
+  id              String  @id @default(cuid())
+  moduleId        String
+  module          Module  @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  locale          String
+  name            String
+  description     String? @db.Text
+  metaTitle       String?
+  metaDescription String? @db.Text
+
+  @@unique([moduleId, locale])
+  @@index([locale])
+}
+
+model Article {
+  id            String        @id @default(cuid())
+  moduleId      String
+  module        Module        @relation(fields: [moduleId], references: [id])
+  authorId      String
+  author        User          @relation("AuthoredArticles", fields: [authorId], references: [id])
+  status        ArticleStatus @default(DRAFT)
+  sourceLocale  String        @default("en")
+  sourceVersion Int           @default(1)
+  coverImage    String?
+  difficulty    Difficulty    @default(BEGINNER)
+  likeCount     Int           @default(0)
+  publishedAt   DateTime?
+  viewCount     Int           @default(0)
+  translations  ArticleTranslation[]
+  tags          ArticleTag[]
+  likes         ArticleLike[]
+  views         ArticleView[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([status, publishedAt])
+  @@index([authorId])
+}
+
+model ArticleLike {
+  userId    String
+  articleId String
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@id([userId, articleId])
+  @@index([articleId])
+  @@index([userId])
+}
+
+/// Per-user reading history. Upserted by the view tracker when the
+/// reader is signed in; one row per (user, article) regardless of how
+/// many times they re-read — `count` tracks reads, `viewedAt` is the
+/// last visit, so we can show "X reads, last viewed N hours ago".
+model ArticleView {
+  userId    String
+  articleId String
+  count     Int      @default(1)
+  viewedAt  DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@id([userId, articleId])
+  @@index([userId, viewedAt])
+  @@index([articleId])
+}
+
+model ArticleTranslation {
+  id                   String              @id @default(cuid())
+  articleId            String
+  article              Article             @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  locale               String
+  slug                 String
+  title                String
+  excerpt              String?             @db.Text
+  bodyMdx              String              @db.LongText
+  bodyHtml             String?             @db.LongText
+  metaTitle            String?
+  metaDescription      String?             @db.Text
+  ogImage              String?
+  translatorId         String?
+  translator           User?               @relation(fields: [translatorId], references: [id])
+  status               TranslationStatus   @default(PENDING)
+  basedOnSourceVersion Int                 @default(1)
+  publishedAt          DateTime?
+  updatedAt            DateTime            @updatedAt
+
+  @@unique([articleId, locale])
+  @@unique([locale, slug])
+  @@index([locale, status])
+  @@fulltext([title, excerpt, bodyMdx])
+}
+
+model Tag {
+  id           String           @id @default(cuid())
+  slug         String           @unique
+  isTrending   Boolean          @default(false)
+  translations TagTranslation[]
+  articles     ArticleTag[]
+}
+
+model TagTranslation {
+  tagId  String
+  locale String
+  name   String
+  tag    Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([tagId, locale])
+}
+
+model ArticleTag {
+  articleId String
+  tagId     String
+  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  tag       Tag     @relation(fields: [tagId], references: [id])
+
+  @@id([articleId, tagId])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  actorId   String
+  action    String
+  target    String?
+  meta      Json?
+  createdAt DateTime @default(now())
+
+  @@index([actorId, createdAt])
+}
