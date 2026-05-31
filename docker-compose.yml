@@ -43,8 +43,10 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      # Persist admin-uploaded images across restarts.
-      - uploads:/app/public/uploads
+      # Persist admin-uploaded images across restarts. Mounted at /app/uploads
+      # (UPLOAD_DIR) — served by app/uploads/[...path]/route.ts, NOT public/
+      # (next start does not serve files added to public/ at runtime).
+      - uploads:/app/uploads
 
 volumes:
   db_data:

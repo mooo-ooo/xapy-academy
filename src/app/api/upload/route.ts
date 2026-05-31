@@ -4,11 +4,14 @@ import { join, extname } from "node:path";
 import { randomBytes } from "node:crypto";
 import { auth } from "@/lib/auth";
 import { logAudit } from "@/lib/audit";
+import { UPLOAD_DIR } from "@/lib/uploads";
 
 /**
- * Authenticated image upload — writes files to `public/uploads/` and
- * returns the public URL. Any signed-in user can upload (avatars on
- * /account); ADMIN/CTV use it for article covers + branding too.
+ * Authenticated image upload — writes files to `UPLOAD_DIR` (outside
+ * `public/`, see lib/uploads.ts) and returns the public URL, which is
+ * served by `app/uploads/[...path]/route.ts`. Any signed-in user can
+ * upload (avatars on /account); ADMIN/CTV use it for article covers +
+ * branding too.
  *
  * Trade-offs:
  *  - Local disk; works in dev + single-server prod. For multi-instance
@@ -62,9 +65,8 @@ export async function POST(req: Request) {
   const safeExt = /^\.[a-z0-9]+$/.test(ext) ? ext : ".bin";
   const filename = `${randomBytes(8).toString("hex")}${safeExt}`;
 
-  const dir = join(process.cwd(), "public", "uploads");
-  await mkdir(dir, { recursive: true });
-  await writeFile(join(dir, filename), Buffer.from(await file.arrayBuffer()));
+  await mkdir(UPLOAD_DIR, { recursive: true });
+  await writeFile(join(UPLOAD_DIR, filename), Buffer.from(await file.arrayBuffer()));
 
   const publicUrl = `/uploads/${filename}`;
   await logAudit({

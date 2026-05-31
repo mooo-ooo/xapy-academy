@@ -55,8 +55,12 @@ next-env.d.ts
 /playwright-report/
 /playwright/.cache/
 
-# user-uploaded images are local-only, but keep the folder tracked so a
-# fresh clone / standalone `public/` copy has it (the upload route also
-# mkdir -p's it at runtime).
+# user-uploaded images are local-only. Stored in /uploads (UPLOAD_DIR,
+# outside public/) and served by app/uploads/[...path]/route.ts. The
+# upload route mkdir -p's it at runtime; keep the folder tracked so a
+# fresh clone has it.
+/uploads/*
+!/uploads/.gitkeep
+# legacy location (pre route-handler); harmless to keep ignored.
 /public/uploads/*
 !/public/uploads/.gitkeep
