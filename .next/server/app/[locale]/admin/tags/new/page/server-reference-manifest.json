@@ -1,0 +1,17 @@
+{
+  "node": {
+    "40eafe9f498d3f768e90918e81d199e44a6ee5eaff": {
+      "workers": {
+        "app/[locale]/admin/tags/new/page": {
+          "moduleId": 25644,
+          "async": false,
+          "exportedName": "createTagAction",
+          "filename": "src/app/[locale]/admin/tags/actions.ts"
+        }
+      },
+      "exportedName": "createTagAction",
+      "filename": "src/app/[locale]/admin/tags/actions.ts"
+    }
+  },
+  "edge": {}
+}

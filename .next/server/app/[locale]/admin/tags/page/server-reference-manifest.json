@@ -1,0 +1,29 @@
+{
+  "node": {
+    "400fb1eefb0fec82670a0dc1420263bda139c4f009": {
+      "workers": {
+        "app/[locale]/admin/tags/page": {
+          "moduleId": 78850,
+          "async": false,
+          "exportedName": "deleteTagAction",
+          "filename": "src/app/[locale]/admin/tags/actions.ts"
+        }
+      },
+      "exportedName": "deleteTagAction",
+      "filename": "src/app/[locale]/admin/tags/actions.ts"
+    },
+    "4008b2909960bf1ebc79b03d0d6825ae14af8cd868": {
+      "workers": {
+        "app/[locale]/admin/tags/page": {
+          "moduleId": 78850,
+          "async": false,
+          "exportedName": "toggleTrendingAction",
+          "filename": "src/app/[locale]/admin/tags/actions.ts"
+        }
+      },
+      "exportedName": "toggleTrendingAction",
+      "filename": "src/app/[locale]/admin/tags/actions.ts"
+    }
+  },
+  "edge": {}
+}

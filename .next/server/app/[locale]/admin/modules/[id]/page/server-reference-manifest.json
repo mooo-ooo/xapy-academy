@@ -1,0 +1,29 @@
+{
+  "node": {
+    "40754e33695192f41c616a952f9b68a4ca23bc739f": {
+      "workers": {
+        "app/[locale]/admin/modules/[id]/page": {
+          "moduleId": 89820,
+          "async": false,
+          "exportedName": "upsertModuleAction",
+          "filename": "src/app/[locale]/admin/modules/actions.ts"
+        }
+      },
+      "exportedName": "upsertModuleAction",
+      "filename": "src/app/[locale]/admin/modules/actions.ts"
+    },
+    "406de1ed02b51cd9d7aba9cf2e74bba59ded1a8c33": {
+      "workers": {
+        "app/[locale]/admin/modules/[id]/page": {
+          "moduleId": 89820,
+          "async": false,
+          "exportedName": "upsertModuleTranslationAction",
+          "filename": "src/app/[locale]/admin/modules/actions.ts"
+        }
+      },
+      "exportedName": "upsertModuleTranslationAction",
+      "filename": "src/app/[locale]/admin/modules/actions.ts"
+    }
+  },
+  "edge": {}
+}
