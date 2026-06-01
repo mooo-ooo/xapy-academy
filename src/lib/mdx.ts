@@ -5,6 +5,7 @@ import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypePrettyCode from "rehype-pretty-code";
 import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
 import GitHubSlugger from "github-slugger";
+import { parseYouTubeId, youtubeEmbedSrc } from "@/lib/youtube";
 
 /**
  * Sanitize schema — defaultSchema + allow the class/style produced
@@ -69,6 +70,82 @@ const sanitizeSchema = {
   ],
 };
 
+type HastNode = {
+  type: string;
+  tagName?: string;
+  value?: string;
+  properties?: Record<string, unknown>;
+  children?: HastNode[];
+};
+
+function hastText(node: HastNode): string {
+  if (node.type === "text") return node.value ?? "";
+  if (!node.children) return "";
+  let out = "";
+  for (const child of node.children) out += hastText(child);
+  return out;
+}
+
+function soleAnchorHref(p: HastNode): string | null {
+  const els = (p.children ?? []).filter(
+    (c) => !(c.type === "text" && (c.value ?? "").trim() === ""),
+  );
+  if (
+    els.length === 1 &&
+    els[0].type === "element" &&
+    els[0].tagName === "a" &&
+    typeof els[0].properties?.href === "string"
+  ) {
+    return els[0].properties.href as string;
+  }
+  return null;
+}
+
+function youtubeEmbedNode(id: string, start?: number): HastNode {
+  return {
+    type: "element",
+    tagName: "div",
+    properties: { className: ["video-embed"] },
+    children: [
+      {
+        type: "element",
+        tagName: "iframe",
+        properties: {
+          src: youtubeEmbedSrc(id, start),
+          title: "YouTube video player",
+          loading: "lazy",
+          allow:
+            "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share",
+          allowFullScreen: true,
+          referrerPolicy: "strict-origin-when-cross-origin",
+        },
+        children: [],
+      },
+    ],
+  };
+}
+
+function rehypeYouTubeEmbed() {
+  const walk = (node: HastNode) => {
+    const children = node.children;
+    if (!children) return;
+    for (let i = 0; i < children.length; i++) {
+      const child = children[i];
+      if (child.type === "element" && child.tagName === "p") {
+        const parsed =
+          parseYouTubeId(soleAnchorHref(child) ?? "") ??
+          parseYouTubeId(hastText(child).trim());
+        if (parsed) {
+          children[i] = youtubeEmbedNode(parsed.id, parsed.start);
+          continue;
+        }
+      }
+      walk(child);
+    }
+  };
+  return (tree: HastNode) => walk(tree);
+}
+
 export type RenderedMdx = {
   content: React.ReactElement;
   toc: TocEntry[];
@@ -94,6 +171,7 @@ export async function renderArticleMdx(source: string): Promise<RenderedMdx> {
     source,
     options: {
       mdxOptions: {
+        format: "md",
         remarkPlugins: [remarkGfm],
         rehypePlugins: [
           rehypeSlug,
@@ -109,6 +187,7 @@ export async function renderArticleMdx(source: string): Promise<RenderedMdx> {
             },
           ],
           [rehypeSanitize, sanitizeSchema],
+          rehypeYouTubeEmbed,
         ],
       },
     },

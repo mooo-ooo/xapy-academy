@@ -19,9 +19,12 @@ import {
   List,
   ListOrdered,
   Quote,
+  Video,
 } from "lucide-react";
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { parseYouTubeId } from "@/lib/youtube";
+import { YoutubeEmbed } from "@/components/admin/youtube-node";
 
 /**
  * Controlled rich-text editor that reads/writes Markdown.
@@ -51,6 +54,7 @@ export function TiptapEditor({
         HTMLAttributes: { class: "tiptap-link" },
       }),
       Placeholder.configure({ placeholder }),
+      YoutubeEmbed,
       Markdown.configure({
         html: false,
         tightLists: true,
@@ -108,6 +112,24 @@ function Toolbar({ editor }: { editor: Editor }) {
       return;
     }
     editor.chain().focus().extendMarkRange("link").setLink({ href: url }).run();
+  }
+
+  function promptVideo() {
+    const input = window.prompt("YouTube URL", "https://");
+    if (!input) return;
+    const parsed = parseYouTubeId(input);
+    if (!parsed) {
+      window.alert("Not a valid YouTube link.");
+      return;
+    }
+    editor
+      .chain()
+      .focus()
+      .insertContent({
+        type: "youtube",
+        attrs: { videoId: parsed.id, start: parsed.start ?? null },
+      })
+      .run();
   }
 
   return (
@@ -171,9 +193,13 @@ function Toolbar({ editor }: { editor: Editor }) {
       <Sep />
       <ToolButton
         onClick={promptLink}
+        title="Insert link"
         className={btn(editor.isActive("link"))}
       >
         <LinkIcon size={14} />
+      </ToolButton>
+      <ToolButton onClick={promptVideo} title="Embed YouTube video">
+        <Video size={14} />
       </ToolButton>
     </div>
   );
@@ -182,16 +208,19 @@ function Toolbar({ editor }: { editor: Editor }) {
 function ToolButton({
   children,
   onClick,
+  title,
   className = "",
 }: {
   children: React.ReactNode;
   onClick: () => void;
+  title?: string;
   className?: string;
 }) {
   return (
     <Button
       type="button"
       onClick={onClick}
+      title={title}
       variant="ghost"
       size="sm"
       className={`h-7 w-7 p-0 ${className}`}
