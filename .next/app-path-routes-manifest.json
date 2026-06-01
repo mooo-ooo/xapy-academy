@@ -42,5 +42,6 @@
   "/llms.txt/route": "/llms.txt",
   "/opengraph-image/route": "/opengraph-image",
   "/robots.txt/route": "/robots.txt",
-  "/sitemap.xml/route": "/sitemap.xml"
+  "/sitemap.xml/route": "/sitemap.xml",
+  "/uploads/[...path]/route": "/uploads/[...path]"
 }

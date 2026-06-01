@@ -42,5 +42,6 @@
   "/llms.txt/route": "app/llms.txt/route.js",
   "/opengraph-image/route": "app/opengraph-image/route.js",
   "/robots.txt/route": "app/robots.txt/route.js",
-  "/sitemap.xml/route": "app/sitemap.xml/route.js"
+  "/sitemap.xml/route": "app/sitemap.xml/route.js",
+  "/uploads/[...path]/route": "app/uploads/[...path]/route.js"
 }
