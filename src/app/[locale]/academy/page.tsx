@@ -53,12 +53,20 @@ export default async function AcademyPage({
   setRequestLocale(locale);
 
   const { effective } = await resolveLocaleForRequest(locale);
-  const [modules, trending, t, site] = await Promise.all([
+  const [modules, trending, t, tSite, site] = await Promise.all([
     listPublicModules(effective),
     listTrendingTags(effective, 6),
     getTranslations({ locale: effective, namespace: "academy" }),
+    getTranslations({ locale: effective, namespace: "site" }),
     getSiteSetting(),
   ]);
+
+  const heroOverride = site.heroTranslations[effective] ?? {};
+  const hero = {
+    title: heroOverride.title?.trim() || tSite("title"),
+    tagline: heroOverride.tagline?.trim() || tSite("tagline"),
+    imageUrl: site.heroImageUrl,
+  };
 
   // CollectionPage + ItemList of the module pillars — a content-hierarchy
   // map for AI fan-out (GEO). The Organization/WebSite live in the layout
@@ -86,7 +94,11 @@ export default async function AcademyPage({
   return (
     <>
       <JsonLd data={buildGraph([landingJsonLd])} />
-      <Hero />
+      <Hero
+        title={hero.title}
+        tagline={hero.tagline}
+        imageUrl={hero.imageUrl}
+      />
       <div className="-mt-4 px-6">
         <SearchSection trending={trendingPills} />
       </div>

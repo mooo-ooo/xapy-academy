@@ -1,17 +1,12 @@
-import { getTranslations } from "next-intl/server";
-
-/**
- * Hero — pixel values from tokens.json:
- *   h1: 72px / 700 / lh 64.8px / tracking -3.6px / color hsl(var(--foreground))
- *   p : 22.4px / 400 / lh 36.4px / tracking 0.6px / color hsl(var(--muted-foreground))
- *
- * Layout: title+subtitle on the left, robot illustration on the right (centered on hero block).
- * The site header is now sticky (72px) and sits in normal flow above this section,
- * so no margin-top is needed.
- */
-export async function Hero() {
-  const t = await getTranslations("site");
-
+export function Hero({
+  title,
+  tagline,
+  imageUrl,
+}: {
+  title: string;
+  tagline: string;
+  imageUrl?: string | null;
+}) {
   return (
     <section
       className="relative flex w-full flex-col justify-end overflow-hidden px-6 pt-10 pb-8"
@@ -87,7 +82,7 @@ export async function Hero() {
                   WebkitBackgroundClip: "text",
                 }}
               >
-                {t("title")}
+                {title}
               </span>
             </h1>
 
@@ -103,7 +98,7 @@ export async function Hero() {
                 opacity: 0,
               }}
             >
-              {t("tagline")}
+              {tagline}
             </p>
           </div>
 
@@ -120,7 +115,16 @@ export async function Hero() {
             }}
             aria-hidden="true"
           >
-            <RobotIllustration />
+            {imageUrl ? (
+              <img
+                src={imageUrl}
+                alt=""
+                className="h-full w-full object-contain"
+                style={{ borderRadius: 16 }}
+              />
+            ) : (
+              <RobotIllustration />
+            )}
           </div>
         </div>
       </div>

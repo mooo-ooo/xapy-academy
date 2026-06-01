@@ -2,6 +2,12 @@ import { cache } from "react";
 import { prisma } from "@/lib/db";
 import { routing, type Locale } from "@/i18n/routing";
 
+export type HeroLocaleContent = {
+  title?: string;
+  tagline?: string;
+};
+export type HeroTranslations = Record<string, HeroLocaleContent>;
+
 export type SiteSettingResolved = {
   publicLocale: Locale;
   supportedLocales: Locale[];
@@ -15,7 +21,23 @@ export type SiteSettingResolved = {
   twitterHandle: string | null;
   allowSelfSignup: boolean;
   signupRequiresApproval: boolean;
+  heroImageUrl: string | null;
+  heroTranslations: HeroTranslations;
 };
+
+function parseHeroTranslations(value: unknown): HeroTranslations {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return {};
+  const out: HeroTranslations = {};
+  for (const [locale, raw] of Object.entries(value as Record<string, unknown>)) {
+    if (!raw || typeof raw !== "object" || Array.isArray(raw)) continue;
+    const r = raw as Record<string, unknown>;
+    const entry: HeroLocaleContent = {};
+    if (typeof r.title === "string") entry.title = r.title;
+    if (typeof r.tagline === "string") entry.tagline = r.tagline;
+    out[locale] = entry;
+  }
+  return out;
+}
 
 /**
  * Read SiteSetting (id=1) — cached per request via React `cache`.
@@ -49,6 +71,8 @@ export const getSiteSetting = cache(async (): Promise<SiteSettingResolved> => {
       twitterHandle: null,
       allowSelfSignup: true,
       signupRequiresApproval: true,
+      heroImageUrl: null,
+      heroTranslations: {},
     };
   }
   const supported = Array.isArray(row.supportedLocales)
@@ -69,6 +93,8 @@ export const getSiteSetting = cache(async (): Promise<SiteSettingResolved> => {
     twitterHandle: row.twitterHandle,
     allowSelfSignup: row.allowSelfSignup,
     signupRequiresApproval: row.signupRequiresApproval,
+    heroImageUrl: row.heroImageUrl,
+    heroTranslations: parseHeroTranslations(row.heroTranslations),
   };
 });
 

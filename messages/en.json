@@ -639,9 +639,22 @@
       "tabs": {
         "general": "General",
         "branding": "Branding",
+        "hero": "Hero",
         "locales": "Locales",
         "seo": "SEO",
         "contact": "Contact"
+      },
+      "hero": {
+        "title": "Landing hero",
+        "description": "The big title, tagline, and illustration on the academy landing page.",
+        "imageLabel": "Hero image",
+        "imageHint": "Replaces the built-in robot illustration when set. Leave empty to keep the robot. Shared across all languages.",
+        "localeLabel": "Editing language",
+        "localeHint": "Title and tagline are stored per language. Pick a language, then edit its text. Empty fields fall back to the built-in translation.",
+        "titleLabel": "Title",
+        "titlePlaceholder": "KIYOTAKA ACADEMY",
+        "taglineLabel": "Tagline",
+        "taglinePlaceholder": "Institutional-grade education for the modern trader."
       },
       "title": "Site settings",
       "subtitle": "Everything that shapes the public site lives here. The env var {envVar} is just the middleware bootstrap — the DB wins for data-layer reads.",

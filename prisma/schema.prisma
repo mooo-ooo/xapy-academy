@@ -121,6 +121,12 @@ model SiteSetting {
   /// When true (default), newly-registered accounts land with
   /// isActive=false until an admin approves in /admin/users.
   signupRequiresApproval Boolean  @default(true)
+  /// Landing-hero image — replaces the built-in robot illustration when set.
+  heroImageUrl           String?  @db.Text
+  /// Per-locale hero text overrides:
+  /// { "<locale>": { "title"?, "tagline"? } }. Any missing field falls
+  /// back to the i18n `site.*` defaults.
+  heroTranslations       Json?
   updatedAt              DateTime @updatedAt
 }
 

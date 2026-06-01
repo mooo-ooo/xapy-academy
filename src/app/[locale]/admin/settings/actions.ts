@@ -66,7 +66,35 @@ const schema = z.object({
     .min(1, "Pick at least one locale")
     .optional(),
   publicLocale: localeEnum.optional(),
+  heroImageUrl: nullableUrl,
+  heroTranslations: z
+    .record(
+      z.string(),
+      z.object({
+        title: z.string().trim().max(200).optional(),
+        tagline: z.string().trim().max(400).optional(),
+      }),
+    )
+    .optional(),
 });
+
+type HeroEntry = { title?: string; tagline?: string };
+
+function cleanHeroTranslations(
+  input: Record<string, HeroEntry> | undefined,
+): Record<string, HeroEntry> {
+  if (!input) return {};
+  const valid = new Set(routing.locales as readonly string[]);
+  const out: Record<string, HeroEntry> = {};
+  for (const [locale, c] of Object.entries(input)) {
+    if (!valid.has(locale)) continue;
+    const entry: HeroEntry = {};
+    if (c.title?.trim()) entry.title = c.title.trim();
+    if (c.tagline?.trim()) entry.tagline = c.tagline.trim();
+    if (Object.keys(entry).length > 0) out[locale] = entry;
+  }
+  return out;
+}
 
 /**
  * Phase 7B: locales (publicLocale / supportedLocales) moved to
@@ -109,6 +137,12 @@ export async function updateSiteSettingAction(raw: unknown) {
     signupRequiresApproval: parsed.data.signupRequiresApproval ?? true,
     ...(supported ? { supportedLocales: supported } : {}),
     ...(publicLocale ? { publicLocale } : {}),
+    ...(parsed.data.heroImageUrl !== undefined
+      ? { heroImageUrl: parsed.data.heroImageUrl }
+      : {}),
+    ...(parsed.data.heroTranslations !== undefined
+      ? { heroTranslations: cleanHeroTranslations(parsed.data.heroTranslations) }
+      : {}),
   };
 
   await prisma.siteSetting.upsert({

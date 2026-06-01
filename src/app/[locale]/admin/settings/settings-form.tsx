@@ -18,6 +18,8 @@ import { ImageUpload } from "@/components/admin/image-upload";
 import { Loader2 } from "lucide-react";
 import { updateSiteSettingAction } from "./actions";
 
+type HeroEntry = { title?: string; tagline?: string };
+
 type Initial = {
   siteName: string;
   tagline: string | null;
@@ -31,6 +33,8 @@ type Initial = {
   signupRequiresApproval: boolean;
   supportedLocales: string[];
   publicLocale: string;
+  heroImageUrl: string | null;
+  heroTranslations: Record<string, HeroEntry>;
 };
 
 export function SettingsForm({
@@ -46,9 +50,20 @@ export function SettingsForm({
   // as the admin ticks/un-ticks checkboxes.
   const [supported, setSupported] = useState<string[]>(initial.supportedLocales);
   const [publicLocale, setPublicLocale] = useState<string>(initial.publicLocale);
+  const [heroTr, setHeroTr] = useState<Record<string, HeroEntry>>(
+    initial.heroTranslations ?? {},
+  );
+  const [heroLocale, setHeroLocale] = useState<string>(initial.publicLocale);
   const router = useRouter();
   const t = useTranslations("admin.settings");
   const [pending, startTransition] = useTransition();
+
+  function setHeroField(field: keyof HeroEntry, value: string) {
+    setHeroTr((prev) => ({
+      ...prev,
+      [heroLocale]: { ...prev[heroLocale], [field]: value },
+    }));
+  }
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -67,6 +82,8 @@ export function SettingsForm({
         signupRequiresApproval: fd.get("signupRequiresApproval") === "on",
         supportedLocales: supported,
         publicLocale,
+        heroImageUrl: String(fd.get("heroImageUrl") ?? ""),
+        heroTranslations: heroTr,
       });
       if (!res.ok) {
         toast.error(res.error);
@@ -83,6 +100,7 @@ export function SettingsForm({
         <TabsList>
           <TabsTrigger value="general">{t("tabs.general")}</TabsTrigger>
           <TabsTrigger value="branding">{t("tabs.branding")}</TabsTrigger>
+          <TabsTrigger value="hero">{t("tabs.hero")}</TabsTrigger>
           <TabsTrigger value="locales">{t("tabs.locales")}</TabsTrigger>
           <TabsTrigger value="seo">{t("tabs.seo")}</TabsTrigger>
           <TabsTrigger value="contact">{t("tabs.contact")}</TabsTrigger>
@@ -161,6 +179,60 @@ export function SettingsForm({
               <ImageUpload
                 name="faviconUrl"
                 initial={initial.faviconUrl ?? ""}
+              />
+            </Field>
+          </Section>
+        </TabsContent>
+
+        <TabsContent value="hero" forceMount className="space-y-6">
+          <Section title={t("hero.title")} description={t("hero.description")}>
+            <Field
+              id="heroImageUrl"
+              label={t("hero.imageLabel")}
+              hint={t("hero.imageHint")}
+            >
+              <ImageUpload
+                name="heroImageUrl"
+                initial={initial.heroImageUrl ?? ""}
+              />
+            </Field>
+
+            <div className="flex flex-col gap-1.5 md:max-w-xs">
+              <Label htmlFor="heroLocale">{t("hero.localeLabel")}</Label>
+              <select
+                id="heroLocale"
+                value={heroLocale}
+                onChange={(e) => setHeroLocale(e.target.value)}
+                className="h-10 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--inset))] px-3 text-sm text-[hsl(var(--foreground))] outline-none focus:border-[hsl(var(--accent-emerald))]"
+              >
+                {supported.map((l) => (
+                  <option key={l} value={l}>
+                    {l.toUpperCase()} — {localeLabel(l)}
+                  </option>
+                ))}
+              </select>
+              <p className="text-xs text-[hsl(var(--muted-foreground))]">
+                {t("hero.localeHint")}
+              </p>
+            </div>
+
+            <Field id="heroTitle" label={t("hero.titleLabel")}>
+              <Input
+                id="heroTitle"
+                value={heroTr[heroLocale]?.title ?? ""}
+                onChange={(e) => setHeroField("title", e.target.value)}
+                maxLength={200}
+                placeholder={t("hero.titlePlaceholder")}
+              />
+            </Field>
+            <Field id="heroTagline" label={t("hero.taglineLabel")}>
+              <Textarea
+                id="heroTagline"
+                rows={2}
+                value={heroTr[heroLocale]?.tagline ?? ""}
+                onChange={(e) => setHeroField("tagline", e.target.value)}
+                maxLength={400}
+                placeholder={t("hero.taglinePlaceholder")}
               />
             </Field>
           </Section>
