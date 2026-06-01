@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { requireRole } from "@/lib/rbac";
+import { ADMIN_ROLES } from "@/lib/roles";
 import { logAudit } from "@/lib/audit";
 import { routing } from "@/i18n/routing";
 
@@ -18,7 +19,7 @@ const createSchema = z.object({
 });
 
 export async function createTagAction(raw: unknown) {
-  const session = await requireRole(["ADMIN"]);
+  const session = await requireRole(ADMIN_ROLES);
   const parsed = createSchema.safeParse(raw);
   if (!parsed.success) {
     return {
@@ -48,7 +49,7 @@ const translationSchema = z.object({
 });
 
 export async function upsertTagTranslationAction(raw: unknown) {
-  const session = await requireRole(["ADMIN"]);
+  const session = await requireRole(ADMIN_ROLES);
   const parsed = translationSchema.safeParse(raw);
   if (!parsed.success) return { ok: false as const, error: "Invalid input" };
   await prisma.tagTranslation.upsert({
@@ -76,7 +77,7 @@ export async function upsertTagTranslationAction(raw: unknown) {
 const toggleSchema = z.object({ id: z.string(), isTrending: z.boolean() });
 
 export async function toggleTrendingAction(raw: unknown) {
-  const session = await requireRole(["ADMIN"]);
+  const session = await requireRole(ADMIN_ROLES);
   const parsed = toggleSchema.safeParse(raw);
   if (!parsed.success) return { ok: false as const, error: "Invalid input" };
   await prisma.tag.update({
@@ -97,7 +98,7 @@ export async function toggleTrendingAction(raw: unknown) {
 const deleteSchema = z.object({ id: z.string() });
 
 export async function deleteTagAction(raw: unknown) {
-  const session = await requireRole(["ADMIN"]);
+  const session = await requireRole(ADMIN_ROLES);
   const parsed = deleteSchema.safeParse(raw);
   if (!parsed.success) return { ok: false as const, error: "Invalid input" };
   const count = await prisma.articleTag.count({
@@ -126,7 +127,7 @@ const setArticleTagsSchema = z.object({
 });
 
 export async function setArticleTagsAction(raw: unknown) {
-  const session = await requireRole(["ADMIN"]);
+  const session = await requireRole(ADMIN_ROLES);
   const parsed = setArticleTagsSchema.safeParse(raw);
   if (!parsed.success) return { ok: false as const, error: "Invalid input" };
   const { articleId, tagIds } = parsed.data;

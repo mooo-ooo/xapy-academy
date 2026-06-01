@@ -1,5 +1,6 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { auth } from "@/lib/auth";
+import { isAdminLevel } from "@/lib/roles";
 import { prisma } from "@/lib/db";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "@/i18n/navigation";
@@ -26,7 +27,7 @@ export default async function AdminDashboard({
     getTranslations({ locale, namespace: "admin.audit.actions" }),
   ]);
   const session = (await auth())!;
-  const isAdmin = session.user.role === "ADMIN";
+  const isAdmin = isAdminLevel(session.user.role);
 
   const [
     userCount,
@@ -83,7 +84,7 @@ export default async function AdminDashboard({
         </p>
         <h1 className="mt-1 text-3xl font-bold tracking-tight text-[hsl(var(--foreground))]">
           {session.user.name || session.user.email}{" "}
-          <Badge tone={session.user.role === "ADMIN" ? "admin" : "ctv"}>
+          <Badge tone={isAdminLevel(session.user.role) ? "admin" : "ctv"}>
             {session.user.role}
           </Badge>
         </h1>

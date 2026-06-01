@@ -1,6 +1,7 @@
 import { redirect } from "@/i18n/navigation";
 import { setRequestLocale } from "next-intl/server";
 import { auth } from "@/lib/auth";
+import { isAdminLevel } from "@/lib/roles";
 import { AdminSidebar } from "@/components/layout/admin-sidebar";
 import { Toaster } from "@/components/ui/toast";
 
@@ -20,10 +21,7 @@ export default async function AdminLayout({
   if (!session?.user) {
     redirect({ href: "/login", locale });
   }
-  if (
-    session!.user.role !== "ADMIN" &&
-    session!.user.role !== "CTV"
-  ) {
+  if (!isAdminLevel(session!.user.role) && session!.user.role !== "CTV") {
     redirect({ href: "/academy", locale });
   }
 

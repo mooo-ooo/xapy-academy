@@ -1,6 +1,7 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { prisma } from "@/lib/db";
 import { auth } from "@/lib/auth";
+import { isAdminLevel } from "@/lib/roles";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
@@ -32,7 +33,7 @@ export default async function ArticlesPage({
   ]);
 
   const session = (await auth())!;
-  const isAdmin = session.user.role === "ADMIN";
+  const isAdmin = isAdminLevel(session.user.role);
   const sp = await searchParams;
 
   const lq = buildListQuery(sp, {

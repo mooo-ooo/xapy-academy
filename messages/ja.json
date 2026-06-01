@@ -451,7 +451,8 @@
         "role": {
           "user": "User (読者)",
           "ctv": "CTV (翻訳者)",
-          "admin": "Admin (フル権限)"
+          "admin": "Admin (フル権限)",
+          "moderator": "モデレーター (フル権限)"
         },
         "preferredLanguageLabel": "希望言語",
         "language": {

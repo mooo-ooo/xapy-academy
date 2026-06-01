@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { requireRole } from "@/lib/rbac";
+import { ADMIN_ROLES } from "@/lib/roles";
 import { logAudit } from "@/lib/audit";
 import { routing } from "@/i18n/routing";
 
@@ -73,7 +74,7 @@ const schema = z.object({
  * writes the non-locale settings fields.
  */
 export async function updateSiteSettingAction(raw: unknown) {
-  const session = await requireRole(["ADMIN"]);
+  const session = await requireRole(ADMIN_ROLES);
   const parsed = schema.safeParse(raw);
   if (!parsed.success) {
     const firstIssue = parsed.error.issues[0];

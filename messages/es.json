@@ -451,7 +451,8 @@
         "role": {
           "user": "User (lector)",
           "ctv": "CTV (traductor)",
-          "admin": "Admin (completo)"
+          "admin": "Admin (completo)",
+          "moderator": "Moderador (completo)"
         },
         "preferredLanguageLabel": "Idioma preferido",
         "language": {

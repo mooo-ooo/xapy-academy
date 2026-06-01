@@ -10,8 +10,9 @@ import { logAudit } from "@/lib/audit";
 import { generateRandomPassword, hashPassword } from "@/lib/password";
 import { routing } from "@/i18n/routing";
 import { createImpersonationToken } from "@/lib/auth";
+import { ADMIN_ROLES, assignableRolesFor, canManageUser } from "@/lib/roles";
 
-const ASSIGNABLE_ROLES = ["USER", "CTV"] as const;
+const ASSIGNABLE_ROLES = ["USER", "CTV", "MODERATOR"] as const;
 
 const createUserSchema = z.object({
   email: z.string().email(),
@@ -27,9 +28,12 @@ export type CreateUserResult =
 export async function createUserAction(
   raw: unknown,
 ): Promise<CreateUserResult> {
-  const session = await requireRole(["ADMIN"]);
+  const session = await requireRole(ADMIN_ROLES);
   const parsed = createUserSchema.safeParse(raw);
   if (!parsed.success) return { ok: false, error: "Invalid input" };
+  if (!assignableRolesFor(session.user.role).includes(parsed.data.role)) {
+    return { ok: false, error: "You can't assign that role." };
+  }
 
   const exists = await prisma.user.findUnique({
     where: { email: parsed.data.email },
@@ -68,7 +72,7 @@ const updateRoleSchema = z.object({
 });
 
 export async function updateUserRoleAction(raw: unknown) {
-  const session = await requireRole(["ADMIN"]);
+  const session = await requireRole(ADMIN_ROLES);
   const parsed = updateRoleSchema.safeParse(raw);
   if (!parsed.success) return { ok: false as const, error: "Invalid input" };
 
@@ -80,8 +84,14 @@ export async function updateUserRoleAction(raw: unknown) {
     where: { id: parsed.data.userId },
   });
   if (!target) return { ok: false as const, error: "User not found" };
-  if (target.role === "ADMIN") {
-    return { ok: false as const, error: "Admin role cannot be changed." };
+  if (!canManageUser(session.user.role, target.role)) {
+    return {
+      ok: false as const,
+      error: "You can't manage a user of this level.",
+    };
+  }
+  if (!assignableRolesFor(session.user.role).includes(parsed.data.role)) {
+    return { ok: false as const, error: "You can't assign that role." };
   }
 
   const previous = target.role;
@@ -105,12 +115,27 @@ const toggleActiveSchema = z.object({
 });
 
 export async function toggleUserActiveAction(raw: unknown) {
-  const session = await requireRole(["ADMIN"]);
+  const session = await requireRole(ADMIN_ROLES);
   const parsed = toggleActiveSchema.safeParse(raw);
   if (!parsed.success) return { ok: false as const, error: "Invalid input" };
 
   if (parsed.data.userId === session.user.id && !parsed.data.isActive) {
     return { ok: false as const, error: "You can't deactivate yourself." };
+  }
+
+  const target = await prisma.user.findUnique({
+    where: { id: parsed.data.userId },
+    select: { role: true },
+  });
+  if (!target) return { ok: false as const, error: "User not found" };
+  if (
+    parsed.data.userId !== session.user.id &&
+    !canManageUser(session.user.role, target.role)
+  ) {
+    return {
+      ok: false as const,
+      error: "You can't manage a user of this level.",
+    };
   }
 
   await prisma.user.update({
@@ -135,9 +160,21 @@ export type ResetPasswordResult =
 export async function resetUserPasswordAction(
   raw: unknown,
 ): Promise<ResetPasswordResult> {
-  const session = await requireRole(["ADMIN"]);
+  const session = await requireRole(ADMIN_ROLES);
   const parsed = resetPasswordSchema.safeParse(raw);
   if (!parsed.success) return { ok: false, error: "Invalid input" };
+
+  const target = await prisma.user.findUnique({
+    where: { id: parsed.data.userId },
+    select: { role: true },
+  });
+  if (!target) return { ok: false, error: "User not found" };
+  if (
+    parsed.data.userId !== session.user.id &&
+    !canManageUser(session.user.role, target.role)
+  ) {
+    return { ok: false, error: "You can't manage a user of this level." };
+  }
 
   const newPassword = generateRandomPassword();
   const hash = await hashPassword(newPassword);
@@ -162,7 +199,7 @@ const updateLangSchema = z.object({
 const deleteSchema = z.object({ userId: z.string() });
 
 export async function deleteUserAction(raw: unknown) {
-  const session = await requireRole(["ADMIN"]);
+  const session = await requireRole(ADMIN_ROLES);
   const parsed = deleteSchema.safeParse(raw);
   if (!parsed.success) return { ok: false as const, error: "Invalid input" };
 
@@ -175,8 +212,11 @@ export async function deleteUserAction(raw: unknown) {
     select: { id: true, email: true, role: true },
   });
   if (!target) return { ok: false as const, error: "User not found" };
-  if (target.role === "ADMIN") {
-    return { ok: false as const, error: "Admin account cannot be deleted." };
+  if (!canManageUser(session.user.role, target.role)) {
+    return {
+      ok: false as const,
+      error: "You can't manage a user of this level.",
+    };
   }
 
   try {
@@ -213,7 +253,7 @@ export type ImpersonateResult =
 export async function impersonateUserAction(
   userId: string,
 ): Promise<ImpersonateResult> {
-  const session = await requireRole(["ADMIN"]);
+  const session = await requireRole(ADMIN_ROLES);
 
   if (typeof userId !== "string" || userId.length === 0) {
     return { ok: false, error: "Invalid input" };
@@ -228,6 +268,12 @@ export async function impersonateUserAction(
   });
   if (!target) return { ok: false, error: "User not found" };
   if (!target.isActive) return { ok: false, error: "User is inactive" };
+  if (!canManageUser(session.user.role, target.role)) {
+    return {
+      ok: false,
+      error: "You can't impersonate a user of this level.",
+    };
+  }
 
   await logAudit({
     actorId: session.user.id,
@@ -277,16 +323,22 @@ export type AuthorProfileResult =
 export async function updateAuthorProfileAction(
   raw: unknown,
 ): Promise<AuthorProfileResult> {
-  const session = await requireRole(["ADMIN"]);
+  const session = await requireRole(ADMIN_ROLES);
   const parsed = authorProfileSchema.safeParse(raw);
   if (!parsed.success) return { ok: false, error: "Invalid input" };
   const { userId, bio, jobTitle, sameAs, knowsAbout } = parsed.data;
 
   const target = await prisma.user.findUnique({
     where: { id: userId },
-    select: { id: true, name: true, email: true, slug: true },
+    select: { id: true, name: true, email: true, slug: true, role: true },
   });
   if (!target) return { ok: false, error: "User not found" };
+  if (
+    userId !== session.user.id &&
+    !canManageUser(session.user.role, target.role)
+  ) {
+    return { ok: false, error: "You can't manage a user of this level." };
+  }
 
   // Explicit slug wins; else keep existing; else derive from name/email.
   const slugBase =
@@ -320,15 +372,24 @@ export async function updateAuthorProfileAction(
 }
 
 export async function updatePreferredLangAction(raw: unknown) {
-  const session = await requireRole(["ADMIN"]);
+  const session = await requireRole(ADMIN_ROLES);
   const parsed = updateLangSchema.safeParse(raw);
   if (!parsed.success) return { ok: false as const, error: "Invalid input" };
 
   const target = await prisma.user.findUnique({
     where: { id: parsed.data.userId },
-    select: { preferredLang: true },
+    select: { preferredLang: true, role: true },
   });
   if (!target) return { ok: false as const, error: "User not found" };
+  if (
+    parsed.data.userId !== session.user.id &&
+    !canManageUser(session.user.role, target.role)
+  ) {
+    return {
+      ok: false as const,
+      error: "You can't manage a user of this level.",
+    };
+  }
 
   await prisma.user.update({
     where: { id: parsed.data.userId },

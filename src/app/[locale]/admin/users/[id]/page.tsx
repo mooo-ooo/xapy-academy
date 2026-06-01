@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/db";
+import { auth } from "@/lib/auth";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { ArrowLeft } from "lucide-react";
@@ -37,6 +38,7 @@ export default async function ManageUserPage({
     },
   });
   if (!user) notFound();
+  const session = (await auth())!;
   const locales = routing.locales as unknown as string[];
   const toStringArray = (v: unknown): string[] =>
     Array.isArray(v) ? v.filter((x): x is string => typeof x === "string") : [];
@@ -55,7 +57,7 @@ export default async function ManageUserPage({
           {user.name ?? user.email}
           <Badge
             tone={
-              user.role === "ADMIN"
+              user.role === "ADMIN" || user.role === "MODERATOR"
                 ? "admin"
                 : user.role === "CTV"
                   ? "ctv"
@@ -88,6 +90,8 @@ export default async function ManageUserPage({
           sameAs: toStringArray(user.sameAs),
           knowsAbout: toStringArray(user.knowsAbout),
         }}
+        actorRole={session.user.role}
+        actorId={session.user.id}
         locales={locales}
       />
     </div>

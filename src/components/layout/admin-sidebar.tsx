@@ -29,17 +29,17 @@ const GROUPS: Array<{
   /** Path prefixes (locale-stripped) that mark this group active. */
   match: string[];
 }> = [
-  { href: "/admin", key: "dashboard", icon: LayoutDashboard, roles: ["ADMIN", "CTV"], match: [] },
+  { href: "/admin", key: "dashboard", icon: LayoutDashboard, roles: ["ADMIN", "MODERATOR", "CTV"], match: [] },
   {
     href: "/admin/articles",
     key: "content",
     icon: FileText,
-    roles: ["ADMIN", "CTV"],
+    roles: ["ADMIN", "MODERATOR", "CTV"],
     match: ["/admin/articles", "/admin/translations", "/admin/modules", "/admin/tags"],
   },
-  { href: "/admin/users", key: "users", icon: Users, roles: ["ADMIN"], match: ["/admin/users"] },
-  { href: "/admin/settings", key: "settings", icon: Settings, roles: ["ADMIN"], match: ["/admin/settings"] },
-  { href: "/admin/audit", key: "audit", icon: ScrollText, roles: ["ADMIN"], match: ["/admin/audit"] },
+  { href: "/admin/users", key: "users", icon: Users, roles: ["ADMIN", "MODERATOR"], match: ["/admin/users"] },
+  { href: "/admin/settings", key: "settings", icon: Settings, roles: ["ADMIN", "MODERATOR"], match: ["/admin/settings"] },
+  { href: "/admin/audit", key: "audit", icon: ScrollText, roles: ["ADMIN", "MODERATOR"], match: ["/admin/audit"] },
 ];
 
 export function AdminSidebar({ role }: { role: AppRole }) {

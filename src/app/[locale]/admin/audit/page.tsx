@@ -1,5 +1,6 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { auth } from "@/lib/auth";
+import { isAdminLevel } from "@/lib/roles";
 import { redirect } from "@/i18n/navigation";
 import { prisma } from "@/lib/db";
 import { DataTable, type Column } from "@/components/admin/data-table";
@@ -18,7 +19,7 @@ export default async function AuditPage({
   const { locale } = await params;
   setRequestLocale(locale);
   const session = (await auth())!;
-  if (session.user.role !== "ADMIN") redirect({ href: "/admin", locale });
+  if (!isAdminLevel(session.user.role)) redirect({ href: "/admin", locale });
 
   const [t, tActions] = await Promise.all([
     getTranslations({ locale, namespace: "admin.audit" }),

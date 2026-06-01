@@ -14,6 +14,7 @@ enum Role {
   ADMIN
   USER
   CTV
+  MODERATOR
 }
 
 enum ArticleStatus {

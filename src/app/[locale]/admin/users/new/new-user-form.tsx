@@ -16,12 +16,17 @@ import {
 import { toast } from "@/components/ui/toast";
 import { Copy, Loader2 } from "lucide-react";
 import { createUserAction } from "../actions";
+import type { AppRole } from "@/lib/auth";
+import { assignableRolesFor } from "@/lib/roles";
 
-export function NewUserForm() {
+type AssignableRole = Exclude<AppRole, "ADMIN">;
+
+export function NewUserForm({ actorRole }: { actorRole: AppRole }) {
   const router = useRouter();
   const t = useTranslations("admin.users.form");
   const [pending, startTransition] = useTransition();
-  const [role, setRole] = useState<"USER" | "CTV">("USER");
+  const assignable = assignableRolesFor(actorRole);
+  const [role, setRole] = useState<AssignableRole>("USER");
   const [preferredLang, setPreferredLang] = useState<"en" | "vi">("en");
   const [createdPassword, setCreatedPassword] = useState<{
     email: string;
@@ -110,13 +115,23 @@ export function NewUserForm() {
       <div className="grid grid-cols-2 gap-4">
         <div className="flex flex-col gap-1.5">
           <Label required>{t("roleLabel")}</Label>
-          <Select value={role} onValueChange={(v) => setRole(v as typeof role)}>
+          <Select
+            value={role}
+            onValueChange={(v) => setRole(v as AssignableRole)}
+          >
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="USER">{t("role.user")}</SelectItem>
-              <SelectItem value="CTV">{t("role.ctv")}</SelectItem>
+              {assignable.includes("MODERATOR") && (
+                <SelectItem value="MODERATOR">{t("role.moderator")}</SelectItem>
+              )}
+              {assignable.includes("CTV") && (
+                <SelectItem value="CTV">{t("role.ctv")}</SelectItem>
+              )}
+              {assignable.includes("USER") && (
+                <SelectItem value="USER">{t("role.user")}</SelectItem>
+              )}
             </SelectContent>
           </Select>
         </div>

@@ -451,7 +451,8 @@
         "role": {
           "user": "User (đọc)",
           "ctv": "CTV (dịch giả)",
-          "admin": "Admin (toàn quyền)"
+          "admin": "Admin (toàn quyền)",
+          "moderator": "Điều hành viên (toàn quyền)"
         },
         "preferredLanguageLabel": "Ngôn ngữ ưu tiên",
         "language": {

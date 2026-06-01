@@ -2,6 +2,7 @@ import { notFound, redirect } from "next/navigation";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { prisma } from "@/lib/db";
 import { auth } from "@/lib/auth";
+import { isAdminLevel } from "@/lib/roles";
 import { Link } from "@/i18n/navigation";
 import { ArrowLeft } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -96,7 +97,7 @@ export default async function TranslatePage({
       <TranslationEditor
         articleId={article.id}
         locale={lang}
-        canPublish={session.user.role === "ADMIN"}
+        canPublish={isAdminLevel(session.user.role)}
         source={{
           title: source.title,
           excerpt: source.excerpt ?? "",

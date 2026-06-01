@@ -14,10 +14,11 @@ import { ImpersonateButton } from "@/components/admin/impersonate-button";
 import { DeleteUserButton } from "@/components/admin/delete-user-button";
 import { ApproveUserButton } from "@/components/admin/approve-user-button";
 import { auth } from "@/lib/auth";
+import { canManageUser } from "@/lib/roles";
 
 export const dynamic = "force-dynamic";
 
-const ROLES = ["ADMIN", "CTV", "USER"] as const;
+const ROLES = ["ADMIN", "MODERATOR", "CTV", "USER"] as const;
 
 export default async function UsersPage({
   params,
@@ -33,6 +34,7 @@ export default async function UsersPage({
   const sp = await searchParams;
   const session = await auth();
   const currentUserId = session?.user?.id;
+  const actorRole = session?.user?.role;
   const lq = buildListQuery(sp, {
     sortable: ["createdAt", "email"],
     defaultSort: "createdAt",
@@ -159,7 +161,11 @@ export default async function UsersPage({
             <td className="px-5 py-4">
               <Badge
                 tone={
-                  u.role === "ADMIN" ? "admin" : u.role === "CTV" ? "ctv" : "user"
+                  u.role === "ADMIN" || u.role === "MODERATOR"
+                    ? "admin"
+                    : u.role === "CTV"
+                      ? "ctv"
+                      : "user"
                 }
               >
                 {u.role}
@@ -186,7 +192,12 @@ export default async function UsersPage({
                 <ImpersonateButton
                   userId={u.id}
                   userLabel={u.name ?? u.email}
-                  disabled={!u.isActive || u.id === currentUserId}
+                  disabled={
+                    !u.isActive ||
+                    u.id === currentUserId ||
+                    !actorRole ||
+                    !canManageUser(actorRole, u.role)
+                  }
                 />
                 <Button variant="ghost" size="sm" asChild>
                   <Link href={`/admin/users/${u.id}`}>{t("manage")}</Link>
@@ -194,7 +205,11 @@ export default async function UsersPage({
                 <DeleteUserButton
                   userId={u.id}
                   userLabel={u.name ?? u.email}
-                  disabled={u.id === currentUserId || u.role === "ADMIN"}
+                  disabled={
+                    u.id === currentUserId ||
+                    !actorRole ||
+                    !canManageUser(actorRole, u.role)
+                  }
                 />
               </div>
             </td>

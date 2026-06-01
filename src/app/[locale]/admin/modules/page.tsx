@@ -1,6 +1,7 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { prisma } from "@/lib/db";
 import { auth } from "@/lib/auth";
+import { isAdminLevel } from "@/lib/roles";
 import { Link, redirect } from "@/i18n/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -19,7 +20,7 @@ export default async function ModulesPage({
   setRequestLocale(locale);
   const t = await getTranslations({ locale, namespace: "admin.modules" });
   const session = (await auth())!;
-  if (session.user.role !== "ADMIN") redirect({ href: "/admin", locale });
+  if (!isAdminLevel(session.user.role)) redirect({ href: "/admin", locale });
 
   const modules = await prisma.module.findMany({
     orderBy: { sortOrder: "asc" },

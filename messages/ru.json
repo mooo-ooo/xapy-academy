@@ -451,7 +451,8 @@
         "role": {
           "user": "User (читатель)",
           "ctv": "CTV (переводчик)",
-          "admin": "Admin (полный)"
+          "admin": "Admin (полный)",
+          "moderator": "Модератор (полный)"
         },
         "preferredLanguageLabel": "Предпочитаемый язык",
         "language": {

@@ -2,6 +2,7 @@ import { setRequestLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { ArrowLeft } from "lucide-react";
 import { NewUserForm } from "./new-user-form";
+import { auth } from "@/lib/auth";
 
 export default async function NewUserPage({
   params,
@@ -11,6 +12,7 @@ export default async function NewUserPage({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations({ locale, namespace: "admin.users" });
+  const session = (await auth())!;
 
   return (
     <div className="mx-auto max-w-xl">
@@ -26,7 +28,7 @@ export default async function NewUserPage({
       <p className="mb-8 text-sm text-[hsl(var(--muted-foreground))]">
         {t("new.subtitle")}
       </p>
-      <NewUserForm />
+      <NewUserForm actorRole={session.user.role} />
     </div>
   );
 }

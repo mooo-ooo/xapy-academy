@@ -451,7 +451,8 @@
         "role": {
           "user": "User(读者)",
           "ctv": "CTV(译者)",
-          "admin": "Admin(完全)"
+          "admin": "Admin(完全)",
+          "moderator": "版主(完全)"
         },
         "preferredLanguageLabel": "首选语言",
         "language": {

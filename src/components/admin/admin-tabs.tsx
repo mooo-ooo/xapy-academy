@@ -13,10 +13,10 @@ type Tab = {
 
 const GROUPS: Record<string, Tab[]> = {
   content: [
-    { key: "articles", href: "/admin/articles", roles: ["ADMIN", "CTV"] },
-    { key: "translations", href: "/admin/translations", roles: ["ADMIN", "CTV"] },
-    { key: "modules", href: "/admin/modules", roles: ["ADMIN"] },
-    { key: "tags", href: "/admin/tags", roles: ["ADMIN"] },
+    { key: "articles", href: "/admin/articles", roles: ["ADMIN", "MODERATOR", "CTV"] },
+    { key: "translations", href: "/admin/translations", roles: ["ADMIN", "MODERATOR", "CTV"] },
+    { key: "modules", href: "/admin/modules", roles: ["ADMIN", "MODERATOR"] },
+    { key: "tags", href: "/admin/tags", roles: ["ADMIN", "MODERATOR"] },
   ],
 };
 

@@ -35,12 +35,16 @@ import {
   updatePreferredLangAction,
   updateUserRoleAction,
 } from "../actions";
+import type { AppRole } from "@/lib/auth";
+import { assignableRolesFor, canManageUser } from "@/lib/roles";
 
-type Role = "ADMIN" | "USER" | "CTV";
-type AssignableRole = "USER" | "CTV";
+type Role = AppRole;
+type AssignableRole = Exclude<AppRole, "ADMIN">;
 
 export function UserManageForm({
   user,
+  actorRole,
+  actorId,
   locales,
 }: {
   user: {
@@ -54,15 +58,21 @@ export function UserManageForm({
     sameAs: string[];
     knowsAbout: string[];
   };
+  actorRole: Role;
+  actorId: string;
   locales: string[];
 }) {
   const router = useRouter();
   const t = useTranslations("admin.users.manageForm");
   const tForm = useTranslations("admin.users.form");
   const [pending, startTransition] = useTransition();
-  const isAdmin = user.role === "ADMIN";
+  const manageable = canManageUser(actorRole, user.role);
+  const isSelf = actorId === user.id;
+  const canEditProfile = manageable || isSelf;
+  const assignable = assignableRolesFor(actorRole);
   const [role, setRole] = useState<AssignableRole>(
-    isAdmin ? "USER" : (user.role as AssignableRole),
+    ((manageable ? (user.role as AssignableRole) : assignable[0]) ??
+      "USER") as AssignableRole,
   );
   const [lang, setLang] = useState(user.preferredLang);
   const [resetPassword, setResetPassword] = useState<string | null>(null);
@@ -156,7 +166,7 @@ export function UserManageForm({
     });
   }
 
-  const roleTab = isAdmin ? (
+  const roleTab = !manageable ? (
     <p className="text-sm text-[hsl(var(--muted-foreground))]">
       {t("adminRoleLocked")}
     </p>
@@ -173,8 +183,15 @@ export function UserManageForm({
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="USER">{tForm("role.user")}</SelectItem>
-            <SelectItem value="CTV">{tForm("role.ctv")}</SelectItem>
+            {assignable.includes("MODERATOR") && (
+              <SelectItem value="MODERATOR">{tForm("role.moderator")}</SelectItem>
+            )}
+            {assignable.includes("CTV") && (
+              <SelectItem value="CTV">{tForm("role.ctv")}</SelectItem>
+            )}
+            {assignable.includes("USER") && (
+              <SelectItem value="USER">{tForm("role.user")}</SelectItem>
+            )}
           </SelectContent>
         </Select>
       </div>
@@ -351,14 +368,36 @@ export function UserManageForm({
     </div>
   );
 
+  const lockedMsg = (
+    <p className="text-sm text-[hsl(var(--muted-foreground))]">
+      {t("adminRoleLocked")}
+    </p>
+  );
+
   return (
     <VerticalTabsShell
       tabs={[
         { key: "role", label: t("roleLabel"), content: roleTab },
-        { key: "lang", label: t("langLabel"), content: langTab },
-        { key: "author", label: t("authorTab"), content: authorTab },
-        { key: "password", label: t("passwordTitle"), content: passwordTab },
-        { key: "access", label: t("accessTitle"), content: accessTab },
+        {
+          key: "lang",
+          label: t("langLabel"),
+          content: canEditProfile ? langTab : lockedMsg,
+        },
+        {
+          key: "author",
+          label: t("authorTab"),
+          content: canEditProfile ? authorTab : lockedMsg,
+        },
+        {
+          key: "password",
+          label: t("passwordTitle"),
+          content: manageable ? passwordTab : lockedMsg,
+        },
+        {
+          key: "access",
+          label: t("accessTitle"),
+          content: manageable ? accessTab : lockedMsg,
+        },
       ]}
     />
   );

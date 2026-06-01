@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { requireRole } from "@/lib/rbac";
+import { ADMIN_ROLES } from "@/lib/roles";
 import { logAudit } from "@/lib/audit";
 import { routing } from "@/i18n/routing";
 
@@ -24,7 +25,7 @@ const upsertModuleSchema = z.object({
 });
 
 export async function upsertModuleAction(raw: unknown) {
-  const session = await requireRole(["ADMIN"]);
+  const session = await requireRole(ADMIN_ROLES);
   const parsed = upsertModuleSchema.safeParse(raw);
   if (!parsed.success) {
     return { ok: false as const, error: "Invalid input" };
@@ -91,7 +92,7 @@ const translationSchema = z.object({
 });
 
 export async function upsertModuleTranslationAction(raw: unknown) {
-  const session = await requireRole(["ADMIN"]);
+  const session = await requireRole(ADMIN_ROLES);
   const parsed = translationSchema.safeParse(raw);
   if (!parsed.success) {
     return { ok: false as const, error: "Invalid input" };
@@ -131,7 +132,7 @@ export async function upsertModuleTranslationAction(raw: unknown) {
 
 const deleteSchema = z.object({ id: z.string() });
 export async function deleteModuleAction(raw: unknown) {
-  const session = await requireRole(["ADMIN"]);
+  const session = await requireRole(ADMIN_ROLES);
   const parsed = deleteSchema.safeParse(raw);
   if (!parsed.success) return { ok: false as const, error: "Invalid input" };
   const count = await prisma.article.count({
@@ -164,7 +165,7 @@ const reorderSchema = z.object({
  * stay open for future inserts.
  */
 export async function reorderModuleAction(raw: unknown) {
-  const session = await requireRole(["ADMIN"]);
+  const session = await requireRole(ADMIN_ROLES);
   const parsed = reorderSchema.safeParse(raw);
   if (!parsed.success) return { ok: false as const, error: "Invalid input" };
 

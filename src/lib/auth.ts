@@ -52,7 +52,7 @@ function verifyImpersonationToken(token: string): string | null {
   return userId;
 }
 
-export type AppRole = "ADMIN" | "USER" | "CTV";
+export type AppRole = "ADMIN" | "USER" | "CTV" | "MODERATOR";
 
 declare module "next-auth" {
   interface Session {

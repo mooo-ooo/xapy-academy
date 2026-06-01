@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter, Link } from "@/i18n/navigation";
+import type { AppRole } from "@/lib/auth";
 import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -44,7 +45,7 @@ export function TranslatorAssignmentPanel({
     id: string;
     name: string | null;
     email: string;
-    role: "ADMIN" | "USER" | "CTV";
+    role: AppRole;
   }>;
 }) {
   const router = useRouter();
@@ -128,7 +129,7 @@ function TranslationRow({
     id: string;
     name: string | null;
     email: string;
-    role: "ADMIN" | "USER" | "CTV";
+    role: AppRole;
   }>;
   pending: boolean;
   onAssign: (translatorId: string | null) => void;

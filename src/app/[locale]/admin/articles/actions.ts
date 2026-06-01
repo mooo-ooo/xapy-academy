@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { requireRole } from "@/lib/rbac";
+import { ADMIN_ROLES } from "@/lib/roles";
 import { auth, type AppRole } from "@/lib/auth";
 import { logAudit } from "@/lib/audit";
 import { routing } from "@/i18n/routing";
@@ -30,7 +31,7 @@ const createArticleSchema = z.object({
 });
 
 export async function createArticleAction(raw: unknown) {
-  const session = await requireRole(["ADMIN"]);
+  const session = await requireRole(ADMIN_ROLES);
   const parsed = createArticleSchema.safeParse(raw);
   if (!parsed.success) return { ok: false as const, error: "Invalid input" };
 
@@ -94,7 +95,7 @@ const updateSourceSchema = z.object({
 });
 
 export async function updateArticleSourceAction(raw: unknown) {
-  const session = await requireRole(["ADMIN"]);
+  const session = await requireRole(ADMIN_ROLES);
   const parsed = updateSourceSchema.safeParse(raw);
   if (!parsed.success) return { ok: false as const, error: "Invalid input" };
 
@@ -178,7 +179,7 @@ const statusSchema = z.object({
 });
 
 export async function setArticleStatusAction(raw: unknown) {
-  const session = await requireRole(["ADMIN"]);
+  const session = await requireRole(ADMIN_ROLES);
   const parsed = statusSchema.safeParse(raw);
   if (!parsed.success) return { ok: false as const, error: "Invalid input" };
 
@@ -206,7 +207,7 @@ const assignSchema = z.object({
 });
 
 export async function assignTranslatorAction(raw: unknown) {
-  const session = await requireRole(["ADMIN"]);
+  const session = await requireRole(ADMIN_ROLES);
   const parsed = assignSchema.safeParse(raw);
   if (!parsed.success) return { ok: false as const, error: "Invalid input" };
   if (parsed.data.locale === undefined) {
@@ -316,7 +317,7 @@ export async function saveTranslationAction(raw: unknown) {
   const ctx = await loadOrUnauthorized(
     parsed.data.articleId,
     parsed.data.locale,
-    ["ADMIN", "CTV"],
+    [...ADMIN_ROLES, "CTV"],
   );
   if ("error" in ctx) return { ok: false as const, error: ctx.error };
 
@@ -356,7 +357,9 @@ export async function setTranslationStatusAction(raw: unknown) {
 
   // Authorization: CTV can submit (→ REVIEW); only ADMIN can publish.
   const requiredRoles: AppRole[] =
-    parsed.data.status === "PUBLISHED" ? ["ADMIN"] : ["ADMIN", "CTV"];
+    parsed.data.status === "PUBLISHED"
+      ? [...ADMIN_ROLES]
+      : [...ADMIN_ROLES, "CTV"];
   const ctx = await loadOrUnauthorized(
     parsed.data.articleId,
     parsed.data.locale,
@@ -395,7 +398,7 @@ const updateStatsSchema = z.object({
  * increment from the new baseline.
  */
 export async function updateArticleStatsAction(raw: unknown) {
-  const session = await requireRole(["ADMIN"]);
+  const session = await requireRole(ADMIN_ROLES);
   const parsed = updateStatsSchema.safeParse(raw);
   if (!parsed.success) return { ok: false as const, error: "Invalid input" };
 

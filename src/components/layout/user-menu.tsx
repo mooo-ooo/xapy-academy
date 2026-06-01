@@ -4,6 +4,7 @@ import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { LogOut, Settings, Shield, UserRound } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useTransition } from "react";
+import type { AppRole } from "@/lib/auth";
 
 export function UserMenu({
   name,
@@ -12,7 +13,7 @@ export function UserMenu({
 }: {
   name: string | null;
   email: string;
-  role: "ADMIN" | "USER" | "CTV";
+  role: AppRole;
 }) {
   const t = useTranslations("header");
   const [pending, startTransition] = useTransition();
@@ -68,7 +69,7 @@ export function UserMenu({
               <Settings size={14} /> {t("account")}
             </a>
           </DropdownMenu.Item>
-          {role === "ADMIN" || role === "CTV" ? (
+          {role === "ADMIN" || role === "MODERATOR" || role === "CTV" ? (
             <DropdownMenu.Item
               asChild
               className="rounded-lg outline-none data-[highlighted]:bg-[hsl(var(--hover))]"

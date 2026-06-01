@@ -1,6 +1,7 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { prisma } from "@/lib/db";
 import { auth } from "@/lib/auth";
+import { isAdminLevel } from "@/lib/roles";
 import { Link } from "@/i18n/navigation";
 import { Badge } from "@/components/ui/badge";
 import { AdminTabs } from "@/components/admin/admin-tabs";
@@ -17,7 +18,7 @@ export default async function TranslationsInboxPage({
   const t = await getTranslations({ locale, namespace: "admin.translations" });
 
   const session = (await auth())!;
-  const isAdmin = session.user.role === "ADMIN";
+  const isAdmin = isAdminLevel(session.user.role);
 
   const rows = await prisma.articleTranslation.findMany({
     where: isAdmin

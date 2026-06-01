@@ -451,7 +451,8 @@
         "role": {
           "user": "User (독자)",
           "ctv": "CTV (번역자)",
-          "admin": "Admin (전체)"
+          "admin": "Admin (전체)",
+          "moderator": "운영자 (전체)"
         },
         "preferredLanguageLabel": "선호 언어",
         "language": {
