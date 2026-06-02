@@ -1,3 +1,0 @@
-module.exports=[1992,(e,o,d)=>{}];
-
-//# sourceMappingURL=_next-internal_server_app_api_feed_route_actions_0suhni8.js.map
