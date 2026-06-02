@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 <url>
-<loc>http://localhost:3000/en/academy</loc>
-<xhtml:link rel="alternate" hreflang="en" href="http://localhost:3000/en/academy" />
-<xhtml:link rel="alternate" hreflang="vi" href="http://localhost:3000/vi/academy" />
-<xhtml:link rel="alternate" hreflang="x-default" href="http://localhost:3000/en/academy" />
+<loc>https://wiki.xapy.io/en/academy</loc>
+<xhtml:link rel="alternate" hreflang="en" href="https://wiki.xapy.io/en/academy" />
+<xhtml:link rel="alternate" hreflang="vi" href="https://wiki.xapy.io/vi/academy" />
+<xhtml:link rel="alternate" hreflang="x-default" href="https://wiki.xapy.io/en/academy" />
 <changefreq>daily</changefreq>
 <priority>1</priority>
 </url>
 <url>
-<loc>http://localhost:3000/vi/academy</loc>
-<xhtml:link rel="alternate" hreflang="en" href="http://localhost:3000/en/academy" />
-<xhtml:link rel="alternate" hreflang="vi" href="http://localhost:3000/vi/academy" />
-<xhtml:link rel="alternate" hreflang="x-default" href="http://localhost:3000/en/academy" />
+<loc>https://wiki.xapy.io/vi/academy</loc>
+<xhtml:link rel="alternate" hreflang="en" href="https://wiki.xapy.io/en/academy" />
+<xhtml:link rel="alternate" hreflang="vi" href="https://wiki.xapy.io/vi/academy" />
+<xhtml:link rel="alternate" hreflang="x-default" href="https://wiki.xapy.io/en/academy" />
 <changefreq>daily</changefreq>
 <priority>1</priority>
 </url>
 <url>
-<loc>http://localhost:3000/en/academy/glossary</loc>
-<xhtml:link rel="alternate" hreflang="en" href="http://localhost:3000/en/academy/glossary" />
-<xhtml:link rel="alternate" hreflang="vi" href="http://localhost:3000/vi/academy/glossary" />
-<xhtml:link rel="alternate" hreflang="x-default" href="http://localhost:3000/en/academy/glossary" />
+<loc>https://wiki.xapy.io/en/academy/glossary</loc>
+<xhtml:link rel="alternate" hreflang="en" href="https://wiki.xapy.io/en/academy/glossary" />
+<xhtml:link rel="alternate" hreflang="vi" href="https://wiki.xapy.io/vi/academy/glossary" />
+<xhtml:link rel="alternate" hreflang="x-default" href="https://wiki.xapy.io/en/academy/glossary" />
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 <url>
-<loc>http://localhost:3000/vi/academy/glossary</loc>
-<xhtml:link rel="alternate" hreflang="en" href="http://localhost:3000/en/academy/glossary" />
-<xhtml:link rel="alternate" hreflang="vi" href="http://localhost:3000/vi/academy/glossary" />
-<xhtml:link rel="alternate" hreflang="x-default" href="http://localhost:3000/en/academy/glossary" />
+<loc>https://wiki.xapy.io/vi/academy/glossary</loc>
+<xhtml:link rel="alternate" hreflang="en" href="https://wiki.xapy.io/en/academy/glossary" />
+<xhtml:link rel="alternate" hreflang="vi" href="https://wiki.xapy.io/vi/academy/glossary" />
+<xhtml:link rel="alternate" hreflang="x-default" href="https://wiki.xapy.io/en/academy/glossary" />
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
