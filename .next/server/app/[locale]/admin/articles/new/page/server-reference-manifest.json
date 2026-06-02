@@ -1,0 +1,17 @@
+{
+  "node": {
+    "40e290dd7217a3a8d712570f99f172c3b10a965dd0": {
+      "workers": {
+        "app/[locale]/admin/articles/new/page": {
+          "moduleId": 80590,
+          "async": false,
+          "exportedName": "createArticleAction",
+          "filename": "src/app/[locale]/admin/articles/actions.ts"
+        }
+      },
+      "exportedName": "createArticleAction",
+      "filename": "src/app/[locale]/admin/articles/actions.ts"
+    }
+  },
+  "edge": {}
+}

@@ -1,0 +1,3 @@
+{
+  "/[locale]/admin/articles/[id]/translate/[lang]/page": "app/[locale]/admin/articles/[id]/translate/[lang]/page.js"
+}
