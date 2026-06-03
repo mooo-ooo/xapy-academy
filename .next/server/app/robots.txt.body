@@ -142,5 +142,5 @@ Disallow: /api
 Disallow: /_next
 Disallow: /tools/output
 
-Host: http://localhost:3000
-Sitemap: http://localhost:3000/sitemap.xml
+Host: https://wiki.xapy.io
+Sitemap: https://wiki.xapy.io/sitemap.xml
