@@ -3,7 +3,7 @@
     "4082baa5f46991b276d5cc5920a1f16955f9cad234": {
       "workers": {
         "app/[locale]/admin/users/page": {
-          "moduleId": 22224,
+          "moduleId": 322224,
           "async": false,
           "exportedName": "impersonateUserAction",
           "filename": "src/app/[locale]/admin/users/actions.ts"
@@ -15,7 +15,7 @@
     "4053e1d5eec5b1ed82e596ae8849a6edc05357cbf1": {
       "workers": {
         "app/[locale]/admin/users/page": {
-          "moduleId": 22224,
+          "moduleId": 322224,
           "async": false,
           "exportedName": "deleteUserAction",
           "filename": "src/app/[locale]/admin/users/actions.ts"
@@ -27,7 +27,7 @@
     "40c94fc00211bf971b11be3e73fc70a7f08e750577": {
       "workers": {
         "app/[locale]/admin/users/page": {
-          "moduleId": 22224,
+          "moduleId": 322224,
           "async": false,
           "exportedName": "toggleUserActiveAction",
           "filename": "src/app/[locale]/admin/users/actions.ts"

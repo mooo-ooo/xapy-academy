@@ -3,7 +3,7 @@
     "404af0ead448165d3e5754c63d605a8f4bf4947afa": {
       "workers": {
         "app/[locale]/admin/articles/[id]/translate/[lang]/page": {
-          "moduleId": 9158,
+          "moduleId": 709158,
           "async": false,
           "exportedName": "saveTranslationAction",
           "filename": "src/app/[locale]/admin/articles/actions.ts"
@@ -15,7 +15,7 @@
     "40611cde531798c5a91c4411fe8befab868172db2b": {
       "workers": {
         "app/[locale]/admin/articles/[id]/translate/[lang]/page": {
-          "moduleId": 9158,
+          "moduleId": 709158,
           "async": false,
           "exportedName": "setTranslationStatusAction",
           "filename": "src/app/[locale]/admin/articles/actions.ts"
