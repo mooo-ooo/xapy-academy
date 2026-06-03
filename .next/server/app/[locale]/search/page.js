@@ -1,7 +1,7 @@
 var R=require("../../../chunks/ssr/[turbopack]_runtime.js")("server/app/[locale]/search/page.js")
 R.c("server/chunks/ssr/[root-of-the-server]__0zz1.6s._.js")
 R.c("server/chunks/ssr/node_modules_next_dist_esm_build_templates_app-page_0pu6fpb.js")
-R.c("server/chunks/ssr/[root-of-the-server]__0f5xb.n._.js")
+R.c("server/chunks/ssr/[root-of-the-server]__0bhv7xq._.js")
 R.c("server/chunks/ssr/[root-of-the-server]__0djckpe._.js")
 R.c("server/chunks/ssr/node_modules_next_dist_compiled_@opentelemetry_api_index_0zv0b3p.js")
 R.c("server/chunks/ssr/[root-of-the-server]__09m8ydx._.js")
@@ -19,5 +19,5 @@ R.c("server/chunks/ssr/_11sksrm._.js")
 R.c("server/chunks/ssr/node_modules_0a5xfvz._.js")
 R.c("server/chunks/ssr/node_modules_next_0-.64yu._.js")
 R.c("server/chunks/ssr/_next-internal_server_app_[locale]_search_page_actions_07vdo_b.js")
-R.m(15596)
-module.exports=R.m(15596).exports
+R.m(915596)
+module.exports=R.m(915596).exports

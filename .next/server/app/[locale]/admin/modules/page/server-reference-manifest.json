@@ -3,7 +3,7 @@
     "40f1aaeb27ee46b79ae0064de33b0c63c056ae5217": {
       "workers": {
         "app/[locale]/admin/modules/page": {
-          "moduleId": 76925,
+          "moduleId": 176925,
           "async": false,
           "exportedName": "reorderModuleAction",
           "filename": "src/app/[locale]/admin/modules/actions.ts"

@@ -2,7 +2,7 @@ var R=require("../../../../../chunks/ssr/[turbopack]_runtime.js")("server/app/[l
 R.c("server/chunks/ssr/[root-of-the-server]__0v37hif._.js")
 R.c("server/chunks/ssr/[root-of-the-server]__12lqfut._.js")
 R.c("server/chunks/ssr/node_modules_next_dist_esm_build_templates_app-page_0lqq0y6.js")
-R.c("server/chunks/ssr/[root-of-the-server]__0f5xb.n._.js")
+R.c("server/chunks/ssr/[root-of-the-server]__0bhv7xq._.js")
 R.c("server/chunks/ssr/[root-of-the-server]__0djckpe._.js")
 R.c("server/chunks/ssr/node_modules_next_dist_compiled_@opentelemetry_api_index_0zv0b3p.js")
 R.c("server/chunks/ssr/[root-of-the-server]__09m8ydx._.js")
@@ -22,5 +22,5 @@ R.c("server/chunks/ssr/node_modules_next_0-.64yu._.js")
 R.c("server/chunks/ssr/src_0.l1lgn._.js")
 R.c("server/chunks/ssr/src_app_[locale]_academy_[moduleSlug]_[articleSlug]_loading_tsx_0helmzn._.js")
 R.c("server/chunks/ssr/0zjb_server_app_[locale]_academy_[moduleSlug]_[articleSlug]_page_actions_0n9tzde.js")
-R.m(37911)
-module.exports=R.m(37911).exports
+R.m(237911)
+module.exports=R.m(237911).exports

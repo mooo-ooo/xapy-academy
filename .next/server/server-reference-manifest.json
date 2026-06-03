@@ -3,7 +3,7 @@
     "40d1dede1bd27568566b7f8e5ef1b81178abf6bb51": {
       "workers": {
         "app/[locale]/account/page": {
-          "moduleId": 44492,
+          "moduleId": 244492,
           "async": false,
           "exportedName": "changePasswordAction",
           "filename": "src/app/[locale]/account/actions.ts"
@@ -15,7 +15,7 @@
     "40db5044822f3be703d15aae230de8e0baeec56ab8": {
       "workers": {
         "app/[locale]/account/page": {
-          "moduleId": 44492,
+          "moduleId": 244492,
           "async": false,
           "exportedName": "updateProfileAction",
           "filename": "src/app/[locale]/account/actions.ts"
@@ -45,7 +45,7 @@
           "filename": "src/app/[locale]/admin/articles/actions.ts"
         },
         "app/[locale]/admin/articles/[id]/translate/[lang]/page": {
-          "moduleId": 9158,
+          "moduleId": 709158,
           "async": false,
           "exportedName": "setTranslationStatusAction",
           "filename": "src/app/[locale]/admin/articles/actions.ts"
@@ -105,7 +105,7 @@
     "404af0ead448165d3e5754c63d605a8f4bf4947afa": {
       "workers": {
         "app/[locale]/admin/articles/[id]/translate/[lang]/page": {
-          "moduleId": 9158,
+          "moduleId": 709158,
           "async": false,
           "exportedName": "saveTranslationAction",
           "filename": "src/app/[locale]/admin/articles/actions.ts"
@@ -117,7 +117,7 @@
     "40e290dd7217a3a8d712570f99f172c3b10a965dd0": {
       "workers": {
         "app/[locale]/admin/articles/new/page": {
-          "moduleId": 80590,
+          "moduleId": 480590,
           "async": false,
           "exportedName": "createArticleAction",
           "filename": "src/app/[locale]/admin/articles/actions.ts"
@@ -129,7 +129,7 @@
     "40f1aaeb27ee46b79ae0064de33b0c63c056ae5217": {
       "workers": {
         "app/[locale]/admin/modules/page": {
-          "moduleId": 76925,
+          "moduleId": 176925,
           "async": false,
           "exportedName": "reorderModuleAction",
           "filename": "src/app/[locale]/admin/modules/actions.ts"
@@ -141,13 +141,13 @@
     "40754e33695192f41c616a952f9b68a4ca23bc739f": {
       "workers": {
         "app/[locale]/admin/modules/[id]/page": {
-          "moduleId": 89820,
+          "moduleId": 789820,
           "async": false,
           "exportedName": "upsertModuleAction",
           "filename": "src/app/[locale]/admin/modules/actions.ts"
         },
         "app/[locale]/admin/modules/new/page": {
-          "moduleId": 80808,
+          "moduleId": 580808,
           "async": false,
           "exportedName": "upsertModuleAction",
           "filename": "src/app/[locale]/admin/modules/actions.ts"
@@ -159,7 +159,7 @@
     "406de1ed02b51cd9d7aba9cf2e74bba59ded1a8c33": {
       "workers": {
         "app/[locale]/admin/modules/[id]/page": {
-          "moduleId": 89820,
+          "moduleId": 789820,
           "async": false,
           "exportedName": "upsertModuleTranslationAction",
           "filename": "src/app/[locale]/admin/modules/actions.ts"
@@ -183,13 +183,13 @@
     "400fb1eefb0fec82670a0dc1420263bda139c4f009": {
       "workers": {
         "app/[locale]/admin/tags/[id]/page": {
-          "moduleId": 46645,
+          "moduleId": 646645,
           "async": false,
           "exportedName": "deleteTagAction",
           "filename": "src/app/[locale]/admin/tags/actions.ts"
         },
         "app/[locale]/admin/tags/page": {
-          "moduleId": 78850,
+          "moduleId": 978850,
           "async": false,
           "exportedName": "deleteTagAction",
           "filename": "src/app/[locale]/admin/tags/actions.ts"
@@ -201,13 +201,13 @@
     "4008b2909960bf1ebc79b03d0d6825ae14af8cd868": {
       "workers": {
         "app/[locale]/admin/tags/[id]/page": {
-          "moduleId": 46645,
+          "moduleId": 646645,
           "async": false,
           "exportedName": "toggleTrendingAction",
           "filename": "src/app/[locale]/admin/tags/actions.ts"
         },
         "app/[locale]/admin/tags/page": {
-          "moduleId": 78850,
+          "moduleId": 978850,
           "async": false,
           "exportedName": "toggleTrendingAction",
           "filename": "src/app/[locale]/admin/tags/actions.ts"
@@ -219,7 +219,7 @@
     "40de085434d93d8f85dd38443954f1afb7c97832e2": {
       "workers": {
         "app/[locale]/admin/tags/[id]/page": {
-          "moduleId": 46645,
+          "moduleId": 646645,
           "async": false,
           "exportedName": "upsertTagTranslationAction",
           "filename": "src/app/[locale]/admin/tags/actions.ts"
@@ -231,7 +231,7 @@
     "40eafe9f498d3f768e90918e81d199e44a6ee5eaff": {
       "workers": {
         "app/[locale]/admin/tags/new/page": {
-          "moduleId": 25644,
+          "moduleId": 625644,
           "async": false,
           "exportedName": "createTagAction",
           "filename": "src/app/[locale]/admin/tags/actions.ts"
@@ -243,7 +243,7 @@
     "4082baa5f46991b276d5cc5920a1f16955f9cad234": {
       "workers": {
         "app/[locale]/admin/users/page": {
-          "moduleId": 22224,
+          "moduleId": 322224,
           "async": false,
           "exportedName": "impersonateUserAction",
           "filename": "src/app/[locale]/admin/users/actions.ts"
@@ -255,7 +255,7 @@
     "4053e1d5eec5b1ed82e596ae8849a6edc05357cbf1": {
       "workers": {
         "app/[locale]/admin/users/page": {
-          "moduleId": 22224,
+          "moduleId": 322224,
           "async": false,
           "exportedName": "deleteUserAction",
           "filename": "src/app/[locale]/admin/users/actions.ts"
@@ -267,13 +267,13 @@
     "40c94fc00211bf971b11be3e73fc70a7f08e750577": {
       "workers": {
         "app/[locale]/admin/users/[id]/page": {
-          "moduleId": 37695,
+          "moduleId": 937695,
           "async": false,
           "exportedName": "toggleUserActiveAction",
           "filename": "src/app/[locale]/admin/users/actions.ts"
         },
         "app/[locale]/admin/users/page": {
-          "moduleId": 22224,
+          "moduleId": 322224,
           "async": false,
           "exportedName": "toggleUserActiveAction",
           "filename": "src/app/[locale]/admin/users/actions.ts"
@@ -285,7 +285,7 @@
     "40d2141b0fcad5d027f0e03ed6f6ac65de37b0078f": {
       "workers": {
         "app/[locale]/admin/users/[id]/page": {
-          "moduleId": 37695,
+          "moduleId": 937695,
           "async": false,
           "exportedName": "resetUserPasswordAction",
           "filename": "src/app/[locale]/admin/users/actions.ts"
@@ -297,7 +297,7 @@
     "40a22ca8de5d4801f364fbc1092a3d8e4fc98d332b": {
       "workers": {
         "app/[locale]/admin/users/[id]/page": {
-          "moduleId": 37695,
+          "moduleId": 937695,
           "async": false,
           "exportedName": "updateAuthorProfileAction",
           "filename": "src/app/[locale]/admin/users/actions.ts"
@@ -309,7 +309,7 @@
     "40f31f7d53d1f8a588eabe093e7c7a1f65fedfd1c8": {
       "workers": {
         "app/[locale]/admin/users/[id]/page": {
-          "moduleId": 37695,
+          "moduleId": 937695,
           "async": false,
           "exportedName": "updatePreferredLangAction",
           "filename": "src/app/[locale]/admin/users/actions.ts"
@@ -321,7 +321,7 @@
     "4077ef5ca6167b81e1e732a04b7ec2ea081edc9dbf": {
       "workers": {
         "app/[locale]/admin/users/[id]/page": {
-          "moduleId": 37695,
+          "moduleId": 937695,
           "async": false,
           "exportedName": "updateUserRoleAction",
           "filename": "src/app/[locale]/admin/users/actions.ts"
@@ -333,7 +333,7 @@
     "40b491602999a97fbf4bbd7d948e94a2732ac0604d": {
       "workers": {
         "app/[locale]/admin/users/new/page": {
-          "moduleId": 47026,
+          "moduleId": 747026,
           "async": false,
           "exportedName": "createUserAction",
           "filename": "src/app/[locale]/admin/users/actions.ts"
@@ -345,7 +345,7 @@
     "407824a961363b144c7fd16ecdeefcb7eb9df40f5d": {
       "workers": {
         "app/[locale]/register/page": {
-          "moduleId": 21470,
+          "moduleId": 121470,
           "async": false,
           "exportedName": "registerAction",
           "filename": "src/app/[locale]/register/actions.ts"
