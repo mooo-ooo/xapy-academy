@@ -1,0 +1,3 @@
+module.exports=[138109,a=>{"use strict";var b=a.i(809707);let c=[["path",{d:"m20 19.5-5.5 1.2",key:"1aenhr"}],["path",{d:"M14.5 4v11.22a1 1 0 0 0 1.242.97L20 15.2",key:"2rtezt"}],["path",{d:"m2.978 19.351 5.549-1.363A2 2 0 0 0 10 16V2",key:"1kbm92"}],["path",{d:"M20 10 4 13.5",key:"8nums9"}]],d=(0,b.default)("saudi-riyal",c);a.s(["__iconNode",0,c,"default",0,d])}];
+
+//# sourceMappingURL=0p91_lucide-react_dist_esm_icons_saudi-riyal_mjs_0_joc-g._.js.map

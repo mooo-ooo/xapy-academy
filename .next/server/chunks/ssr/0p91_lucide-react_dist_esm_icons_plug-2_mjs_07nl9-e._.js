@@ -1,0 +1,3 @@
+module.exports=[130577,a=>{"use strict";var b=a.i(809707);let c=[["path",{d:"M9 2v6",key:"17ngun"}],["path",{d:"M15 2v6",key:"s7yy2p"}],["path",{d:"M12 17v5",key:"bb1du9"}],["path",{d:"M5 8h14",key:"pcz4l3"}],["path",{d:"M6 11V8h12v3a6 6 0 1 1-12 0Z",key:"wtfw2c"}]],d=(0,b.default)("plug-2",c);a.s(["__iconNode",0,c,"default",0,d])}];
+
+//# sourceMappingURL=0p91_lucide-react_dist_esm_icons_plug-2_mjs_07nl9-e._.js.map

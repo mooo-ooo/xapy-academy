@@ -1,6 +1,6 @@
 {
   "node": {
-    "404c54580a582a0913147c9e81eb02d314820f2ef7": {
+    "40323ae0a59320c8b73a61dbdc5d501bdf5db0033d": {
       "workers": {
         "app/[locale]/admin/users/page": {
           "moduleId": 322224,
@@ -12,7 +12,7 @@
       "exportedName": "impersonateUserAction",
       "filename": "src/app/[locale]/admin/users/actions.ts"
     },
-    "4041dad520504a5c3b7c2f29dbc52d687ac2fc9bef": {
+    "4064f198ef2285ce9948efbd45cf272c427647c5a4": {
       "workers": {
         "app/[locale]/admin/users/page": {
           "moduleId": 322224,
@@ -24,7 +24,7 @@
       "exportedName": "deleteUserAction",
       "filename": "src/app/[locale]/admin/users/actions.ts"
     },
-    "408039a71d3f303e60f752e7c21bf25abde3cee458": {
+    "4029c3a63ace691c64547ab868a7b84fcd947c89ec": {
       "workers": {
         "app/[locale]/admin/users/page": {
           "moduleId": 322224,

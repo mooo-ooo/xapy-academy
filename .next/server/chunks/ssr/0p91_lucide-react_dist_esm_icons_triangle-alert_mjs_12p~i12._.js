@@ -1,0 +1,3 @@
+module.exports=[306249,a=>{"use strict";var b=a.i(809707);let c=[["path",{d:"m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3",key:"wmoenq"}],["path",{d:"M12 9v4",key:"juzpu7"}],["path",{d:"M12 17h.01",key:"p32p05"}]],d=(0,b.default)("triangle-alert",c);a.s(["__iconNode",0,c,"default",0,d])}];
+
+//# sourceMappingURL=0p91_lucide-react_dist_esm_icons_triangle-alert_mjs_12p~i12._.js.map

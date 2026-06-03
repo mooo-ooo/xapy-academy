@@ -1,0 +1,3 @@
+module.exports=[186738,a=>{"use strict";var b=a.i(809707);let c=[["path",{d:"M3 3v16a2 2 0 0 0 2 2h16",key:"c24i48"}],["rect",{x:"7",y:"13",width:"9",height:"4",rx:"1",key:"1iip1u"}],["rect",{x:"7",y:"5",width:"12",height:"4",rx:"1",key:"1anskk"}]],d=(0,b.default)("chart-bar-big",c);a.s(["__iconNode",0,c,"default",0,d])}];
+
+//# sourceMappingURL=0p91_lucide-react_dist_esm_icons_chart-bar-big_mjs_006ph63._.js.map

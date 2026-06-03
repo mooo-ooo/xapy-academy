@@ -1,0 +1,3 @@
+module.exports=[532206,a=>{"use strict";var b=a.i(809707);let c=[["path",{d:"m7 11 2-2-2-2",key:"1lz0vl"}],["path",{d:"M11 13h4",key:"1p7l4v"}],["rect",{width:"18",height:"18",x:"3",y:"3",rx:"2",ry:"2",key:"1m3agn"}]],d=(0,b.default)("square-terminal",c);a.s(["__iconNode",0,c,"default",0,d])}];
+
+//# sourceMappingURL=0p91_lucide-react_dist_esm_icons_square-terminal_mjs_0qnn-au._.js.map

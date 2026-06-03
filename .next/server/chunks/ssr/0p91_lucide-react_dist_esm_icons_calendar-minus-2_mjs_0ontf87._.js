@@ -1,0 +1,3 @@
+module.exports=[44930,a=>{"use strict";var b=a.i(809707);let c=[["path",{d:"M8 2v4",key:"1cmpym"}],["path",{d:"M16 2v4",key:"4m81vk"}],["rect",{width:"18",height:"18",x:"3",y:"4",rx:"2",key:"1hopcy"}],["path",{d:"M3 10h18",key:"8toen8"}],["path",{d:"M10 16h4",key:"17e571"}]],d=(0,b.default)("calendar-minus-2",c);a.s(["__iconNode",0,c,"default",0,d])}];
+
+//# sourceMappingURL=0p91_lucide-react_dist_esm_icons_calendar-minus-2_mjs_0ontf87._.js.map

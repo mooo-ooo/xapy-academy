@@ -1,6 +1,6 @@
 {
   "node": {
-    "40ad0cec5a873a96bafcbcbf54b8e8d833e0cdb294": {
+    "401ac8593b2b41017b391fd384bbec0779f6da5019": {
       "workers": {
         "app/[locale]/admin/modules/[id]/page": {
           "moduleId": 789820,
@@ -12,7 +12,7 @@
       "exportedName": "upsertModuleAction",
       "filename": "src/app/[locale]/admin/modules/actions.ts"
     },
-    "406d6548254c287c8b90a3a3971596f5ff3f115d76": {
+    "40674279459bab07feeff89d8d58b9eef5e7c9c6e1": {
       "workers": {
         "app/[locale]/admin/modules/[id]/page": {
           "moduleId": 789820,

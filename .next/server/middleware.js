@@ -1,5 +1,5 @@
 var R=require("./chunks/[turbopack]_runtime.js")("server/middleware.js")
-R.c("server/chunks/[externals]__0fh5xvk._.js")
-R.c("server/chunks/[root-of-the-server]__0a~jg01._.js")
-R.m(489997)
-module.exports=R.m(489997).exports
+R.c("server/chunks/[externals]__06rm_cd._.js")
+R.c("server/chunks/[root-of-the-server]__0swwui3._.js")
+R.m(878825)
+module.exports=R.m(878825).exports

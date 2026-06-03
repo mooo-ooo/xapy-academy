@@ -1,0 +1,3 @@
+module.exports=[602419,a=>{"use strict";var b=a.i(809707);let c=[["circle",{cx:"12",cy:"5",r:"1",key:"gxeob9"}],["path",{d:"m9 20 3-6 3 6",key:"se2kox"}],["path",{d:"m6 8 6 2 6-2",key:"4o3us4"}],["path",{d:"M12 10v4",key:"1kjpxc"}]],d=(0,b.default)("person-standing",c);a.s(["__iconNode",0,c,"default",0,d])}];
+
+//# sourceMappingURL=0p91_lucide-react_dist_esm_icons_person-standing_mjs_07gi7re._.js.map

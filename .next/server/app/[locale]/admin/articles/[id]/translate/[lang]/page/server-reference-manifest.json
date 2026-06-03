@@ -1,6 +1,6 @@
 {
   "node": {
-    "401003be0ebfa5855466b8af546cd2d3c38ed9780b": {
+    "40d08e89eeeb9fe083f58aa5e3ce814b05add4496b": {
       "workers": {
         "app/[locale]/admin/articles/[id]/translate/[lang]/page": {
           "moduleId": 709158,
@@ -12,7 +12,7 @@
       "exportedName": "saveTranslationAction",
       "filename": "src/app/[locale]/admin/articles/actions.ts"
     },
-    "401e994cd362fd389779bc62e0f3fc5f3e3ce32bed": {
+    "40c869011e58e9c03bce924df4b19ca0e4a60a4e7a": {
       "workers": {
         "app/[locale]/admin/articles/[id]/translate/[lang]/page": {
           "moduleId": 709158,

@@ -1,6 +1,6 @@
 {
   "node": {
-    "40fed6741ed79173dadd5041cdeb4dafa2deffd96a": {
+    "40debe442bdeeb23992325b08d2a3ad9dfa898adb4": {
       "workers": {
         "app/[locale]/admin/tags/page": {
           "moduleId": 978850,
@@ -12,7 +12,7 @@
       "exportedName": "deleteTagAction",
       "filename": "src/app/[locale]/admin/tags/actions.ts"
     },
-    "40093d27a4c747ec836cad24bc2d97cf073691e976": {
+    "403244430902eb3981cab5d97089d239f7fc8d4541": {
       "workers": {
         "app/[locale]/admin/tags/page": {
           "moduleId": 978850,

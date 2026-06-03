@@ -4,6 +4,47 @@
 
 This file lists the canonical public articles. Each article is available as plain Markdown by appending `.md` to its URL.
 
+## Modules
+
+- [Order Flow Footprints](https://wiki.xapy.io/en/academy/order-flow-footprints): Read aggressive buyers and sellers in real time using footprint charts, bid-ask imbalance, and delta.
+- [TPO & Profile](https://wiki.xapy.io/en/academy/tpo-profile): Time-Price Opportunity, market profile and value-area mechanics for context-driven decisions.
+- [Technical Analysis](https://wiki.xapy.io/en/academy/technical-analysis): Trends, structure, levels and indicators — the modern technician's toolkit.
+- [Psychology](https://wiki.xapy.io/en/academy/psychology): Risk discipline, emotional control and the cognitive frameworks used by institutional traders.
+- [Options Greeks](https://wiki.xapy.io/en/academy/options-greeks)
+- [Algorithmic](https://wiki.xapy.io/en/academy/algorithmic)
+
+## Articles
+
+- [HOW TO VIBECODE KSCRIPTS ON KIYOTAKA; NO PRIOR PROGRAMMING KNOWLEDGE REQUIRED, JUST AN IDEA IS SUFFICIENT](https://wiki.xapy.io/api/articles/en/algorithmic/how-to-vibecode-kscripts-on-kiyotaka-no-prior-programming-knowledge-required-just-an-idea-is-sufficient-mmauv7e6mayhxq): For years, custom indicators were locked behind paywalls, proprietary platforms, or the steep learning curve of mastering a scripting language most traders never had time to pick up. If you wanted a tool that thought the way you did one that measured exactly what you cared about you either paid someone to build it, spent months learning to code it yourself, or settled for whatever the platform gave you. Most traders settled. That changes with Kiyotaka_ai. By giving every trader a free, open editor to build and deploy custom indicators, Kiyotakaai has handed back something that was quietly gatekept for too long creative control over your own analysis. You no longer need to be a developer to think like one. You don’t need to retrofit your strategy into someone else’s indicator and hope it’s close enough. You can build exactly what you see in your head, test it on live charts, and trade with tools that are truly yours. This guide is about exactly that. We’re going to walk through how to vibe code indicators on Kiyotaka_ai no deep programming background required, just a clear idea, the right framework, and the willingness to iterate. By the end, you’ll have gone from concept to a working, plotted indicator on a live chart. And the best part? It won’t cost you a thing. Lets get the vibe coding started!!
+- [WTF Crude Oil Suprise 23%](https://wiki.xapy.io/api/articles/en/tpo-profile/wtf-crude-oil-suprise-23-modcgddcm8zgnm): Buggy platform
+- [Price Action Series #1](https://wiki.xapy.io/api/articles/en/technical-analysis/price-action-series-1-mj8aepdvhe40vu): You start here.
+- [Trading BTC Futures Using GEX](https://wiki.xapy.io/api/articles/en/options-greeks/trading-btc-futures-using-gex-mjfvg83k9kyqt7): Using GEX in BTC Futures
+- [A Brief Explanation and Guide to A/VWAP Usage](https://wiki.xapy.io/api/articles/en/technical-analysis/a-brief-explanation-and-tips-for-avwap-usage-mj0ufbvyo3981q): A Brief Summary on VWAP and AVWAP
+- [Options Greeks: A Simple Introduction](https://wiki.xapy.io/api/articles/en/options-greeks/options-greeks-a-simple-introduction-mjwwr6ird8t799): A foundational guide to understanding how options prices respond to price, time, and volatility, without getting lost in complexity. This is not a comprehensive guide on how different Greeks interact.
+- [Derivative Data Essentials: Part 2](https://wiki.xapy.io/api/articles/en/order-flow-footprints/derivative-data-essentials-part-2-miwrdq05bky6p3): Derivatives Data Essentials: Part 2. Covering Liquidations, Volume Delta, Long-Short Ratio & Taker Buy/ Sell.
+- [Psychology in Trading](https://wiki.xapy.io/api/articles/en/psychology/psychology-101-mjfqd9jfysrcsm): A systems-based approach to trading psychology, including position sizing, discipline, backtesting, game theory, and statistical consistency.
+- [Strategy Building - The lab experiment.](https://wiki.xapy.io/api/articles/en/psychology/strategy-building-the-lab-experiment-mj3sbb5ljvfonr): Kiyotaka Exclusive - How to use a scientific approach to build profitable strategies over time.
+- [A Definitive Guide to Cumulative Volume Delta (CVD)](https://wiki.xapy.io/api/articles/en/technical-analysis/a-definitive-guide-to-cumulative-volume-delta-cvd-mivdvktjbpzaoa): An impromptu guide on how to effectively utilize the CVD
+- [Order flow & Footprint Series #1](https://wiki.xapy.io/api/articles/en/order-flow-footprints/footprint-order-flow-series-1-miscne898es6r8): The basics of Order Flow.
+- [Market Profile Series #6](https://wiki.xapy.io/api/articles/en/tpo-profile/market-profile-series-6-misaypyj1zq6zj): Defining a strategy.
+- [Market Profile Series #4](https://wiki.xapy.io/api/articles/en/tpo-profile/market-profile-series-4-mis8zki1s7ke2r): A few trading strategies you can implement by using Market Profile.
+- [Market Profile Series #8](https://wiki.xapy.io/api/articles/en/tpo-profile/market-profile-series-8-misbozmlz4t390): Blueprint for your own Profile-based strategy.
+- [Market Profile Series #1](https://wiki.xapy.io/api/articles/en/tpo-profile/market-profile-series-1-mis781ljb73v05): A brief introduction to Market Profile and TPO charts.
+- [Market Profile Series #3](https://wiki.xapy.io/api/articles/en/tpo-profile/market-profile-series-3-mis8g1p1hfgvq9): A look at different types of market participants, and how to position safely.
+- [Market Profile Series #7](https://wiki.xapy.io/api/articles/en/tpo-profile/market-profile-series-7-misbgmi8uf9z7c): More strategy building based on Profile.
+- [Market Profile Series #2](https://wiki.xapy.io/api/articles/en/tpo-profile/market-profile-series-2-mis7loj5plzsfy): A little introduction to auctions, and how to read them using Market Profile.
+- [Psychology #1](https://wiki.xapy.io/api/articles/en/psychology/psychology-1-misgshjk8o0abr): Three rules to keep you sane and profitable.
+- [Market Profile Series #5](https://wiki.xapy.io/api/articles/en/tpo-profile/market-profile-series-5-misam9484lexo2): More strategies and their rationale.
+- [VWAP, A Practical Guide](https://wiki.xapy.io/api/articles/en/order-flow-footprints/vwap-a-practical-guide-mispnagruiqjba): A breakdown of the VWAP's mechanics, behavior and practical applications.
+- [Derivative Data Essentials](https://wiki.xapy.io/api/articles/en/order-flow-footprints/derivative-data-essentials-misnyl6npskjmk): Introduction to Open Interest, Cumulative Volume Delta, Funding & Orderbook Depth.
+- [Order flow & Footprint Series #2](https://wiki.xapy.io/api/articles/en/order-flow-footprints/order-flow-footpring-series-2-misczaublaj8ik): How to utilize the information in the footprint.
+- [Guide to Volume Footprints](https://wiki.xapy.io/api/articles/en/order-flow-footprints/guide-to-volume-footprints-misxg1c34r6ae3): A complete introduction to footprint charts, showing how executed volume, delta, imbalances, and absorption reveal the true battle between buyers and sellers inside every candle.
+- [Guide to Orderbook Heatmaps](https://wiki.xapy.io/api/articles/en/order-flow-footprints/guide-to-orderbook-heatmaps-misxt4467qg6xe): A complete introduction to orderbook heatmaps, showing how liquidity appears, moves, and disappears, and how these shifts reveal real support, resistance, absorption, spoofing, and upcoming breakouts.
+- [Introduction to Orderbook Heatmaps](https://wiki.xapy.io/api/articles/en/order-flow-footprints/introduction-to-orderbook-heatmaps-mioq7yj4e2xhl1): Everything you need to know about Kiyotaka's Orderbook Heatmaps
+- [Guide to Time Price Opportunity](https://wiki.xapy.io/api/articles/en/tpo-profile/guide-to-time-price-opportunity-miszqf9ck61kfg): Understand how the market builds value, transitions into imbalance, and why TPO levels guide future support, resistance, and trade setups.
+- [Delta explained: reading aggressive flow](https://wiki.xapy.io/api/articles/en/order-flow-footprints/delta-explained): What delta really measures, three patterns that matter, and the mistakes that drain a footprint trader's edge.
+- [dsfsdfsdf](https://wiki.xapy.io/api/articles/en/order-flow-footprints/dsfsdfsdf)
+
 ## Glossary
 
 - [Trading terminology](https://wiki.xapy.io/en/academy/glossary): canonical definitions for the vocabulary used across the Academy
