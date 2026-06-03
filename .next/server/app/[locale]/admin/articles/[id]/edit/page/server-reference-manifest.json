@@ -1,6 +1,6 @@
 {
   "node": {
-    "403d76728d89d7b16896a1e01ea0323dbe183aa25a": {
+    "403af19b06504789db30fee54cb3c5d7f741707277": {
       "workers": {
         "app/[locale]/admin/articles/[id]/edit/page": {
           "moduleId": 62225,
@@ -12,7 +12,7 @@
       "exportedName": "assignTranslatorAction",
       "filename": "src/app/[locale]/admin/articles/actions.ts"
     },
-    "40611cde531798c5a91c4411fe8befab868172db2b": {
+    "401e994cd362fd389779bc62e0f3fc5f3e3ce32bed": {
       "workers": {
         "app/[locale]/admin/articles/[id]/edit/page": {
           "moduleId": 62225,
@@ -24,7 +24,7 @@
       "exportedName": "setTranslationStatusAction",
       "filename": "src/app/[locale]/admin/articles/actions.ts"
     },
-    "4063a872ba5475d51934106e30fbad5ff6ccd5d48f": {
+    "402341f1f412a1a4f58a9c22fa3331bb0a175ed0d8": {
       "workers": {
         "app/[locale]/admin/articles/[id]/edit/page": {
           "moduleId": 62225,
@@ -36,7 +36,7 @@
       "exportedName": "setArticleTagsAction",
       "filename": "src/app/[locale]/admin/tags/actions.ts"
     },
-    "400de12ef93b1dc0d7eb4ff00cad7955ba8502ee00": {
+    "402b57c5401d7570a1510702f987e49699e1c89e21": {
       "workers": {
         "app/[locale]/admin/articles/[id]/edit/page": {
           "moduleId": 62225,
@@ -48,7 +48,7 @@
       "exportedName": "setArticleStatusAction",
       "filename": "src/app/[locale]/admin/articles/actions.ts"
     },
-    "4057ee08e6af3f1d0bed6ef74dbf9e23891a25a4c2": {
+    "405a382e888ae620f71ea7103f0afbe65ffcfd8760": {
       "workers": {
         "app/[locale]/admin/articles/[id]/edit/page": {
           "moduleId": 62225,
@@ -60,7 +60,7 @@
       "exportedName": "updateArticleSourceAction",
       "filename": "src/app/[locale]/admin/articles/actions.ts"
     },
-    "40644039db19c5f19102c9169f252e74d4979a8352": {
+    "40ef3211cd0583b977223648a923667494715cab99": {
       "workers": {
         "app/[locale]/admin/articles/[id]/edit/page": {
           "moduleId": 62225,
