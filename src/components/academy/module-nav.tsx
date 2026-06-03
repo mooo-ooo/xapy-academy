@@ -4,8 +4,8 @@ import { useState } from "react";
 import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 import * as Dialog from "@radix-ui/react-dialog";
-import { Filter, Globe, X, type LucideIcon } from "lucide-react";
-import { moduleIcon } from "@/lib/module-icons";
+import { Filter, X } from "lucide-react";
+import { ModuleIcon } from "@/components/academy/module-icon";
 import type { ModuleCard } from "@/lib/data/modules";
 
 /**
@@ -59,7 +59,7 @@ export function ModuleNav({
     >
       <ul className="flex items-center gap-2 overflow-x-auto">
         <li>
-          <Chip href="/academy" active={!activeSlug} Icon={Globe}>
+          <Chip href="/academy" active={!activeSlug} iconName="globe">
             {labels.all}
           </Chip>
         </li>
@@ -68,7 +68,7 @@ export function ModuleNav({
             <Chip
               href={`/academy/${m.slug}`}
               active={activeSlug === m.slug}
-              Icon={moduleIcon(m.icon)}
+              iconName={m.icon}
             >
               {m.name}
             </Chip>
@@ -121,7 +121,7 @@ export function ModuleNav({
                 <TopicCard
                   href="/academy"
                   active={!activeSlug}
-                  Icon={Globe}
+                  iconName="globe"
                   title={labels.all}
                   subtitle={t("guideCount", {
                     count: modules.reduce((n, m) => n + m.articleCount, 0),
@@ -133,7 +133,7 @@ export function ModuleNav({
                     key={m.id}
                     href={`/academy/${m.slug}`}
                     active={activeSlug === m.slug}
-                    Icon={moduleIcon(m.icon)}
+                    iconName={m.icon}
                     title={m.name}
                     subtitle={
                       m.description ?? t("guideCount", { count: m.articleCount })
@@ -153,12 +153,12 @@ export function ModuleNav({
 function Chip({
   href,
   active,
-  Icon,
+  iconName,
   children,
 }: {
   href: string;
   active: boolean;
-  Icon: LucideIcon;
+  iconName: string | null | undefined;
   children: React.ReactNode;
 }) {
   return (
@@ -170,7 +170,7 @@ function Chip({
           : "inline-flex h-9 items-center gap-2 rounded-full px-4 text-[hsl(var(--muted-foreground))] transition-colors hover:bg-[hsl(var(--hover))] hover:text-[hsl(var(--foreground))]"
       }
     >
-      <Icon size={14} strokeWidth={2} />
+      <ModuleIcon name={iconName} size={14} strokeWidth={2} />
       {children}
     </Link>
   );
@@ -185,14 +185,14 @@ function Chip({
 function TopicCard({
   href,
   active,
-  Icon,
+  iconName,
   title,
   subtitle,
   onNavigate,
 }: {
   href: string;
   active: boolean;
-  Icon: LucideIcon;
+  iconName: string | null | undefined;
   title: string;
   subtitle: string;
   onNavigate: () => void;
@@ -214,7 +214,7 @@ function TopicCard({
             : "bg-[hsl(var(--inset))] text-[hsl(var(--foreground))]"
         }`}
       >
-        <Icon size={20} strokeWidth={2} />
+        <ModuleIcon name={iconName} size={20} strokeWidth={2} />
       </span>
       <div className="min-w-0">
         <h3
