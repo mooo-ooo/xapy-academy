@@ -50,8 +50,8 @@ export function ModuleForm({
   }
 
   return (
-    <form onSubmit={onSubmit} className="grid grid-cols-1 gap-4 md:grid-cols-2">
-      <div className="flex flex-col gap-1.5 md:col-span-2">
+    <form onSubmit={onSubmit} className="flex flex-col gap-6">
+      <div className="flex max-w-xl flex-col gap-1.5">
         <Label htmlFor="slug" required>
           {t("slugLabel")}
         </Label>
@@ -70,7 +70,7 @@ export function ModuleForm({
         <Label>{t("iconLabel")}</Label>
         <IconPicker name="icon" initial={initial?.icon ?? ""} />
       </div>
-      <label className="flex items-center gap-3 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--inset))] p-3 md:col-span-2">
+      <label className="flex max-w-xl items-center gap-3 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--inset))] p-3">
         <input
           type="checkbox"
           name="isPublic"
@@ -86,7 +86,7 @@ export function ModuleForm({
           </div>
         </div>
       </label>
-      <div className="md:col-span-2">
+      <div>
         <Button type="submit" disabled={pending}>
           {pending && <Loader2 size={14} className="animate-spin" />}
           {initial ? t("saveUpdate") : t("saveCreate")}

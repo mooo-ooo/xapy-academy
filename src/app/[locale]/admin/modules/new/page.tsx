@@ -12,7 +12,7 @@ export default async function NewModulePage({
   setRequestLocale(locale);
   const t = await getTranslations({ locale, namespace: "admin.modules" });
   return (
-    <div className="mx-auto max-w-xl">
+    <div className="w-full">
       <Link
         href="/admin/modules"
         className="mb-6 inline-flex items-center gap-1.5 text-sm text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]"
