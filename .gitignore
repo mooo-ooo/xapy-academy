@@ -14,7 +14,7 @@
 /coverage
 
 # next.js
-/.next/
+# NOTE: main tracks the built .next for deploy — do NOT ignore it here.
 
 # production
 /build
