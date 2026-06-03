@@ -2,11 +2,11 @@
 
 import { useMemo, useState } from "react";
 import { DynamicIcon, iconNames, type IconName } from "lucide-react/dynamic";
-import { X } from "lucide-react";
+import { Search, X } from "lucide-react";
 import { normalizeIconName } from "@/lib/module-icons";
 import { cn } from "@/lib/utils";
 
-const LIMIT = 72;
+const LIMIT = 120;
 
 export function IconPicker({
   name,
@@ -20,41 +20,58 @@ export function IconPicker({
   );
   const [query, setQuery] = useState("");
 
-  const results = useMemo(() => {
+  const { results, total } = useMemo(() => {
     const q = query.trim().toLowerCase().replace(/\s+/g, "-");
-    const list = q ? iconNames.filter((n) => n.includes(q)) : iconNames;
-    return list.slice(0, LIMIT);
+    const all = q ? iconNames.filter((n) => n.includes(q)) : iconNames;
+    return { results: all.slice(0, LIMIT), total: all.length };
   }, [query]);
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4">
       <input type="hidden" name={name} value={value} />
 
-      <div className="flex flex-wrap items-center gap-2">
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search icons… (chart, book, brain, code…)"
-          className="h-9 min-w-[200px] flex-1 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--inset))] px-3 text-sm text-[hsl(var(--foreground))] outline-none focus:border-[hsl(var(--accent-emerald))]"
-        />
-        {value && (
-          <span className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-400/40 bg-emerald-500/10 px-2.5 py-1.5 text-xs text-emerald-200">
-            <DynamicIcon name={value as IconName} size={14} />
-            <span className="font-mono">{value}</span>
+      <div className="mb-3 flex flex-col gap-3 sm:flex-row sm:items-center">
+        <div className="relative flex-1">
+          <Search
+            size={15}
+            className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[hsl(var(--muted-foreground))]"
+          />
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search icons… (chart, book, brain, rocket, code…)"
+            className="h-10 w-full rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--inset))] pl-9 pr-3 text-sm text-[hsl(var(--foreground))] outline-none focus:border-[hsl(var(--accent-emerald))]"
+          />
+        </div>
+        {value ? (
+          <div className="flex shrink-0 items-center gap-2.5 rounded-lg border border-emerald-400/40 bg-emerald-500/10 px-3 py-2">
+            <DynamicIcon
+              name={value as IconName}
+              size={18}
+              className="text-emerald-200"
+            />
+            <span className="font-mono text-xs text-emerald-100">{value}</span>
             <button
               type="button"
               onClick={() => setValue("")}
               aria-label="Clear icon"
-              className="ml-0.5 text-emerald-200/70 hover:text-emerald-100"
+              className="text-emerald-200/70 transition-colors hover:text-emerald-100"
             >
-              <X size={12} />
+              <X size={14} />
             </button>
+          </div>
+        ) : (
+          <span className="shrink-0 px-1 text-xs text-[hsl(var(--muted-foreground))]">
+            No icon selected
           </span>
         )}
       </div>
 
-      <div className="grid max-h-56 grid-cols-8 gap-1.5 overflow-y-auto rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-2 sm:grid-cols-10 md:grid-cols-12">
+      <div
+        className="grid max-h-[360px] gap-2 overflow-y-auto rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--inset))] p-3"
+        style={{ gridTemplateColumns: "repeat(auto-fill, minmax(48px, 1fr))" }}
+      >
         {results.map((iconName) => {
           const active = value === iconName;
           return (
@@ -64,27 +81,27 @@ export function IconPicker({
               onClick={() => setValue(iconName)}
               title={iconName}
               className={cn(
-                "inline-flex h-9 w-9 items-center justify-center rounded-lg border transition-colors",
+                "flex aspect-square items-center justify-center rounded-lg border transition-colors",
                 active
-                  ? "border-emerald-400/40 bg-emerald-500/10 text-emerald-200"
-                  : "border-transparent text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--hover))] hover:text-[hsl(var(--foreground))]",
+                  ? "border-emerald-400/50 bg-emerald-500/15 text-emerald-200"
+                  : "border-transparent text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--border))] hover:bg-[hsl(var(--hover))] hover:text-[hsl(var(--foreground))]",
               )}
             >
-              <DynamicIcon name={iconName} size={16} />
+              <DynamicIcon name={iconName} size={20} />
             </button>
           );
         })}
         {results.length === 0 && (
-          <p className="col-span-full p-3 text-center text-xs text-[hsl(var(--muted-foreground))]">
+          <p className="col-span-full py-10 text-center text-sm text-[hsl(var(--muted-foreground))]">
             No icons match “{query}”.
           </p>
         )}
       </div>
 
-      <p className="text-xs text-[hsl(var(--muted-foreground))]">
+      <p className="mt-2.5 text-xs text-[hsl(var(--muted-foreground))]">
         {query
-          ? `Showing ${results.length}${iconNames.filter((n) => n.includes(query.trim().toLowerCase().replace(/\s+/g, "-"))).length > LIMIT ? "+" : ""} matches`
-          : `${iconNames.length} icons — type to search`}
+          ? `${total} match${total === 1 ? "" : "es"}${total > LIMIT ? ` — showing first ${LIMIT}` : ""}`
+          : `${iconNames.length.toLocaleString()} icons — type to search`}
         . Browse names at lucide.dev/icons.
       </p>
     </div>
