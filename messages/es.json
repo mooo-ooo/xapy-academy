@@ -518,7 +518,8 @@
         "general": "General",
         "branding": "Marca",
         "seo": "SEO",
-        "contact": "Contacto"
+        "contact": "Contacto",
+        "footer": "Footer"
       },
       "title": "Ajustes del sitio",
       "subtitle": "Todo lo que da forma al sitio público vive aquí. La variable de entorno {envVar} es solo el bootstrap del middleware — la BD gana en las lecturas de la capa de datos.",
@@ -571,7 +572,28 @@
         "twitterPlaceholder": "@tuhandle"
       },
       "save": "Guardar ajustes",
-      "saved": "Ajustes guardados"
+      "saved": "Ajustes guardados",
+      "footer": {
+        "title": "Footer",
+        "description": "Configure the public site footer. Link columns and text are per-language; social links are shared.",
+        "enabledLabel": "Show footer",
+        "enabledHint": "When off, no footer is rendered on the public site.",
+        "socialLabel": "Social links",
+        "socialHint": "Shared across all languages. Pick a platform and paste the full URL.",
+        "addSocial": "Add social link",
+        "urlPlaceholder": "https://… or mailto:…",
+        "localeLabel": "Editing language",
+        "introLabel": "Intro text",
+        "introPlaceholder": "Short description shown next to the logo",
+        "copyrightLabel": "Copyright line",
+        "copyrightHint": "Use {year} and {siteName} as placeholders.",
+        "columnsLabel": "Link columns",
+        "addColumn": "Add column",
+        "columnTitlePlaceholder": "Column title",
+        "addLink": "Add link",
+        "linkLabelPlaceholder": "Label",
+        "linkUrlPlaceholder": "/path or https://…"
+      }
     }
   }
 }

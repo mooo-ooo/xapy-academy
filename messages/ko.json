@@ -518,7 +518,8 @@
         "general": "일반",
         "branding": "브랜딩",
         "seo": "SEO",
-        "contact": "연락처"
+        "contact": "연락처",
+        "footer": "Footer"
       },
       "title": "사이트 설정",
       "subtitle": "공개 사이트를 형성하는 모든 것이 여기에 있습니다. {envVar} 환경 변수는 미들웨어 부트스트랩일 뿐이며 — 데이터 계층 읽기에서는 데이터베이스가 우선합니다.",
@@ -571,7 +572,28 @@
         "twitterPlaceholder": "@yourhandle"
       },
       "save": "설정 저장",
-      "saved": "설정이 저장되었습니다"
+      "saved": "설정이 저장되었습니다",
+      "footer": {
+        "title": "Footer",
+        "description": "Configure the public site footer. Link columns and text are per-language; social links are shared.",
+        "enabledLabel": "Show footer",
+        "enabledHint": "When off, no footer is rendered on the public site.",
+        "socialLabel": "Social links",
+        "socialHint": "Shared across all languages. Pick a platform and paste the full URL.",
+        "addSocial": "Add social link",
+        "urlPlaceholder": "https://… or mailto:…",
+        "localeLabel": "Editing language",
+        "introLabel": "Intro text",
+        "introPlaceholder": "Short description shown next to the logo",
+        "copyrightLabel": "Copyright line",
+        "copyrightHint": "Use {year} and {siteName} as placeholders.",
+        "columnsLabel": "Link columns",
+        "addColumn": "Add column",
+        "columnTitlePlaceholder": "Column title",
+        "addLink": "Add link",
+        "linkLabelPlaceholder": "Label",
+        "linkUrlPlaceholder": "/path or https://…"
+      }
     }
   }
 }

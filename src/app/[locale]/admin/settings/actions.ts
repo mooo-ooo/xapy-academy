@@ -76,7 +76,70 @@ const schema = z.object({
       }),
     )
     .optional(),
+  footerConfig: z
+    .object({
+      enabled: z.boolean(),
+      social: z
+        .array(
+          z.object({
+            platform: z.string().trim().max(20),
+            url: z.string().trim().max(2048),
+          }),
+        )
+        .max(16),
+      translations: z.record(
+        z.string(),
+        z.object({
+          intro: z.string().trim().max(800).optional(),
+          copyright: z.string().trim().max(200).optional(),
+          columns: z
+            .array(
+              z.object({
+                title: z.string().trim().max(80),
+                links: z
+                  .array(
+                    z.object({
+                      label: z.string().trim().max(80),
+                      href: z.string().trim().max(2048),
+                    }),
+                  )
+                  .max(24),
+              }),
+            )
+            .max(8)
+            .optional(),
+        }),
+      ),
+    })
+    .optional(),
 });
+
+type FooterInput = NonNullable<z.infer<typeof schema>["footerConfig"]>;
+
+function cleanFooterConfig(input: FooterInput): FooterInput {
+  const valid = new Set(routing.locales as readonly string[]);
+  const social = input.social
+    .map((s) => ({ platform: s.platform.trim(), url: s.url.trim() }))
+    .filter((s) => s.platform && s.url);
+  const translations: FooterInput["translations"] = {};
+  for (const [locale, c] of Object.entries(input.translations)) {
+    if (!valid.has(locale)) continue;
+    const columns = (c.columns ?? [])
+      .map((col) => ({
+        title: col.title.trim(),
+        links: col.links
+          .map((l) => ({ label: l.label.trim(), href: l.href.trim() }))
+          .filter((l) => l.label && l.href),
+      }))
+      .filter((col) => col.title || col.links.length > 0);
+    const entry: FooterInput["translations"][string] = {};
+    if (c.intro?.trim()) entry.intro = c.intro.trim();
+    if (c.copyright?.trim()) entry.copyright = c.copyright.trim();
+    if (columns.length > 0) entry.columns = columns;
+    if (Object.keys(entry).length > 0) translations[locale] = entry;
+  }
+  return { enabled: input.enabled, social, translations };
+}
 
 type HeroEntry = { title?: string; tagline?: string };
 
@@ -142,6 +205,9 @@ export async function updateSiteSettingAction(raw: unknown) {
       : {}),
     ...(parsed.data.heroTranslations !== undefined
       ? { heroTranslations: cleanHeroTranslations(parsed.data.heroTranslations) }
+      : {}),
+    ...(parsed.data.footerConfig !== undefined
+      ? { footerConfig: cleanFooterConfig(parsed.data.footerConfig) }
       : {}),
   };
 

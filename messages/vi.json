@@ -591,7 +591,29 @@
         "branding": "Nhận diện",
         "locales": "Ngôn ngữ",
         "seo": "SEO",
-        "contact": "Liên hệ"
+        "contact": "Liên hệ",
+        "footer": "Footer"
+      },
+      "footer": {
+        "title": "Footer",
+        "description": "Cấu hình footer của site công khai. Cột link và chữ theo từng ngôn ngữ; link mạng xã hội dùng chung.",
+        "enabledLabel": "Hiện footer",
+        "enabledHint": "Khi tắt, site công khai sẽ không hiển thị footer.",
+        "socialLabel": "Link mạng xã hội",
+        "socialHint": "Dùng chung cho mọi ngôn ngữ. Chọn nền tảng và dán URL đầy đủ.",
+        "addSocial": "Thêm mạng xã hội",
+        "urlPlaceholder": "https://… hoặc mailto:…",
+        "localeLabel": "Ngôn ngữ đang sửa",
+        "introLabel": "Đoạn giới thiệu",
+        "introPlaceholder": "Mô tả ngắn hiển thị cạnh logo",
+        "copyrightLabel": "Dòng bản quyền",
+        "copyrightHint": "Dùng {year} và {siteName} làm placeholder.",
+        "columnsLabel": "Cột liên kết",
+        "addColumn": "Thêm cột",
+        "columnTitlePlaceholder": "Tiêu đề cột",
+        "addLink": "Thêm link",
+        "linkLabelPlaceholder": "Nhãn",
+        "linkUrlPlaceholder": "/đường-dẫn hoặc https://…"
       }
     },
     "table": {

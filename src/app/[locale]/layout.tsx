@@ -7,6 +7,7 @@ import { routing } from "@/i18n/routing";
 import { cookies } from "next/headers";
 import { Providers } from "@/components/providers";
 import { Header } from "@/components/layout/header";
+import { Footer } from "@/components/layout/footer";
 import { JsonLd } from "@/components/seo/json-ld";
 import { WebVitalsReporter } from "@/components/web-vitals";
 import {
@@ -165,6 +166,7 @@ export default async function LocaleLayout({
           <Providers initialTheme={initialTheme}>
             <Header />
             <main className="flex-1">{children}</main>
+            <Footer locale={locale} />
             <WebVitalsReporter />
           </Providers>
         </NextIntlClientProvider>
