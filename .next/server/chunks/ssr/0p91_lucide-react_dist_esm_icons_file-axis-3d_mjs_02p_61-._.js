@@ -1,3 +1,0 @@
-module.exports=[606022,a=>{"use strict";var b=a.i(809707);let c=[["path",{d:"M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z",key:"1oefj6"}],["path",{d:"M14 2v5a1 1 0 0 0 1 1h5",key:"wfsgrz"}],["path",{d:"m8 18 4-4",key:"12zab0"}],["path",{d:"M8 10v8h8",key:"tlaukw"}]],d=(0,b.default)("file-axis-3d",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0p91_lucide-react_dist_esm_icons_file-axis-3d_mjs_02p_61-._.js.map

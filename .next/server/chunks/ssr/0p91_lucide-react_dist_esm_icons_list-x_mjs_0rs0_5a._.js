@@ -1,3 +1,0 @@
-module.exports=[810022,a=>{"use strict";var b=a.i(809707);let c=[["path",{d:"M16 5H3",key:"m91uny"}],["path",{d:"M11 12H3",key:"51ecnj"}],["path",{d:"M16 19H3",key:"zzsher"}],["path",{d:"m15.5 9.5 5 5",key:"ytk86i"}],["path",{d:"m20.5 9.5-5 5",key:"17o44f"}]],d=(0,b.default)("list-x",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0p91_lucide-react_dist_esm_icons_list-x_mjs_0rs0_5a._.js.map

@@ -1,3 +1,0 @@
-module.exports=[287719,a=>{"use strict";var b=a.i(809707);let c=[["rect",{width:"20",height:"12",x:"2",y:"6",rx:"2",key:"9lu3g6"}],["circle",{cx:"12",cy:"12",r:"2",key:"1c9p78"}],["path",{d:"M6 12h.01M18 12h.01",key:"113zkx"}]],d=(0,b.default)("banknote",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0p91_lucide-react_dist_esm_icons_banknote_mjs_099c497._.js.map

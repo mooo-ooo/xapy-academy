@@ -1,3 +1,0 @@
-module.exports=[425817,a=>{"use strict";var b=a.i(809707);let c=[["circle",{cx:"12",cy:"12",r:"10",key:"1mglay"}],["path",{d:"M12 6v6l-2 4",key:"1095bu"}]],d=(0,b.default)("clock-7",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0p91_lucide-react_dist_esm_icons_clock-7_mjs_0~_cs-_._.js.map

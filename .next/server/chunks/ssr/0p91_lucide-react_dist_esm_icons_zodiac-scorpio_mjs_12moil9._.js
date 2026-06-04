@@ -1,3 +1,0 @@
-module.exports=[171500,a=>{"use strict";var b=a.i(809707);let c=[["path",{d:"M10 19V5.5a1 1 0 0 1 5 0V17a2 2 0 0 0 2 2h5l-3-3",key:"1w8g0z"}],["path",{d:"m22 19-3 3",key:"1ix4wq"}],["path",{d:"M5 19V5.5a1 1 0 0 1 5 0",key:"1d4oa3"}],["path",{d:"M5 5.5A2.5 2.5 0 0 0 2.5 3",key:"gp646f"}]],d=(0,b.default)("zodiac-scorpio",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0p91_lucide-react_dist_esm_icons_zodiac-scorpio_mjs_12moil9._.js.map

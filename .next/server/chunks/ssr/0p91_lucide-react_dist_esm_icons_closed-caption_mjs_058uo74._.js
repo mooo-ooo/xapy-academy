@@ -1,3 +1,0 @@
-module.exports=[810792,a=>{"use strict";var b=a.i(809707);let c=[["path",{d:"M10 9.17a3 3 0 1 0 0 5.66",key:"h9wayk"}],["path",{d:"M17 9.17a3 3 0 1 0 0 5.66",key:"1v6zke"}],["rect",{x:"2",y:"5",width:"20",height:"14",rx:"2",key:"qneu4z"}]],d=(0,b.default)("closed-caption",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0p91_lucide-react_dist_esm_icons_closed-caption_mjs_058uo74._.js.map
