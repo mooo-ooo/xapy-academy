@@ -24,6 +24,7 @@ import { toast } from "@/components/ui/toast";
 import { Loader2 } from "lucide-react";
 import { TiptapEditor } from "@/components/admin/tiptap-editor";
 import { ImageUpload } from "@/components/admin/image-upload";
+import { AccentColorField } from "@/components/admin/accent-color-field";
 import { routing } from "@/i18n/routing";
 import { createArticleAction } from "../actions";
 import { slugify } from "@/lib/utils";
@@ -49,6 +50,7 @@ export function NewArticleForm({
     "BEGINNER" | "INTERMEDIATE" | "ADVANCED"
   >("BEGINNER");
   const [body, setBody] = useState(t("form.bodyPlaceholder"));
+  const [accentColor, setAccentColor] = useState("");
   const [activeTab, setActiveTab] = useState("content");
 
   function onTitleChange(next: string) {
@@ -75,6 +77,7 @@ export function NewArticleForm({
         metaDescription: String(fd.get("metaDescription") ?? ""),
         difficulty,
         coverImage: String(fd.get("coverImage") ?? ""),
+        accentColor,
       });
       if (!res.ok) {
         toast.error(res.error);
@@ -193,7 +196,17 @@ export function NewArticleForm({
               </div>
               <div className="flex flex-col gap-1.5">
                 <Label required>{t("form.bodyLabel")}</Label>
-                <TiptapEditor value={body} onChange={setBody} />
+                <AccentColorField
+                  value={accentColor}
+                  onChange={setAccentColor}
+                  label={t("form.accentColorLabel")}
+                  hint={t("form.accentColorHint")}
+                />
+                <TiptapEditor
+                  value={body}
+                  onChange={setBody}
+                  accentColor={accentColor}
+                />
               </div>
             </div>
           </TabsContent>

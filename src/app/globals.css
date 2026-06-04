@@ -340,7 +340,7 @@ body {
 }
 .prose-academy p { color: hsl(var(--foreground)); }
 .prose-academy a {
-  color: hsl(var(--accent-emerald));
+  color: var(--article-accent, hsl(var(--accent-emerald)));
   text-decoration: underline;
   text-underline-offset: 3px;
   text-decoration-thickness: 1px;
@@ -376,7 +376,7 @@ body {
 .prose-academy ol { list-style: decimal; }
 .prose-academy li { margin: 0.4em 0; }
 .prose-academy blockquote {
-  border-left: 3px solid hsl(var(--accent-emerald));
+  border-left: 3px solid var(--article-accent, hsl(var(--accent-emerald)));
   padding-left: 1em;
   color: hsl(var(--muted-foreground));
   font-style: italic;

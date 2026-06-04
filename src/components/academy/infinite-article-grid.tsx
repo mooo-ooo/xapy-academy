@@ -25,6 +25,7 @@ export function InfiniteArticleGrid({
   locale,
   type,
   moduleId,
+  excludeId,
   gridClassName = "grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4",
 }: {
   initialItems: ArticleListItem[];
@@ -33,6 +34,8 @@ export function InfiniteArticleGrid({
   type: "latest" | "module";
   /** Required when type === "module". */
   moduleId?: string;
+  /** When type === "module": drop this article id (e.g. the one being read). */
+  excludeId?: string;
   gridClassName?: string;
 }) {
   const fetchNext = useCallback(
@@ -44,6 +47,7 @@ export function InfiniteArticleGrid({
         limit: "12",
       });
       if (type === "module" && moduleId) params.set("moduleId", moduleId);
+      if (type === "module" && excludeId) params.set("exclude", excludeId);
       const res = await fetch(`/api/feed?${params.toString()}`, {
         cache: "no-store",
       });
@@ -54,7 +58,7 @@ export function InfiniteArticleGrid({
       };
       return { items: revive(json.items), nextCursor: json.nextCursor };
     },
-    [type, locale, moduleId],
+    [type, locale, moduleId, excludeId],
   );
 
   const { items, loading, done, sentinelRef, error } = useInfiniteFeed<

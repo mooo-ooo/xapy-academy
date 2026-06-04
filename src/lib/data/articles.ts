@@ -239,7 +239,7 @@ export async function listLatestArticlesPage(
 export async function listPublishedArticlesInModulePage(
   moduleId: string,
   locale: Locale,
-  opts: { cursor?: string | null; limit?: number } = {},
+  opts: { cursor?: string | null; limit?: number; excludeId?: string } = {},
 ): Promise<ArticleFeedPage> {
   const limit = Math.min(50, Math.max(1, opts.limit ?? 12));
   const cursor = decodeArticleCursor(opts.cursor);
@@ -248,6 +248,7 @@ export async function listPublishedArticlesInModulePage(
       status: "PUBLISHED",
       moduleId,
       translations: { some: { status: "PUBLISHED" } },
+      ...(opts.excludeId ? { id: { not: opts.excludeId } } : {}),
       ...cursorWhereClause(cursor),
     },
     select: ARTICLE_LIST_SELECT,
@@ -292,6 +293,7 @@ export type LoadedArticle = {
   /** Real last-edit timestamp of the rendered translation (Article schema dateModified). */
   updatedAt: Date | null;
   coverImage: string | null;
+  accentColor: string | null;
   difficulty: Difficulty;
   likeCount: number;
   /** Localized tag names → Article.keywords. */
@@ -409,6 +411,7 @@ export const loadArticleForReading = cache(
       publishedAt: renderedTr.publishedAt ?? article.publishedAt,
       updatedAt: renderedTr.updatedAt ?? article.updatedAt,
       coverImage: article.coverImage,
+      accentColor: article.accentColor,
       difficulty: article.difficulty,
       likeCount: article.likeCount,
       keywords,
@@ -437,29 +440,38 @@ export const listPublishedArticlesByAuthor = cache(
   },
 );
 
-/** Same module, latest N excluding the given article id.
- *  Falls back to sourceLocale when the requested locale is missing. */
-export const listRelatedArticles = cache(
+/** Lightweight sibling nav for the article sidebar: every published article
+ *  in the module, oldest-first ("lesson" order. Selects only slug + title for
+ *  the resolved locale — no excerpt / cover / counts. */
+export const listModuleArticleNav = cache(
   async (
     moduleId: string,
-    excludeArticleId: string,
     locale: Locale,
-    limit = 3,
-  ): Promise<ArticleListItem[]> => {
+  ): Promise<{ slug: string; title: string }[]> => {
     const rows = await prisma.article.findMany({
       where: {
         status: "PUBLISHED",
         moduleId,
-        id: { not: excludeArticleId },
         translations: { some: { status: "PUBLISHED" } },
       },
-      select: ARTICLE_LIST_SELECT,
-      orderBy: { publishedAt: "desc" },
-      take: limit,
+      orderBy: [{ publishedAt: "asc" }, { createdAt: "asc" }],
+      select: {
+        sourceLocale: true,
+        translations: {
+          where: { status: "PUBLISHED" },
+          select: { locale: true, slug: true, title: true },
+        },
+      },
     });
-    return rows
-      .map((r) => toListItem(r as unknown as ArticleListRow, locale))
-      .filter((x): x is ArticleListItem => x !== null);
+    const out: { slug: string; title: string }[] = [];
+    for (const r of rows) {
+      const tr =
+        r.translations.find((t) => t.locale === locale) ??
+        r.translations.find((t) => t.locale === r.sourceLocale) ??
+        r.translations[0];
+      if (tr) out.push({ slug: tr.slug, title: tr.title });
+    }
+    return out;
   },
 );
 

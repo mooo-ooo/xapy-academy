@@ -199,7 +199,9 @@
         "metaTitleLabel": "Meta 标题",
         "metaTitlePlaceholder": "文章标题 — Kiyotaka Academy",
         "metaDescriptionLabel": "Meta 描述",
-        "metaDescriptionHint": "140-160 字符片段 — 切勿复用其他语言的文本"
+        "metaDescriptionHint": "140-160 字符片段 — 切勿复用其他语言的文本",
+        "accentColorLabel": "强调色",
+        "accentColorHint": "替换本文链接和引用栏的默认绿色。"
       },
       "edit": {
         "moduleMeta": "模块: {module} · 源: {locale} · v{version}",

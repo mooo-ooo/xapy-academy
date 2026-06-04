@@ -102,7 +102,7 @@ export function TocSidebar({
               {isActive && (
                 <span
                   aria-hidden="true"
-                  className="absolute left-0 top-0 h-full w-0.5 rounded bg-[hsl(var(--accent-emerald))]"
+                  className="absolute left-0 top-0 h-full w-0.5 rounded bg-[color:var(--article-accent,hsl(var(--accent-emerald)))]"
                 />
               )}
               <a

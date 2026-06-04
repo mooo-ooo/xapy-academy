@@ -199,7 +199,9 @@
         "metaTitleLabel": "Meta título",
         "metaTitlePlaceholder": "Título do artigo — Kiyotaka Academy",
         "metaDescriptionLabel": "Meta descrição",
-        "metaDescriptionHint": "Snippet de 140-160 caracteres — nunca reutilize texto de outro idioma"
+        "metaDescriptionHint": "Snippet de 140-160 caracteres — nunca reutilize texto de outro idioma",
+        "accentColorLabel": "Cor de destaque",
+        "accentColorHint": "Substitui o verde padrão de links e citações neste artigo."
       },
       "edit": {
         "moduleMeta": "Módulo: {module} · Fonte: {locale} · v{version}",

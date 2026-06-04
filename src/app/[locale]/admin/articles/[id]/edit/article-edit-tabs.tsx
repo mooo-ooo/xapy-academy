@@ -24,6 +24,7 @@ import { toast } from "@/components/ui/toast";
 import { Loader2 } from "lucide-react";
 import { TiptapEditor } from "@/components/admin/tiptap-editor";
 import { ImageUpload } from "@/components/admin/image-upload";
+import { AccentColorField } from "@/components/admin/accent-color-field";
 import {
   setArticleStatusAction,
   updateArticleSourceAction,
@@ -61,6 +62,7 @@ export function ArticleEditTabs({
     metaDescription: string;
     difficulty: Difficulty;
     coverImage: string;
+    accentColor: string;
     ogImage: string;
   };
   viewCount: number;
@@ -72,6 +74,7 @@ export function ArticleEditTabs({
   const t = useTranslations("admin.articles");
   const [pending, startTransition] = useTransition();
   const [body, setBody] = useState(source.bodyMdx);
+  const [accentColor, setAccentColor] = useState(source.accentColor);
   const [difficulty, setDifficulty] = useState<Difficulty>(source.difficulty);
   const [activeTab, setActiveTab] = useState("content");
   const [views, setViews] = useState(viewCount);
@@ -91,6 +94,7 @@ export function ArticleEditTabs({
         metaDescription: String(fd.get("metaDescription") ?? ""),
         difficulty,
         coverImage: String(fd.get("coverImage") ?? ""),
+        accentColor,
         ogImage: String(fd.get("ogImage") ?? ""),
       });
       if (!res.ok) {
@@ -230,7 +234,17 @@ export function ArticleEditTabs({
               </div>
               <div className="flex flex-col gap-1.5">
                 <Label required>{t("edit.bodyLabel")}</Label>
-                <TiptapEditor value={body} onChange={setBody} />
+                <AccentColorField
+                  value={accentColor}
+                  onChange={setAccentColor}
+                  label={t("form.accentColorLabel")}
+                  hint={t("form.accentColorHint")}
+                />
+                <TiptapEditor
+                  value={body}
+                  onChange={setBody}
+                  accentColor={accentColor}
+                />
               </div>
             </div>
           </TabsContent>

@@ -165,6 +165,7 @@ model Article {
   sourceLocale  String        @default("en")
   sourceVersion Int           @default(1)
   coverImage    String?
+  accentColor   String?
   difficulty    Difficulty    @default(BEGINNER)
   likeCount     Int           @default(0)
   publishedAt   DateTime?

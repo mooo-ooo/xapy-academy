@@ -199,7 +199,9 @@
         "metaTitleLabel": "メタタイトル",
         "metaTitlePlaceholder": "記事タイトル — Kiyotaka Academy",
         "metaDescriptionLabel": "メタ説明",
-        "metaDescriptionHint": "140-160 文字のスニペット — 他言語のコピーを再利用しないでください"
+        "metaDescriptionHint": "140-160 文字のスニペット — 他言語のコピーを再利用しないでください",
+        "accentColorLabel": "アクセントカラー",
+        "accentColorHint": "この記事のリンクと引用バーの既定の緑を置き換えます。"
       },
       "edit": {
         "moduleMeta": "モジュール: {module} · ソース: {locale} · v{version}",

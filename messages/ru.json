@@ -199,7 +199,9 @@
         "metaTitleLabel": "Meta-заголовок",
         "metaTitlePlaceholder": "Заголовок статьи — Kiyotaka Academy",
         "metaDescriptionLabel": "Meta-описание",
-        "metaDescriptionHint": "Сниппет 140-160 символов — никогда не переиспользуйте текст с другого языка"
+        "metaDescriptionHint": "Сниппет 140-160 символов — никогда не переиспользуйте текст с другого языка",
+        "accentColorLabel": "Акцентный цвет",
+        "accentColorHint": "Заменяет зелёный по умолчанию для ссылок и цитат в этой статье."
       },
       "edit": {
         "moduleMeta": "Модуль: {module} · Источник: {locale} · v{version}",
