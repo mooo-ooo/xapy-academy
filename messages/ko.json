@@ -199,7 +199,9 @@
         "metaTitleLabel": "메타 제목",
         "metaTitlePlaceholder": "아티클 제목 — Kiyotaka Academy",
         "metaDescriptionLabel": "메타 설명",
-        "metaDescriptionHint": "140-160자 스니펫 — 다른 언어의 텍스트를 재사용하지 마세요"
+        "metaDescriptionHint": "140-160자 스니펫 — 다른 언어의 텍스트를 재사용하지 마세요",
+        "accentColorLabel": "강조 색상",
+        "accentColorHint": "이 글의 링크와 인용 막대의 기본 초록색을 대체합니다."
       },
       "edit": {
         "moduleMeta": "모듈: {module} · 소스: {locale} · v{version}",

@@ -118,6 +118,7 @@ export default async function EditArticlePage({
           metaDescription: source.metaDescription ?? "",
           difficulty: article.difficulty,
           coverImage: article.coverImage ?? "",
+          accentColor: article.accentColor ?? "",
           ogImage: source.ogImage ?? "",
         }}
         viewCount={article.viewCount}

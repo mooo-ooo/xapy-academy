@@ -1,6 +1,7 @@
 import { compileMDX } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
 import rehypeSlug from "rehype-slug";
+import rehypeRaw from "rehype-raw";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypePrettyCode from "rehype-pretty-code";
 import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
@@ -174,6 +175,7 @@ export async function renderArticleMdx(source: string): Promise<RenderedMdx> {
         format: "md",
         remarkPlugins: [remarkGfm],
         rehypePlugins: [
+          rehypeRaw,
           rehypeSlug,
           [
             rehypeAutolinkHeadings,

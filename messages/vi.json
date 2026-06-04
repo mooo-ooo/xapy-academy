@@ -277,7 +277,9 @@
         "metaTitlePlaceholder": "Tiêu đề bài — Học viện Kiyotaka",
         "metaDescriptionLabel": "Meta description",
         "metaDescriptionHint": "140–160 ký tự — không tái sử dụng từ locale khác",
-        "ogImageLabel": "Ảnh chia sẻ MXH (OG)"
+        "ogImageLabel": "Ảnh chia sẻ MXH (OG)",
+        "accentColorLabel": "Màu chủ đạo",
+        "accentColorHint": "Thay màu xanh mặc định của link và vạch trích dẫn trong bài này."
       },
       "edit": {
         "moduleMeta": "Module: {module} · Nguồn: {locale} · v{version}",

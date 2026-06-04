@@ -51,6 +51,7 @@ export async function GET(req: NextRequest) {
     const page = await listPublishedArticlesInModulePage(moduleId, locale, {
       cursor: sp.get("cursor"),
       limit,
+      excludeId: sp.get("exclude") ?? undefined,
     });
     return NextResponse.json({
       items: page.items.map(serializeArticle),

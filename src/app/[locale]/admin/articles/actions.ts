@@ -28,6 +28,11 @@ const createArticleSchema = z.object({
   metaDescription: z.string().max(280).optional().or(z.literal("")),
   difficulty: z.enum(DIFFICULTY).default("BEGINNER"),
   coverImage: z.string().max(500).optional().or(z.literal("")),
+  accentColor: z
+    .string()
+    .regex(/^#[0-9a-fA-F]{6}$/)
+    .optional()
+    .or(z.literal("")),
 });
 
 export async function createArticleAction(raw: unknown) {
@@ -56,6 +61,7 @@ export async function createArticleAction(raw: unknown) {
       sourceVersion: 1,
       difficulty: parsed.data.difficulty,
       coverImage: parsed.data.coverImage || null,
+      accentColor: parsed.data.accentColor || null,
       translations: {
         create: {
           locale: parsed.data.sourceLocale,
@@ -91,6 +97,11 @@ const updateSourceSchema = z.object({
   metaDescription: z.string().max(280).optional().or(z.literal("")),
   difficulty: z.enum(DIFFICULTY).optional(),
   coverImage: z.string().max(500).optional().or(z.literal("")),
+  accentColor: z
+    .string()
+    .regex(/^#[0-9a-fA-F]{6}$/)
+    .optional()
+    .or(z.literal("")),
   ogImage: z.string().max(2048).optional().or(z.literal("")),
 });
 
@@ -127,6 +138,9 @@ export async function updateArticleSourceAction(raw: unknown) {
           : {}),
         ...(parsed.data.coverImage !== undefined
           ? { coverImage: parsed.data.coverImage || null }
+          : {}),
+        ...(parsed.data.accentColor !== undefined
+          ? { accentColor: parsed.data.accentColor || null }
           : {}),
       },
     }),

@@ -299,7 +299,9 @@
         "metaTitleLabel": "Meta title",
         "metaTitlePlaceholder": "Article Title — Kiyotaka Academy",
         "metaDescriptionLabel": "Meta description",
-        "metaDescriptionHint": "140–160 char snippet — never reuse another locale's copy"
+        "metaDescriptionHint": "140–160 char snippet — never reuse another locale's copy",
+        "accentColorLabel": "Accent color",
+        "accentColorHint": "Overrides the default green for links and quote bars in this article."
       },
       "edit": {
         "moduleMeta": "Module: {module} · Source: {locale} · v{version}",

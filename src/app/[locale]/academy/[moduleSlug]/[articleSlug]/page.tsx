@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { ArrowLeft } from "lucide-react";
-import { ArticleCard } from "@/components/academy/article-card";
+import { ModuleArticleNav } from "@/components/academy/module-article-nav";
 import { AuthorBar } from "@/components/academy/author-bar";
 import { CategoryPill } from "@/components/academy/category-pill";
 import { LikeButton } from "@/components/academy/like-button";
@@ -16,7 +16,7 @@ import { absoluteUrl as makeAbsoluteUrl } from "@/lib/seo";
 import { resolveLocaleForRequest } from "@/lib/data/locale-policy";
 import {
   loadArticleForReading,
-  listRelatedArticles,
+  listModuleArticleNav,
 } from "@/lib/data/articles";
 import { listGlossaryEntries } from "@/lib/data/glossary";
 import { ViewTracker } from "@/components/academy/view-tracker";
@@ -130,9 +130,9 @@ export default async function ArticlePage({
   // client hydration with localStorage dedup, so refreshes / cached
   // ISR responses / bots don't inflate the counter.
 
-  const [{ content, toc }, related, t, site, session] = await Promise.all([
+  const [{ content, toc }, moduleNav, t, site, session] = await Promise.all([
     renderArticleMdx(article.bodyMdx),
-    listRelatedArticles(article.moduleId, article.id, effective, 3),
+    listModuleArticleNav(article.moduleId, effective),
     getTranslations({ locale: effective, namespace: "academy" }),
     getSiteSetting(),
     auth(),
@@ -238,13 +238,17 @@ export default async function ArticlePage({
         </Link>
 
         {/*
-         * Three-column layout — matches the kiyotaka.ai detail page:
-         *   [88px rail] [body up to 3xl] [256px TOC]
-         * Header sits in row 1 of the SAME grid (middle column), so
-         * its left + right edges align perfectly with the body in
-         * row 2. The rail + TOC sticky-pin alongside the body.
+         * Three-column layout: [module lessons nav] [body up to 3xl] [256px TOC].
+         * Header sits in row 1 (middle column); both side rails sticky-pin.
          */}
-        <div className="grid grid-cols-1 gap-y-8 lg:grid-cols-[88px_minmax(0,1fr)_256px] lg:items-start lg:gap-x-12 lg:gap-y-12">
+        <div
+          className="grid grid-cols-1 gap-y-8 lg:grid-cols-[240px_minmax(0,1fr)_256px] lg:items-start lg:gap-x-12 lg:gap-y-12"
+          style={
+            article.accentColor
+              ? ({ "--article-accent": article.accentColor } as React.CSSProperties)
+              : undefined
+          }
+        >
           {/* Row 1 — Header (middle column on lg, full width on mobile) */}
           <header className="w-full max-w-3xl lg:col-start-2 lg:row-start-1">
             <CategoryPill
@@ -290,23 +294,32 @@ export default async function ArticlePage({
             </div>
           </header>
 
-          {/* Row 2 — left sticky rail (lg only) */}
+          {/* Row 2 — left sticky sidebar: module lessons + actions (lg only) */}
           <aside
-            className="sticky top-24 hidden flex-col items-center gap-4 lg:flex lg:col-start-1 lg:row-start-2"
-            aria-label="Article actions"
+            className="sticky top-24 hidden max-h-[calc(100vh-7rem)] flex-col gap-6 overflow-y-auto pr-1 lg:flex lg:col-start-1 lg:row-start-2"
+            aria-label={article.moduleName}
           >
-            <LikeButton
-              articleId={article.id}
-              initialCount={article.likeCount}
-              initiallyLiked={initiallyLiked}
-              isAuthenticated={!!session?.user}
-              locale={article.renderedLocale}
-              variant="rail"
-            />
-            <ShareButton
-              title={article.title}
-              url={makeAbsoluteUrl(articleUrl)}
-            />
+            {moduleNav.length > 1 && (
+              <ModuleArticleNav
+                moduleName={article.moduleName}
+                moduleSlug={article.moduleSlug}
+                items={moduleNav}
+                currentSlug={article.slug}
+              />
+            )}
+            <div className="flex items-center gap-3">
+              <LikeButton
+                articleId={article.id}
+                initialCount={article.likeCount}
+                initiallyLiked={initiallyLiked}
+                isAuthenticated={!!session?.user}
+                locale={article.renderedLocale}
+              />
+              <ShareButton
+                title={article.title}
+                url={makeAbsoluteUrl(articleUrl)}
+              />
+            </div>
           </aside>
 
           {/* Mobile action bar — keeps Like/Share reachable on small screens */}
@@ -337,22 +350,6 @@ export default async function ArticlePage({
           />
         </div>
 
-        {related.length > 0 && (
-          <section className="mx-auto mt-24">
-            <h2 className="mb-6 text-xl font-semibold tracking-tight text-[hsl(var(--foreground))]">
-              {t("article.related")}
-            </h2>
-            <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-              {related.map((a) => (
-                <ArticleCard
-                  key={a.id}
-                  moduleSlug={moduleSlug}
-                  article={a}
-                />
-              ))}
-            </div>
-          </section>
-        )}
       </div>
     </article>
   );
