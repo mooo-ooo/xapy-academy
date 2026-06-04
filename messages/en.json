@@ -644,7 +644,8 @@
         "hero": "Hero",
         "locales": "Locales",
         "seo": "SEO",
-        "contact": "Contact"
+        "contact": "Contact",
+        "footer": "Footer"
       },
       "hero": {
         "title": "Landing hero",
@@ -713,6 +714,27 @@
         "allowSelfSignupHint": "When off, /register returns 404 and OAuth sign-ins for new emails are rejected.",
         "requiresApprovalLabel": "Require admin approval",
         "requiresApprovalHint": "When on, new accounts are created inactive and can't sign in until an admin activates them in /admin/users."
+      },
+      "footer": {
+        "title": "Footer",
+        "description": "Configure the public site footer. Link columns and text are per-language; social links are shared.",
+        "enabledLabel": "Show footer",
+        "enabledHint": "When off, no footer is rendered on the public site.",
+        "socialLabel": "Social links",
+        "socialHint": "Shared across all languages. Pick a platform and paste the full URL.",
+        "addSocial": "Add social link",
+        "urlPlaceholder": "https://… or mailto:…",
+        "localeLabel": "Editing language",
+        "introLabel": "Intro text",
+        "introPlaceholder": "Short description shown next to the logo",
+        "copyrightLabel": "Copyright line",
+        "copyrightHint": "Use {year} and {siteName} as placeholders.",
+        "columnsLabel": "Link columns",
+        "addColumn": "Add column",
+        "columnTitlePlaceholder": "Column title",
+        "addLink": "Add link",
+        "linkLabelPlaceholder": "Label",
+        "linkUrlPlaceholder": "/path or https://…"
       }
     }
   }

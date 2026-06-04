@@ -8,6 +8,20 @@ export type HeroLocaleContent = {
 };
 export type HeroTranslations = Record<string, HeroLocaleContent>;
 
+export type FooterLink = { label: string; href: string };
+export type FooterColumn = { title: string; links: FooterLink[] };
+export type FooterLocaleContent = {
+  intro?: string;
+  copyright?: string;
+  columns?: FooterColumn[];
+};
+export type FooterSocial = { platform: string; url: string };
+export type FooterConfig = {
+  enabled: boolean;
+  social: FooterSocial[];
+  translations: Record<string, FooterLocaleContent>;
+};
+
 export type SiteSettingResolved = {
   publicLocale: Locale;
   supportedLocales: Locale[];
@@ -23,7 +37,107 @@ export type SiteSettingResolved = {
   signupRequiresApproval: boolean;
   heroImageUrl: string | null;
   heroTranslations: HeroTranslations;
+  footer: FooterConfig;
 };
+
+function emptyFooter(): FooterConfig {
+  return { enabled: false, social: [], translations: {} };
+}
+
+function parseFooterConfig(value: unknown): FooterConfig {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return emptyFooter();
+  }
+  const v = value as Record<string, unknown>;
+  const social: FooterSocial[] = Array.isArray(v.social)
+    ? (v.social as unknown[]).flatMap((s) => {
+        if (!s || typeof s !== "object") return [];
+        const r = s as Record<string, unknown>;
+        if (typeof r.platform !== "string" || typeof r.url !== "string") {
+          return [];
+        }
+        return [{ platform: r.platform, url: r.url }];
+      })
+    : [];
+  const translations: Record<string, FooterLocaleContent> = {};
+  if (v.translations && typeof v.translations === "object") {
+    for (const [locale, raw] of Object.entries(
+      v.translations as Record<string, unknown>,
+    )) {
+      if (!raw || typeof raw !== "object" || Array.isArray(raw)) continue;
+      const r = raw as Record<string, unknown>;
+      const entry: FooterLocaleContent = {};
+      if (typeof r.intro === "string") entry.intro = r.intro;
+      if (typeof r.copyright === "string") entry.copyright = r.copyright;
+      if (Array.isArray(r.columns)) {
+        entry.columns = (r.columns as unknown[]).flatMap((col) => {
+          if (!col || typeof col !== "object") return [];
+          const c = col as Record<string, unknown>;
+          const links = Array.isArray(c.links)
+            ? (c.links as unknown[]).flatMap((l) => {
+                if (!l || typeof l !== "object") return [];
+                const lr = l as Record<string, unknown>;
+                if (typeof lr.label !== "string" || typeof lr.href !== "string") {
+                  return [];
+                }
+                return [{ label: lr.label, href: lr.href }];
+              })
+            : [];
+          return [{ title: typeof c.title === "string" ? c.title : "", links }];
+        });
+      }
+      translations[locale] = entry;
+    }
+  }
+  return {
+    enabled: v.enabled === true,
+    social,
+    translations,
+  };
+}
+
+export type ResolvedFooter = {
+  intro: string | null;
+  copyright: string;
+  columns: FooterColumn[];
+  social: FooterSocial[];
+};
+
+export function resolveFooter(
+  footer: FooterConfig,
+  locale: string,
+  publicLocale: string,
+  siteName: string,
+): ResolvedFooter {
+  const order = [
+    locale,
+    publicLocale,
+    "en",
+    ...Object.keys(footer.translations),
+  ];
+  const pick = <K extends keyof FooterLocaleContent>(
+    field: K,
+  ): FooterLocaleContent[K] | undefined => {
+    for (const l of order) {
+      const v = footer.translations[l]?.[field];
+      if (v !== undefined && v !== null && (!Array.isArray(v) || v.length > 0)) {
+        return v;
+      }
+    }
+    return undefined;
+  };
+  const year = new Date().getFullYear();
+  const rawCopyright = pick("copyright") ?? "© {year} {siteName}";
+  const copyright = rawCopyright
+    .replaceAll("{year}", String(year))
+    .replaceAll("{siteName}", siteName);
+  return {
+    intro: pick("intro") ?? null,
+    copyright,
+    columns: pick("columns") ?? [],
+    social: footer.social,
+  };
+}
 
 function parseHeroTranslations(value: unknown): HeroTranslations {
   if (!value || typeof value !== "object" || Array.isArray(value)) return {};
@@ -73,6 +187,7 @@ export const getSiteSetting = cache(async (): Promise<SiteSettingResolved> => {
       signupRequiresApproval: true,
       heroImageUrl: null,
       heroTranslations: {},
+      footer: emptyFooter(),
     };
   }
   const supported = Array.isArray(row.supportedLocales)
@@ -95,6 +210,7 @@ export const getSiteSetting = cache(async (): Promise<SiteSettingResolved> => {
     signupRequiresApproval: row.signupRequiresApproval,
     heroImageUrl: row.heroImageUrl,
     heroTranslations: parseHeroTranslations(row.heroTranslations),
+    footer: parseFooterConfig(row.footerConfig),
   };
 });
 

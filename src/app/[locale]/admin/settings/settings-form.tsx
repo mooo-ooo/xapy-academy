@@ -15,8 +15,10 @@ import {
 } from "@/components/ui/tabs";
 import { toast } from "@/components/ui/toast";
 import { ImageUpload } from "@/components/admin/image-upload";
+import { FooterEditor } from "@/components/admin/footer-editor";
 import { Loader2 } from "lucide-react";
 import { updateSiteSettingAction } from "./actions";
+import type { FooterConfig } from "@/lib/data/site";
 
 type HeroEntry = { title?: string; tagline?: string };
 
@@ -35,6 +37,7 @@ type Initial = {
   publicLocale: string;
   heroImageUrl: string | null;
   heroTranslations: Record<string, HeroEntry>;
+  footer: FooterConfig;
 };
 
 export function SettingsForm({
@@ -54,6 +57,10 @@ export function SettingsForm({
     initial.heroTranslations ?? {},
   );
   const [heroLocale, setHeroLocale] = useState<string>(initial.publicLocale);
+  const [footer, setFooter] = useState<FooterConfig>(initial.footer);
+  const [footerLocale, setFooterLocale] = useState<string>(
+    initial.publicLocale,
+  );
   const router = useRouter();
   const t = useTranslations("admin.settings");
   const [pending, startTransition] = useTransition();
@@ -84,6 +91,7 @@ export function SettingsForm({
         publicLocale,
         heroImageUrl: String(fd.get("heroImageUrl") ?? ""),
         heroTranslations: heroTr,
+        footerConfig: footer,
       });
       if (!res.ok) {
         toast.error(res.error);
@@ -101,6 +109,7 @@ export function SettingsForm({
           <TabsTrigger value="general">{t("tabs.general")}</TabsTrigger>
           <TabsTrigger value="branding">{t("tabs.branding")}</TabsTrigger>
           <TabsTrigger value="hero">{t("tabs.hero")}</TabsTrigger>
+          <TabsTrigger value="footer">{t("tabs.footer")}</TabsTrigger>
           <TabsTrigger value="locales">{t("tabs.locales")}</TabsTrigger>
           <TabsTrigger value="seo">{t("tabs.seo")}</TabsTrigger>
           <TabsTrigger value="contact">{t("tabs.contact")}</TabsTrigger>
@@ -235,6 +244,40 @@ export function SettingsForm({
                 placeholder={t("hero.taglinePlaceholder")}
               />
             </Field>
+          </Section>
+        </TabsContent>
+
+        <TabsContent value="footer" forceMount className="space-y-6">
+          <Section
+            title={t("footer.title")}
+            description={t("footer.description")}
+          >
+            <FooterEditor
+              value={footer}
+              onChange={setFooter}
+              locale={footerLocale}
+              onLocaleChange={setFooterLocale}
+              locales={supported}
+              labels={{
+                enabled: t("footer.enabledLabel"),
+                enabledHint: t("footer.enabledHint"),
+                social: t("footer.socialLabel"),
+                socialHint: t("footer.socialHint"),
+                addSocial: t("footer.addSocial"),
+                urlPlaceholder: t("footer.urlPlaceholder"),
+                localeLabel: t("footer.localeLabel"),
+                intro: t("footer.introLabel"),
+                introPlaceholder: t("footer.introPlaceholder"),
+                copyright: t("footer.copyrightLabel"),
+                copyrightHint: t("footer.copyrightHint"),
+                columns: t("footer.columnsLabel"),
+                addColumn: t("footer.addColumn"),
+                columnTitle: t("footer.columnTitlePlaceholder"),
+                addLink: t("footer.addLink"),
+                linkLabel: t("footer.linkLabelPlaceholder"),
+                linkUrl: t("footer.linkUrlPlaceholder"),
+              }}
+            />
           </Section>
         </TabsContent>
 

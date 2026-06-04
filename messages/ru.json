@@ -518,7 +518,8 @@
         "general": "Общие",
         "branding": "Брендинг",
         "seo": "SEO",
-        "contact": "Контакты"
+        "contact": "Контакты",
+        "footer": "Footer"
       },
       "title": "Настройки сайта",
       "subtitle": "Всё, что формирует публичный сайт, живёт здесь. Переменная окружения {envVar} — это только бутстрап middleware — база данных побеждает при чтении на уровне данных.",
@@ -571,7 +572,28 @@
         "twitterPlaceholder": "@yourhandle"
       },
       "save": "Сохранить настройки",
-      "saved": "Настройки сохранены"
+      "saved": "Настройки сохранены",
+      "footer": {
+        "title": "Footer",
+        "description": "Configure the public site footer. Link columns and text are per-language; social links are shared.",
+        "enabledLabel": "Show footer",
+        "enabledHint": "When off, no footer is rendered on the public site.",
+        "socialLabel": "Social links",
+        "socialHint": "Shared across all languages. Pick a platform and paste the full URL.",
+        "addSocial": "Add social link",
+        "urlPlaceholder": "https://… or mailto:…",
+        "localeLabel": "Editing language",
+        "introLabel": "Intro text",
+        "introPlaceholder": "Short description shown next to the logo",
+        "copyrightLabel": "Copyright line",
+        "copyrightHint": "Use {year} and {siteName} as placeholders.",
+        "columnsLabel": "Link columns",
+        "addColumn": "Add column",
+        "columnTitlePlaceholder": "Column title",
+        "addLink": "Add link",
+        "linkLabelPlaceholder": "Label",
+        "linkUrlPlaceholder": "/path or https://…"
+      }
     }
   }
 }
