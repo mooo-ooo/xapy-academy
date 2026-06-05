@@ -312,7 +312,8 @@
         "statusLine": "Status: {status}",
         "publishArticle": "Publish article",
         "archive": "Archive",
-        "moveToDraft": "Move to draft"
+        "moveToDraft": "Move to draft",
+        "sourceLocaleLocked": "Source language is fixed after creation."
       },
       "translatorPanel": {
         "assignPlaceholder": "Assign translator…",
@@ -342,6 +343,14 @@
         "publish": "Publish",
         "submittedReview": "Submitted for review",
         "translationPublished": "Translation published"
+      },
+      "delete": {
+        "trigger": "Delete",
+        "dialogTitle": "Delete this article?",
+        "dialogDesc": "“{title}” and all its translations, likes and views will be permanently deleted. Uploaded images used only by this article are removed too. This cannot be undone.",
+        "cancel": "Cancel",
+        "confirm": "Delete article",
+        "success": "Article deleted"
       }
     },
     "modules": {

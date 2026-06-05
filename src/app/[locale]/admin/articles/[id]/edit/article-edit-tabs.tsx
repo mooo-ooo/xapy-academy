@@ -45,6 +45,7 @@ type Status = "DRAFT" | "REVIEW" | "PUBLISHED" | "ARCHIVED";
 export function ArticleEditTabs({
   articleId,
   status,
+  modules,
   source,
   viewCount,
   likeCount,
@@ -53,7 +54,10 @@ export function ArticleEditTabs({
 }: {
   articleId: string;
   status: Status;
+  modules: Array<{ id: string; slug: string; name: string }>;
   source: {
+    moduleId: string;
+    sourceLocale: string;
     slug: string;
     title: string;
     excerpt: string;
@@ -75,6 +79,7 @@ export function ArticleEditTabs({
   const [pending, startTransition] = useTransition();
   const [body, setBody] = useState(source.bodyMdx);
   const [accentColor, setAccentColor] = useState(source.accentColor);
+  const [moduleId, setModuleId] = useState(source.moduleId);
   const [difficulty, setDifficulty] = useState<Difficulty>(source.difficulty);
   const [activeTab, setActiveTab] = useState("content");
   const [views, setViews] = useState(viewCount);
@@ -86,6 +91,7 @@ export function ArticleEditTabs({
     startTransition(async () => {
       const res = await updateArticleSourceAction({
         articleId,
+        moduleId,
         slug: String(fd.get("slug") ?? ""),
         title: String(fd.get("title") ?? ""),
         excerpt: String(fd.get("excerpt") ?? ""),
@@ -194,6 +200,34 @@ export function ArticleEditTabs({
             className="m-0 focus-visible:outline-none"
           >
             <div className="flex flex-col gap-5 rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-6">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <div className="flex flex-col gap-1.5">
+                  <Label required>{t("form.moduleLabel")}</Label>
+                  <Select value={moduleId} onValueChange={setModuleId}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {modules.map((m) => (
+                        <SelectItem key={m.id} value={m.id}>
+                          {m.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <Label>{t("form.sourceLanguageLabel")}</Label>
+                  <Input
+                    value={source.sourceLocale.toUpperCase()}
+                    disabled
+                    readOnly
+                  />
+                  <p className="text-xs text-[hsl(var(--muted-foreground))]">
+                    {t("edit.sourceLocaleLocked")}
+                  </p>
+                </div>
+              </div>
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div className="flex flex-col gap-1.5">
                   <Label htmlFor="title" required>

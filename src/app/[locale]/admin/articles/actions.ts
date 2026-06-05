@@ -1,12 +1,15 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { unlink } from "node:fs/promises";
+import { join, basename } from "node:path";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { requireRole } from "@/lib/rbac";
 import { ADMIN_ROLES } from "@/lib/roles";
 import { auth, type AppRole } from "@/lib/auth";
 import { logAudit } from "@/lib/audit";
+import { UPLOAD_DIR } from "@/lib/uploads";
 import { routing } from "@/i18n/routing";
 
 const LOCALES = routing.locales as unknown as [string, ...string[]];
@@ -89,6 +92,7 @@ export async function createArticleAction(raw: unknown) {
 
 const updateSourceSchema = z.object({
   articleId: z.string(),
+  moduleId: z.string().optional(),
   slug: z.string().min(2).max(160).regex(slugRegex),
   title: z.string().min(1).max(200),
   excerpt: z.string().max(400).optional().or(z.literal("")),
@@ -133,6 +137,9 @@ export async function updateArticleSourceAction(raw: unknown) {
       where: { id: article.id },
       data: {
         sourceVersion: nextVersion,
+        ...(parsed.data.moduleId
+          ? { moduleId: parsed.data.moduleId }
+          : {}),
         ...(parsed.data.difficulty
           ? { difficulty: parsed.data.difficulty }
           : {}),
@@ -185,6 +192,81 @@ export async function updateArticleSourceAction(raw: unknown) {
   revalidatePath(`/admin/articles/${article.id}/edit`);
   revalidatePath("/[locale]/academy", "layout");
   return { ok: true as const, sourceVersion: nextVersion, bodyChanged };
+}
+
+function uploadNamesFromText(text: string | null | undefined): string[] {
+  if (!text) return [];
+  const out: string[] = [];
+  const re = /\/uploads\/([A-Za-z0-9._-]+)/g;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(text)) !== null) out.push(m[1]);
+  return out;
+}
+
+async function deleteOrphanUploads(names: string[]) {
+  const unique = [...new Set(names.map((n) => basename(n)))].filter(Boolean);
+  for (const name of unique) {
+    const [coverCount, trCount, site] = await Promise.all([
+      prisma.article.count({ where: { coverImage: { contains: name } } }),
+      prisma.articleTranslation.count({
+        where: {
+          OR: [{ ogImage: { contains: name } }, { bodyMdx: { contains: name } }],
+        },
+      }),
+      prisma.siteSetting.findFirst({
+        where: {
+          OR: [
+            { logoUrl: { contains: name } },
+            { faviconUrl: { contains: name } },
+            { defaultOgImageUrl: { contains: name } },
+            { heroImageUrl: { contains: name } },
+          ],
+        },
+        select: { id: true },
+      }),
+    ]);
+    if (coverCount === 0 && trCount === 0 && !site) {
+      try {
+        await unlink(join(UPLOAD_DIR, name));
+      } catch {
+        void 0;
+      }
+    }
+  }
+}
+
+const deleteArticleSchema = z.object({ articleId: z.string() });
+
+export async function deleteArticleAction(raw: unknown) {
+  const session = await requireRole(ADMIN_ROLES);
+  const parsed = deleteArticleSchema.safeParse(raw);
+  if (!parsed.success) return { ok: false as const, error: "Invalid input" };
+
+  const article = await prisma.article.findUnique({
+    where: { id: parsed.data.articleId },
+    include: { translations: { select: { ogImage: true, bodyMdx: true } } },
+  });
+  if (!article) return { ok: false as const, error: "Article not found" };
+
+  const names: string[] = [...uploadNamesFromText(article.coverImage)];
+  for (const tr of article.translations) {
+    names.push(...uploadNamesFromText(tr.ogImage));
+    names.push(...uploadNamesFromText(tr.bodyMdx));
+  }
+
+  await prisma.article.delete({ where: { id: article.id } });
+  await deleteOrphanUploads(names);
+
+  await logAudit({
+    actorId: session.user.id,
+    action: "ARTICLE_DELETE",
+    target: article.id,
+    meta: { images: [...new Set(names.map((n) => basename(n)))] },
+  });
+  revalidatePath("/admin/articles");
+  revalidatePath("/[locale]/academy", "layout");
+  revalidatePath("/sitemap.xml");
+  return { ok: true as const };
 }
 
 const statusSchema = z.object({
