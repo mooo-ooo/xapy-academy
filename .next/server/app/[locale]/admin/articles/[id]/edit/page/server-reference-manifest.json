@@ -36,6 +36,18 @@
       "exportedName": "setArticleTagsAction",
       "filename": "src/app/[locale]/admin/tags/actions.ts"
     },
+    "40bfce6f920ae8e9bf7954e6f9a656269fffe9a320": {
+      "workers": {
+        "app/[locale]/admin/articles/[id]/edit/page": {
+          "moduleId": 62225,
+          "async": false,
+          "exportedName": "deleteArticleAction",
+          "filename": "src/app/[locale]/admin/articles/actions.ts"
+        }
+      },
+      "exportedName": "deleteArticleAction",
+      "filename": "src/app/[locale]/admin/articles/actions.ts"
+    },
     "40893b2b4963e8ae5259fc460818a09d4600412af5": {
       "workers": {
         "app/[locale]/admin/articles/[id]/edit/page": {

@@ -24,6 +24,24 @@
       "filename": "src/app/[locale]/account/actions.ts",
       "exportedName": "updateProfileAction"
     },
+    "40bfce6f920ae8e9bf7954e6f9a656269fffe9a320": {
+      "workers": {
+        "app/[locale]/admin/articles/[id]/edit/page": {
+          "moduleId": 62225,
+          "async": false,
+          "exportedName": "deleteArticleAction",
+          "filename": "src/app/[locale]/admin/articles/actions.ts"
+        },
+        "app/[locale]/admin/articles/page": {
+          "moduleId": 435696,
+          "async": false,
+          "exportedName": "deleteArticleAction",
+          "filename": "src/app/[locale]/admin/articles/actions.ts"
+        }
+      },
+      "filename": "src/app/[locale]/admin/articles/actions.ts",
+      "exportedName": "deleteArticleAction"
+    },
     "40ac95fddc623c2640c4be3c429be856b080cdea21": {
       "workers": {
         "app/[locale]/admin/articles/[id]/edit/page": {
