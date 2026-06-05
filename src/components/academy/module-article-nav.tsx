@@ -17,23 +17,20 @@ export function ModuleArticleNav({
         {moduleName}
       </p>
       <ol className="flex flex-col gap-0.5">
-        {items.map((it, i) => {
+        {items.map((it) => {
           const active = it.slug === currentSlug;
           return (
             <li key={it.slug}>
               <Link
                 href={`/academy/${moduleSlug}/${it.slug}`}
                 aria-current={active ? "page" : undefined}
-                title={`Lesson ${i + 1} - ${it.title}`}
+                title={it.title}
                 className={
                   active
                     ? "block truncate border-l-2 border-[color:var(--article-accent,hsl(var(--accent-emerald)))] bg-[hsl(var(--hover))] py-1.5 pl-3 pr-2 font-medium text-[hsl(var(--foreground))]"
                     : "block truncate border-l-2 border-transparent py-1.5 pl-3 pr-2 text-[hsl(var(--muted-foreground))] transition-colors hover:border-[hsl(var(--border-strong))] hover:text-[hsl(var(--foreground))]"
                 }
               >
-                <span className="font-mono text-[11px] uppercase opacity-70">
-                  Lesson {i + 1} -
-                </span>{" "}
                 {it.title}
               </Link>
             </li>

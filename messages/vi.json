@@ -290,7 +290,8 @@
         "statusLine": "Trạng thái: {status}",
         "publishArticle": "Xuất bản bài",
         "archive": "Lưu trữ",
-        "moveToDraft": "Chuyển về nháp"
+        "moveToDraft": "Chuyển về nháp",
+        "sourceLocaleLocked": "Ngôn ngữ gốc không đổi được sau khi tạo bài."
       },
       "translatorPanel": {
         "assignPlaceholder": "Phân công dịch giả…",
@@ -334,6 +335,14 @@
         "likesLabel": "Lượt thích",
         "save": "Lưu thống kê",
         "saved": "Đã cập nhật thống kê"
+      },
+      "delete": {
+        "trigger": "Xóa",
+        "dialogTitle": "Xóa bài viết này?",
+        "dialogDesc": "“{title}” cùng toàn bộ bản dịch, lượt thích và lượt xem sẽ bị xóa vĩnh viễn. Ảnh chỉ dùng riêng cho bài này cũng bị xóa khỏi thư mục. Không thể hoàn tác.",
+        "cancel": "Hủy",
+        "confirm": "Xóa bài viết",
+        "success": "Đã xóa bài viết"
       }
     },
     "modules": {

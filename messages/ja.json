@@ -212,7 +212,8 @@
         "statusLine": "ステータス: {status}",
         "publishArticle": "記事を公開",
         "archive": "アーカイブ",
-        "moveToDraft": "下書きに戻す"
+        "moveToDraft": "下書きに戻す",
+        "sourceLocaleLocked": "ソース言語は作成後は変更できません。"
       },
       "translatorPanel": {
         "assignPlaceholder": "翻訳者を割り当て…",
@@ -242,6 +243,14 @@
         "publish": "公開",
         "submittedReview": "レビューに提出しました",
         "translationPublished": "翻訳を公開しました"
+      },
+      "delete": {
+        "trigger": "Delete",
+        "dialogTitle": "Delete this article?",
+        "dialogDesc": "“{title}” and all its translations, likes and views will be permanently deleted. Uploaded images used only by this article are removed too. This cannot be undone.",
+        "cancel": "Cancel",
+        "confirm": "Delete article",
+        "success": "Article deleted"
       }
     },
     "modules": {

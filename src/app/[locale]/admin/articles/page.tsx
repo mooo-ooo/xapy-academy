@@ -11,6 +11,7 @@ import {
   type Column,
   type FilterDef,
 } from "@/components/admin/data-table";
+import { DeleteArticleButton } from "@/components/admin/delete-article-button";
 import { buildListQuery, type SearchParams } from "@/lib/admin/list-query";
 import { AdminTabs } from "@/components/admin/admin-tabs";
 
@@ -200,23 +201,31 @@ export default async function ArticlesPage({
                 {a.likeCount}
               </td>
               <td className="px-5 py-4 text-right">
-                <Button variant="ghost" size="sm" asChild>
-                  <Link
-                    href={
-                      isAdmin
-                        ? `/admin/articles/${a.id}/edit`
-                        : `/admin/articles/${a.id}/translate/${
-                            a.translations.find(
-                              (tr) =>
-                                tr.translatorId === session.user.id &&
-                                tr.locale !== a.sourceLocale,
-                            )?.locale ?? a.sourceLocale
-                          }`
-                    }
-                  >
-                    {isAdmin ? t("rowEdit") : t("rowTranslate")}
-                  </Link>
-                </Button>
+                <div className="flex items-center justify-end gap-1">
+                  <Button variant="ghost" size="sm" asChild>
+                    <Link
+                      href={
+                        isAdmin
+                          ? `/admin/articles/${a.id}/edit`
+                          : `/admin/articles/${a.id}/translate/${
+                              a.translations.find(
+                                (tr) =>
+                                  tr.translatorId === session.user.id &&
+                                  tr.locale !== a.sourceLocale,
+                              )?.locale ?? a.sourceLocale
+                            }`
+                      }
+                    >
+                      {isAdmin ? t("rowEdit") : t("rowTranslate")}
+                    </Link>
+                  </Button>
+                  {isAdmin && (
+                    <DeleteArticleButton
+                      articleId={a.id}
+                      articleTitle={source?.title ?? tCommon("untitled")}
+                    />
+                  )}
+                </div>
               </td>
             </tr>
           );

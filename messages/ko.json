@@ -212,7 +212,8 @@
         "statusLine": "상태: {status}",
         "publishArticle": "아티클 게시",
         "archive": "보관",
-        "moveToDraft": "초안으로 이동"
+        "moveToDraft": "초안으로 이동",
+        "sourceLocaleLocked": "원본 언어는 생성 후 변경할 수 없습니다."
       },
       "translatorPanel": {
         "assignPlaceholder": "번역자 할당…",
@@ -242,6 +243,14 @@
         "publish": "게시",
         "submittedReview": "검토 제출됨",
         "translationPublished": "번역이 게시되었습니다"
+      },
+      "delete": {
+        "trigger": "Delete",
+        "dialogTitle": "Delete this article?",
+        "dialogDesc": "“{title}” and all its translations, likes and views will be permanently deleted. Uploaded images used only by this article are removed too. This cannot be undone.",
+        "cancel": "Cancel",
+        "confirm": "Delete article",
+        "success": "Article deleted"
       }
     },
     "modules": {

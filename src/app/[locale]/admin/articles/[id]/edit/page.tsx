@@ -6,6 +6,7 @@ import { ArrowLeft } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { TranslatorAssignmentPanel } from "./translator-assignment-panel";
 import { ArticleTagsEditor } from "@/components/admin/article-tags-editor";
+import { DeleteArticleButton } from "@/components/admin/delete-article-button";
 import { ArticleEditTabs } from "./article-edit-tabs";
 import { routing } from "@/i18n/routing";
 
@@ -44,7 +45,7 @@ export default async function EditArticlePage({
   );
   if (!source) notFound();
 
-  const [ctvs, allTags] = await Promise.all([
+  const [ctvs, allTags, allModules] = await Promise.all([
     prisma.user.findMany({
       where: { role: { in: ["CTV", "ADMIN"] }, isActive: true },
       orderBy: { name: "asc" },
@@ -55,6 +56,12 @@ export default async function EditArticlePage({
         translations: { where: { locale: "en" }, select: { name: true } },
       },
       orderBy: { slug: "asc" },
+    }),
+    prisma.module.findMany({
+      orderBy: { sortOrder: "asc" },
+      include: {
+        translations: { where: { locale: "en" }, select: { name: true } },
+      },
     }),
   ]);
 
@@ -91,25 +98,38 @@ export default async function EditArticlePage({
             })}
           </p>
         </div>
-        <Badge
-          tone={
-            article.status === "PUBLISHED"
-              ? "published"
-              : article.status === "REVIEW"
-                ? "review"
-                : article.status === "ARCHIVED"
-                  ? "archived"
-                  : "draft"
-          }
-        >
-          {article.status}
-        </Badge>
+        <div className="flex items-center gap-3">
+          <Badge
+            tone={
+              article.status === "PUBLISHED"
+                ? "published"
+                : article.status === "REVIEW"
+                  ? "review"
+                  : article.status === "ARCHIVED"
+                    ? "archived"
+                    : "draft"
+            }
+          >
+            {article.status}
+          </Badge>
+          <DeleteArticleButton
+            articleId={article.id}
+            articleTitle={source.title}
+          />
+        </div>
       </header>
 
       <ArticleEditTabs
         articleId={article.id}
         status={article.status}
+        modules={allModules.map((m) => ({
+          id: m.id,
+          slug: m.slug,
+          name: m.translations[0]?.name ?? m.slug,
+        }))}
         source={{
+          moduleId: article.moduleId,
+          sourceLocale: article.sourceLocale,
           slug: source.slug,
           title: source.title,
           excerpt: source.excerpt ?? "",
