@@ -1,3 +1,0 @@
-module.exports=[406010,a=>{"use strict";var b=a.i(809707);let c=[["rect",{width:"6",height:"10",x:"9",y:"7",rx:"2",key:"yn7j0q"}],["path",{d:"M4 22V2",key:"tsjzd3"}],["path",{d:"M20 22V2",key:"1bnhr8"}]],d=(0,b.default)("align-horizontal-space-around",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0p91_lucide-react_dist_esm_icons_align-horizontal-space-around_mjs_0p~3.cv._.js.map

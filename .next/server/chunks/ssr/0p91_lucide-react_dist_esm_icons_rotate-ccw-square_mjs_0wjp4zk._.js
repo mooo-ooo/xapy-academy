@@ -1,3 +1,0 @@
-module.exports=[902371,a=>{"use strict";var b=a.i(809707);let c=[["path",{d:"M20 9V7a2 2 0 0 0-2-2h-6",key:"19z8uc"}],["path",{d:"m15 2-3 3 3 3",key:"177bxs"}],["path",{d:"M20 13v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2",key:"d36hnl"}]],d=(0,b.default)("rotate-ccw-square",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0p91_lucide-react_dist_esm_icons_rotate-ccw-square_mjs_0wjp4zk._.js.map

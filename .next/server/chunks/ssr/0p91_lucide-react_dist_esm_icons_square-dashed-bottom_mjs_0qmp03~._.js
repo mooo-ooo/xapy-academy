@@ -1,3 +1,0 @@
-module.exports=[631874,a=>{"use strict";var b=a.i(809707);let c=[["path",{d:"M5 21a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2",key:"as5y1o"}],["path",{d:"M9 21h1",key:"15o7lz"}],["path",{d:"M14 21h1",key:"v9vybs"}]],d=(0,b.default)("square-dashed-bottom",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0p91_lucide-react_dist_esm_icons_square-dashed-bottom_mjs_0qmp03~._.js.map

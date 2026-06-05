@@ -1,3 +1,0 @@
-module.exports=[157137,a=>{"use strict";var b=a.i(809707);let c=[["rect",{width:"9",height:"6",x:"6",y:"14",rx:"2",key:"lpm2y7"}],["rect",{width:"16",height:"6",x:"6",y:"4",rx:"2",key:"rdj6ps"}],["path",{d:"M2 2v20",key:"1ivd8o"}]],d=(0,b.default)("align-start-vertical",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0p91_lucide-react_dist_esm_icons_align-start-vertical_mjs_0-_8dzr._.js.map
