@@ -22,16 +22,6 @@
     "crawl:articles": "tsx tools/crawl-articles.ts",
     "postinstall": "prisma generate"
   },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "@prisma/client",
-      "@prisma/engines",
-      "prisma",
-      "@swc/core",
-      "esbuild",
-      "@parcel/watcher"
-    ]
-  },
   "dependencies": {
     "@auth/core": "^0.41.2",
     "@auth/prisma-adapter": "^2.11.2",
