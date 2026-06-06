@@ -125,6 +125,7 @@ export function CkEditor({
   const config: EditorConfig = {
     licenseKey: "GPL",
     placeholder,
+    ui: { viewportOffset: { top: 124 } },
     plugins: [
       Essentials,
       Paragraph,
