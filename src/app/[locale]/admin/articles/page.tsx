@@ -77,6 +77,7 @@ export default async function ArticlesPage({
             locale: true,
             status: true,
             title: true,
+            slug: true,
             translatorId: true,
           },
         },
@@ -140,15 +141,38 @@ export default async function ArticlesPage({
       >
         {articles.map((a) => {
           const source = a.translations.find((tr) => tr.locale === a.sourceLocale);
+          const href = isAdmin
+            ? `/admin/articles/${a.id}/edit`
+            : `/admin/articles/${a.id}/translate/${
+                a.translations.find(
+                  (tr) =>
+                    tr.translatorId === session.user.id &&
+                    tr.locale !== a.sourceLocale,
+                )?.locale ?? a.sourceLocale
+              }`;
+          const publicUrl = source
+            ? `/${a.sourceLocale}/academy/${a.module.slug}/${source.slug}`
+            : null;
           return (
             <tr
               key={a.id}
               className="border-b border-[hsl(var(--border))] last:border-0 hover:bg-white/[0.02]"
             >
               <td className="px-5 py-4">
-                <div className="font-medium text-[hsl(var(--foreground))]">
-                  {source?.title ?? tCommon("untitled")}
-                </div>
+                {publicUrl ? (
+                  <a
+                    href={publicUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-medium text-[hsl(var(--foreground))] transition-colors hover:text-[hsl(var(--accent-emerald))] hover:underline"
+                  >
+                    {source?.title ?? tCommon("untitled")}
+                  </a>
+                ) : (
+                  <span className="font-medium text-[hsl(var(--foreground))]">
+                    {tCommon("untitled")}
+                  </span>
+                )}
                 <div className="text-xs text-[hsl(var(--muted-foreground))]">
                   {t("sourceMeta", {
                     locale: a.sourceLocale.toUpperCase(),
@@ -203,19 +227,7 @@ export default async function ArticlesPage({
               <td className="px-5 py-4 text-right">
                 <div className="flex items-center justify-end gap-1">
                   <Button variant="ghost" size="sm" asChild>
-                    <Link
-                      href={
-                        isAdmin
-                          ? `/admin/articles/${a.id}/edit`
-                          : `/admin/articles/${a.id}/translate/${
-                              a.translations.find(
-                                (tr) =>
-                                  tr.translatorId === session.user.id &&
-                                  tr.locale !== a.sourceLocale,
-                              )?.locale ?? a.sourceLocale
-                            }`
-                      }
-                    >
+                    <Link href={href}>
                       {isAdmin ? t("rowEdit") : t("rowTranslate")}
                     </Link>
                   </Button>

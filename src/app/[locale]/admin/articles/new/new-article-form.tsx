@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/tabs";
 import { toast } from "@/components/ui/toast";
 import { Loader2 } from "lucide-react";
-import { TiptapEditor } from "@/components/admin/tiptap-editor";
+import { RichTextEditor } from "@/components/admin/rich-text-editor";
 import { ImageUpload } from "@/components/admin/image-upload";
 import { AccentColorField } from "@/components/admin/accent-color-field";
 import { routing } from "@/i18n/routing";
@@ -49,7 +49,7 @@ export function NewArticleForm({
   const [difficulty, setDifficulty] = useState<
     "BEGINNER" | "INTERMEDIATE" | "ADVANCED"
   >("BEGINNER");
-  const [body, setBody] = useState(t("form.bodyPlaceholder"));
+  const [body, setBody] = useState("");
   const [accentColor, setAccentColor] = useState("");
   const [activeTab, setActiveTab] = useState("content");
 
@@ -72,7 +72,7 @@ export function NewArticleForm({
         slug,
         title,
         excerpt: String(fd.get("excerpt") ?? ""),
-        bodyMdx: body,
+        bodyHtml: body,
         metaTitle: String(fd.get("metaTitle") ?? ""),
         metaDescription: String(fd.get("metaDescription") ?? ""),
         difficulty,
@@ -90,30 +90,35 @@ export function NewArticleForm({
 
   return (
     <Tabs
-      orientation="vertical"
       value={activeTab}
       onValueChange={setActiveTab}
-      className="flex flex-col gap-4 md:flex-row md:gap-6"
+      className="flex flex-col gap-6"
     >
-      <TabsList className="flex h-auto w-full flex-row items-stretch justify-start gap-1 overflow-x-auto rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-2 md:w-56 md:flex-col md:overflow-visible">
-        <TabsTrigger
-          value="content"
-          title={t("editTabs.content")}
-          className="justify-start truncate rounded-lg px-3 py-2 text-left"
-        >
-          {t("editTabs.content")}
-        </TabsTrigger>
-        <TabsTrigger
-          value="seo"
-          title={t("editTabs.seo")}
-          className="justify-start truncate rounded-lg px-3 py-2 text-left"
-        >
-          {t("editTabs.seo")}
-        </TabsTrigger>
-      </TabsList>
+      <div className="sticky top-[72px] z-30 flex flex-wrap items-center justify-between gap-3 border border-[hsl(var(--border))] bg-[hsl(var(--background))] p-2 shadow-md">
+        <TabsList className="flex h-auto flex-row flex-wrap items-center gap-1 rounded-none border-0 bg-transparent p-0 shadow-none">
+          <TabsTrigger
+            value="content"
+            title={t("editTabs.content")}
+            className="truncate rounded-lg px-4 py-2"
+          >
+            {t("editTabs.content")}
+          </TabsTrigger>
+          <TabsTrigger
+            value="seo"
+            title={t("editTabs.seo")}
+            className="truncate rounded-lg px-4 py-2"
+          >
+            {t("editTabs.seo")}
+          </TabsTrigger>
+        </TabsList>
+        <Button type="submit" form="new-article-form" disabled={pending}>
+          {pending && <Loader2 size={14} className="animate-spin" />}
+          {t("new.submit")}
+        </Button>
+      </div>
 
-      <div className="min-w-0 flex-1">
-        <form onSubmit={onSubmit} className="flex flex-col gap-5">
+      <div className="min-w-0">
+        <form id="new-article-form" onSubmit={onSubmit} className="flex flex-col gap-5">
           <TabsContent
             value="content"
             forceMount
@@ -202,7 +207,7 @@ export function NewArticleForm({
                   label={t("form.accentColorLabel")}
                   hint={t("form.accentColorHint")}
                 />
-                <TiptapEditor
+                <RichTextEditor
                   value={body}
                   onChange={setBody}
                   accentColor={accentColor}
@@ -275,13 +280,6 @@ export function NewArticleForm({
               </div>
             </div>
           </TabsContent>
-
-          <div className="sticky bottom-4 z-10 flex items-center gap-3 rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card-hover))] p-4 backdrop-blur">
-            <Button type="submit" disabled={pending}>
-              {pending && <Loader2 size={14} className="animate-spin" />}
-              {t("new.submit")}
-            </Button>
-          </div>
         </form>
       </div>
     </Tabs>

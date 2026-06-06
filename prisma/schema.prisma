@@ -127,9 +127,6 @@ model SiteSetting {
   /// { "<locale>": { "title"?, "tagline"? } }. Any missing field falls
   /// back to the i18n `site.*` defaults.
   heroTranslations       Json?
-  /// Footer config: { enabled, social: [{platform,url}],
-  /// translations: { "<locale>": { intro?, copyright?, columns?:
-  /// [{ title, links: [{ label, href }] }] } } }.
   footerConfig           Json?
   updatedAt              DateTime @updatedAt
 }

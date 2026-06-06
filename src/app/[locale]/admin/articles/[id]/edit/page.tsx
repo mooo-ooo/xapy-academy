@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { TranslatorAssignmentPanel } from "./translator-assignment-panel";
 import { ArticleTagsEditor } from "@/components/admin/article-tags-editor";
 import { DeleteArticleButton } from "@/components/admin/delete-article-button";
+import { markdownToHtml } from "@/lib/content";
 import { ArticleEditTabs } from "./article-edit-tabs";
 import { routing } from "@/i18n/routing";
 
@@ -133,7 +134,9 @@ export default async function EditArticlePage({
           slug: source.slug,
           title: source.title,
           excerpt: source.excerpt ?? "",
-          bodyMdx: source.bodyMdx,
+          bodyHtml: source.bodyHtml?.trim()
+            ? source.bodyHtml
+            : markdownToHtml(source.bodyMdx),
           metaTitle: source.metaTitle ?? "",
           metaDescription: source.metaDescription ?? "",
           difficulty: article.difficulty,

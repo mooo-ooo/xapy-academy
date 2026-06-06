@@ -28,8 +28,8 @@ export default async function AdminLayout({
   return (
     <div className="flex min-h-screen">
       <AdminSidebar role={session!.user.role} />
-      <div className="flex-1">
-        <main className="mx-auto w-full max-w-[1280px] px-6 py-10">
+      <div className="min-w-0 flex-1">
+        <main className="mx-auto w-full max-w-none px-6 py-10 2xl:px-10">
           {children}
         </main>
       </div>
