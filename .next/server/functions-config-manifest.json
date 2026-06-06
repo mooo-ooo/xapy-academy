@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "functions": {
+    "/_middleware": {
+      "runtime": "nodejs",
+      "matchers": [
+        {
+          "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?(?:\\/((?!api|_next|_vercel|opengraph-image|llms\\.txt|sitemap\\.xml|robots\\.txt|.*\\..*).*))(\\.json|\\.rsc|\\.segments\\/.+\\.segment\\.rsc)?[\\/#\\?]?$",
+          "originalSource": "/((?!api|_next|_vercel|opengraph-image|llms\\.txt|sitemap\\.xml|robots\\.txt|.*\\..*).*)"
+        }
+      ]
+    },
+    "/[locale]/academy/[moduleSlug]/[articleSlug]/opengraph-image": {},
+    "/api/feed": {},
+    "/api/views/[id]": {},
+    "/api/vitals": {},
+    "/opengraph-image": {},
+    "/uploads/[...path]": {}
+  }
+}

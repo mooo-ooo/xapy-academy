@@ -1,0 +1,29 @@
+{
+  "node": {
+    "4073635d89b728ba8fd51e55d06085597d3bc9ae00": {
+      "workers": {
+        "app/[locale]/account/page": {
+          "moduleId": 244492,
+          "async": false,
+          "exportedName": "changePasswordAction",
+          "filename": "src/app/[locale]/account/actions.ts"
+        }
+      },
+      "exportedName": "changePasswordAction",
+      "filename": "src/app/[locale]/account/actions.ts"
+    },
+    "405056ede5fec30d94e562d65cfbdefd7a84accbbb": {
+      "workers": {
+        "app/[locale]/account/page": {
+          "moduleId": 244492,
+          "async": false,
+          "exportedName": "updateProfileAction",
+          "filename": "src/app/[locale]/account/actions.ts"
+        }
+      },
+      "exportedName": "updateProfileAction",
+      "filename": "src/app/[locale]/account/actions.ts"
+    }
+  },
+  "edge": {}
+}

@@ -1,0 +1,41 @@
+{
+  "node": {
+    "40ba077972c06b7406bf41f47e02d90b8f22518be2": {
+      "workers": {
+        "app/[locale]/admin/tags/[id]/page": {
+          "moduleId": 646645,
+          "async": false,
+          "exportedName": "upsertTagTranslationAction",
+          "filename": "src/app/[locale]/admin/tags/actions.ts"
+        }
+      },
+      "exportedName": "upsertTagTranslationAction",
+      "filename": "src/app/[locale]/admin/tags/actions.ts"
+    },
+    "40debe442bdeeb23992325b08d2a3ad9dfa898adb4": {
+      "workers": {
+        "app/[locale]/admin/tags/[id]/page": {
+          "moduleId": 646645,
+          "async": false,
+          "exportedName": "deleteTagAction",
+          "filename": "src/app/[locale]/admin/tags/actions.ts"
+        }
+      },
+      "exportedName": "deleteTagAction",
+      "filename": "src/app/[locale]/admin/tags/actions.ts"
+    },
+    "403244430902eb3981cab5d97089d239f7fc8d4541": {
+      "workers": {
+        "app/[locale]/admin/tags/[id]/page": {
+          "moduleId": 646645,
+          "async": false,
+          "exportedName": "toggleTrendingAction",
+          "filename": "src/app/[locale]/admin/tags/actions.ts"
+        }
+      },
+      "exportedName": "toggleTrendingAction",
+      "filename": "src/app/[locale]/admin/tags/actions.ts"
+    }
+  },
+  "edge": {}
+}

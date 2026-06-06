@@ -1,0 +1,29 @@
+{
+  "node": {
+    "40d08e89eeeb9fe083f58aa5e3ce814b05add4496b": {
+      "workers": {
+        "app/[locale]/admin/articles/[id]/translate/[lang]/page": {
+          "moduleId": 709158,
+          "async": false,
+          "exportedName": "saveTranslationAction",
+          "filename": "src/app/[locale]/admin/articles/actions.ts"
+        }
+      },
+      "exportedName": "saveTranslationAction",
+      "filename": "src/app/[locale]/admin/articles/actions.ts"
+    },
+    "40c869011e58e9c03bce924df4b19ca0e4a60a4e7a": {
+      "workers": {
+        "app/[locale]/admin/articles/[id]/translate/[lang]/page": {
+          "moduleId": 709158,
+          "async": false,
+          "exportedName": "setTranslationStatusAction",
+          "filename": "src/app/[locale]/admin/articles/actions.ts"
+        }
+      },
+      "exportedName": "setTranslationStatusAction",
+      "filename": "src/app/[locale]/admin/articles/actions.ts"
+    }
+  },
+  "edge": {}
+}
