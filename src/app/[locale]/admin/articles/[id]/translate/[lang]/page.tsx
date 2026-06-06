@@ -6,6 +6,7 @@ import { isAdminLevel } from "@/lib/roles";
 import { Link } from "@/i18n/navigation";
 import { ArrowLeft } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { markdownToHtml } from "@/lib/content";
 import { TranslationEditor } from "./translation-editor";
 import { routing } from "@/i18n/routing";
 
@@ -101,7 +102,9 @@ export default async function TranslatePage({
         source={{
           title: source.title,
           excerpt: source.excerpt ?? "",
-          bodyMdx: source.bodyMdx,
+          bodyHtml: source.bodyHtml?.trim()
+            ? source.bodyHtml
+            : markdownToHtml(source.bodyMdx),
           metaTitle: source.metaTitle ?? "",
           metaDescription: source.metaDescription ?? "",
           slug: source.slug,
@@ -110,7 +113,9 @@ export default async function TranslatePage({
           slug: target.slug,
           title: target.title,
           excerpt: target.excerpt ?? "",
-          bodyMdx: target.bodyMdx,
+          bodyHtml: target.bodyHtml?.trim()
+            ? target.bodyHtml
+            : markdownToHtml(target.bodyMdx),
           metaTitle: target.metaTitle ?? "",
           metaDescription: target.metaDescription ?? "",
           ogImage: target.ogImage ?? "",

@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/tabs";
 import { toast } from "@/components/ui/toast";
 import { Loader2 } from "lucide-react";
-import { TiptapEditor } from "@/components/admin/tiptap-editor";
+import { RichTextEditor } from "@/components/admin/rich-text-editor";
 import { ImageUpload } from "@/components/admin/image-upload";
 import { AccentColorField } from "@/components/admin/accent-color-field";
 import {
@@ -61,7 +61,7 @@ export function ArticleEditTabs({
     slug: string;
     title: string;
     excerpt: string;
-    bodyMdx: string;
+    bodyHtml: string;
     metaTitle: string;
     metaDescription: string;
     difficulty: Difficulty;
@@ -77,7 +77,7 @@ export function ArticleEditTabs({
   const router = useRouter();
   const t = useTranslations("admin.articles");
   const [pending, startTransition] = useTransition();
-  const [body, setBody] = useState(source.bodyMdx);
+  const [body, setBody] = useState(source.bodyHtml);
   const [accentColor, setAccentColor] = useState(source.accentColor);
   const [moduleId, setModuleId] = useState(source.moduleId);
   const [difficulty, setDifficulty] = useState<Difficulty>(source.difficulty);
@@ -95,7 +95,7 @@ export function ArticleEditTabs({
         slug: String(fd.get("slug") ?? ""),
         title: String(fd.get("title") ?? ""),
         excerpt: String(fd.get("excerpt") ?? ""),
-        bodyMdx: body,
+        bodyHtml: body,
         metaTitle: String(fd.get("metaTitle") ?? ""),
         metaDescription: String(fd.get("metaDescription") ?? ""),
         difficulty,
@@ -149,51 +149,90 @@ export function ArticleEditTabs({
 
   return (
     <Tabs
-      orientation="vertical"
       value={activeTab}
       onValueChange={setActiveTab}
-      className="flex flex-col gap-4 md:flex-row md:gap-6"
+      className="flex flex-col gap-6"
     >
-      <TabsList className="flex h-auto w-full flex-row items-stretch justify-start gap-1 overflow-x-auto rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-2 md:w-56 md:flex-col md:overflow-visible">
+      <div className="sticky top-[72px] z-30 flex flex-wrap items-center justify-between gap-3 border border-[hsl(var(--border))] bg-[hsl(var(--background))] p-2 shadow-md">
+        <TabsList className="flex h-auto flex-row flex-wrap items-center gap-1 rounded-none border-0 bg-transparent p-0 shadow-none">
         <TabsTrigger
           value="content"
           title={t("editTabs.content")}
-          className="justify-start truncate rounded-lg px-3 py-2 text-left"
+          className="truncate rounded-lg px-4 py-2"
         >
           {t("editTabs.content")}
         </TabsTrigger>
         <TabsTrigger
           value="seo"
           title={t("editTabs.seo")}
-          className="justify-start truncate rounded-lg px-3 py-2 text-left"
+          className="truncate rounded-lg px-4 py-2"
         >
           {t("editTabs.seo")}
         </TabsTrigger>
         <TabsTrigger
           value="tags"
           title={t("editTabs.tags")}
-          className="justify-start truncate rounded-lg px-3 py-2 text-left"
+          className="truncate rounded-lg px-4 py-2"
         >
           {t("editTabs.tags")}
         </TabsTrigger>
         <TabsTrigger
           value="translations"
           title={t("editTabs.translations")}
-          className="justify-start truncate rounded-lg px-3 py-2 text-left"
+          className="truncate rounded-lg px-4 py-2"
         >
           {t("editTabs.translations")}
         </TabsTrigger>
         <TabsTrigger
           value="stats"
           title={t("editTabs.stats")}
-          className="justify-start truncate rounded-lg px-3 py-2 text-left"
+          className="truncate rounded-lg px-4 py-2"
         >
           {t("editTabs.stats")}
         </TabsTrigger>
-      </TabsList>
+        </TabsList>
+        {isSourceTab && (
+          <div className="flex flex-wrap items-center gap-2">
+            <Button type="submit" form="source-form" disabled={pending}>
+              {pending && <Loader2 size={14} className="animate-spin" />}
+              {t("edit.saveSource")}
+            </Button>
+            {status !== "PUBLISHED" && (
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => setStatus("PUBLISHED")}
+                disabled={pending}
+              >
+                {t("edit.publishArticle")}
+              </Button>
+            )}
+            {status === "PUBLISHED" && (
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => setStatus("ARCHIVED")}
+                disabled={pending}
+              >
+                {t("edit.archive")}
+              </Button>
+            )}
+            {status === "ARCHIVED" && (
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => setStatus("DRAFT")}
+                disabled={pending}
+              >
+                {t("edit.moveToDraft")}
+              </Button>
+            )}
+          </div>
+        )}
+      </div>
 
-      <div className="min-w-0 flex-1">
-        <form onSubmit={onSave} className="flex flex-col gap-5">
+      <div className="min-w-0">
+        <form id="source-form" onSubmit={onSave} className="flex flex-col gap-5">
           <TabsContent
             value="content"
             forceMount
@@ -274,7 +313,7 @@ export function ArticleEditTabs({
                   label={t("form.accentColorLabel")}
                   hint={t("form.accentColorHint")}
                 />
-                <TiptapEditor
+                <RichTextEditor
                   value={body}
                   onChange={setBody}
                   accentColor={accentColor}
@@ -359,44 +398,6 @@ export function ArticleEditTabs({
             </div>
           </TabsContent>
 
-          {isSourceTab && (
-            <div className="sticky bottom-4 z-10 flex flex-wrap items-center gap-3 rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card-hover))] p-4 backdrop-blur">
-              <Button type="submit" disabled={pending}>
-                {pending && <Loader2 size={14} className="animate-spin" />}
-                {t("edit.saveSource")}
-              </Button>
-              {status !== "PUBLISHED" && (
-                <Button
-                  type="button"
-                  variant="secondary"
-                  onClick={() => setStatus("PUBLISHED")}
-                  disabled={pending}
-                >
-                  {t("edit.publishArticle")}
-                </Button>
-              )}
-              {status === "PUBLISHED" && (
-                <Button
-                  type="button"
-                  variant="ghost"
-                  onClick={() => setStatus("ARCHIVED")}
-                  disabled={pending}
-                >
-                  {t("edit.archive")}
-                </Button>
-              )}
-              {status === "ARCHIVED" && (
-                <Button
-                  type="button"
-                  variant="ghost"
-                  onClick={() => setStatus("DRAFT")}
-                  disabled={pending}
-                >
-                  {t("edit.moveToDraft")}
-                </Button>
-              )}
-            </div>
-          )}
         </form>
 
         <TabsContent

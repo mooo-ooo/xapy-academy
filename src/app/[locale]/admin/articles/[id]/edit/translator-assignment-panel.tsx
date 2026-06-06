@@ -53,7 +53,7 @@ export function TranslatorAssignmentPanel({
   const [pending, startTransition] = useTransition();
 
   return (
-    <div className="space-y-3">
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
       {targetLocales.map((locale) => {
         const tr = translations.find((tr) => tr.locale === locale);
         return (
@@ -103,12 +103,22 @@ export function TranslatorAssignmentPanel({
         );
       })}
       {targetLocales.length === 0 && (
-        <p className="text-sm text-[hsl(var(--muted-foreground))]">
+        <p className="text-sm text-[hsl(var(--muted-foreground))] sm:col-span-2 xl:col-span-3">
           {t("noTargets")}
         </p>
       )}
     </div>
   );
+}
+
+function localeLabel(code: string): string {
+  try {
+    return (
+      new Intl.DisplayNames(["en"], { type: "language" }).of(code) ?? code
+    );
+  } catch {
+    return code;
+  }
 }
 
 function TranslationRow({
@@ -142,30 +152,39 @@ function TranslationRow({
     tr && tr.basedOnSourceVersion < sourceVersion && tr.status === "PUBLISHED";
 
   return (
-    <div className="flex flex-wrap items-center gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--inset))] p-4">
-      <div className="flex min-w-[120px] items-center gap-2">
-        <span className="font-mono text-sm uppercase tracking-[0.6px] text-[hsl(var(--foreground))]">
-          {locale}
-        </span>
-        {tr && (
-          <Badge
-            tone={
-              tr.status === "PUBLISHED"
-                ? "published"
-                : tr.status === "REVIEW"
-                  ? "review"
-                  : tr.status === "IN_PROGRESS"
-                    ? "in_progress"
-                    : "pending"
-            }
-          >
-            {tr.status}
-          </Badge>
-        )}
-        {isStale && <Badge tone="review">{tTrans("stale")}</Badge>}
+    <div className="flex flex-col gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--inset))] p-4">
+      <div className="flex items-start justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <span className="inline-flex h-7 min-w-7 items-center justify-center rounded-md bg-[hsl(var(--hover))] px-1.5 font-mono text-xs font-semibold uppercase tracking-[0.6px] text-[hsl(var(--foreground))]">
+            {locale}
+          </span>
+          <span className="text-sm font-medium text-[hsl(var(--foreground))]">
+            {localeLabel(locale)}
+          </span>
+        </div>
+        <div className="flex flex-wrap items-center justify-end gap-1.5">
+          {tr ? (
+            <Badge
+              tone={
+                tr.status === "PUBLISHED"
+                  ? "published"
+                  : tr.status === "REVIEW"
+                    ? "review"
+                    : tr.status === "IN_PROGRESS"
+                      ? "in_progress"
+                      : "pending"
+              }
+            >
+              {tr.status}
+            </Badge>
+          ) : (
+            <Badge tone="pending">{tPanel("unassigned")}</Badge>
+          )}
+          {isStale && <Badge tone="review">{tTrans("stale")}</Badge>}
+        </div>
       </div>
 
-      <div className="flex flex-1 items-center gap-2">
+      <div className="flex items-center gap-2">
         <Select
           value={selected}
           onValueChange={(v) => {
@@ -173,7 +192,7 @@ function TranslationRow({
             onAssign(v === "__none__" ? null : v);
           }}
         >
-          <SelectTrigger className="w-72">
+          <SelectTrigger className="w-full">
             <SelectValue placeholder={tPanel("assignPlaceholder")} />
           </SelectTrigger>
           <SelectContent>
@@ -188,16 +207,25 @@ function TranslationRow({
             ))}
           </SelectContent>
         </Select>
-        {pending && <Loader2 size={14} className="animate-spin" />}
+        {pending && (
+          <Loader2
+            size={14}
+            className="shrink-0 animate-spin text-[hsl(var(--muted-foreground))]"
+          />
+        )}
       </div>
 
-      <div className="flex items-center gap-2">
-        {tr && (
-          <Button asChild size="sm" variant="ghost">
+      <div className="flex items-center justify-between gap-2 border-t border-[hsl(var(--border))] pt-2">
+        {tr ? (
+          <Button asChild size="sm" variant="ghost" className="px-2">
             <Link href={`/admin/articles/${articleId}/translate/${locale}`}>
               {tPanel("openTranslation")}
             </Link>
           </Button>
+        ) : (
+          <span className="text-xs text-[hsl(var(--muted-foreground))]">
+            {tPanel("assignPlaceholder")}
+          </span>
         )}
         {tr && tr.status === "REVIEW" && (
           <Button size="sm" onClick={onPublish} disabled={pending}>

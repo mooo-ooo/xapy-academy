@@ -286,6 +286,7 @@ export type LoadedArticle = {
   title: string;
   excerpt: string | null;
   bodyMdx: string;
+  bodyHtml: string | null;
   metaTitle: string | null;
   metaDescription: string | null;
   ogImage: string | null;
@@ -405,6 +406,7 @@ export const loadArticleForReading = cache(
       title: renderedTr.title,
       excerpt: renderedTr.excerpt,
       bodyMdx: renderedTr.bodyMdx,
+      bodyHtml: renderedTr.bodyHtml,
       metaTitle: renderedTr.metaTitle,
       metaDescription: renderedTr.metaDescription,
       ogImage: renderedTr.ogImage,

@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/toast";
 import { Loader2, Save, Send, CheckCheck, Wand2 } from "lucide-react";
-import { TiptapEditor } from "@/components/admin/tiptap-editor";
+import { RichTextEditor } from "@/components/admin/rich-text-editor";
 import { ImageUpload } from "@/components/admin/image-upload";
 import { slugify } from "@/lib/utils";
 import {
@@ -33,7 +33,7 @@ export function TranslationEditor({
   source: {
     title: string;
     excerpt: string;
-    bodyMdx: string;
+    bodyHtml: string;
     metaTitle: string;
     metaDescription: string;
     slug: string;
@@ -42,7 +42,7 @@ export function TranslationEditor({
     slug: string;
     title: string;
     excerpt: string;
-    bodyMdx: string;
+    bodyHtml: string;
     metaTitle: string;
     metaDescription: string;
     ogImage: string;
@@ -60,7 +60,7 @@ export function TranslationEditor({
   // so the first title edit replaces it.
   const placeholderInitial = initial.slug === `${source.slug}-${locale}`;
   const [slugDirty, setSlugDirty] = useState(!placeholderInitial);
-  const [body, setBody] = useState(initial.bodyMdx);
+  const [body, setBody] = useState(initial.bodyHtml);
   const [savedAt, setSavedAt] = useState<Date | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -99,7 +99,7 @@ export function TranslationEditor({
         slug,
         title,
         excerpt: String(fd.get("excerpt") ?? ""),
-        bodyMdx: body,
+        bodyHtml: body,
         metaTitle: String(fd.get("metaTitle") ?? ""),
         metaDescription: String(fd.get("metaDescription") ?? ""),
         ogImage: String(fd.get("ogImage") ?? ""),
@@ -167,7 +167,7 @@ export function TranslationEditor({
             <p className="mb-1 text-xs uppercase tracking-[0.6px] text-[hsl(var(--muted-foreground))]">
               {t("edit.bodyLabel")}
             </p>
-            <TiptapEditor value={source.bodyMdx} readOnly className="bg-black/30" />
+            <RichTextEditor value={source.bodyHtml} readOnly className="bg-black/30" />
           </div>
           <ReadOnlyField label={t("form.metaTitleLabel")} value={source.metaTitle} />
           <ReadOnlyField
@@ -253,7 +253,7 @@ export function TranslationEditor({
           </div>
           <div className="flex flex-col gap-1.5">
             <Label required>{t("edit.bodyLabel")}</Label>
-            <TiptapEditor value={body} onChange={setBody} />
+            <RichTextEditor value={body} onChange={setBody} />
           </div>
           <div className="grid grid-cols-1 gap-3">
             <div className="flex flex-col gap-1.5">

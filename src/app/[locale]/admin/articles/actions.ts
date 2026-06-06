@@ -10,6 +10,7 @@ import { ADMIN_ROLES } from "@/lib/roles";
 import { auth, type AppRole } from "@/lib/auth";
 import { logAudit } from "@/lib/audit";
 import { UPLOAD_DIR } from "@/lib/uploads";
+import { htmlToMarkdown } from "@/lib/content";
 import { routing } from "@/i18n/routing";
 
 const LOCALES = routing.locales as unknown as [string, ...string[]];
@@ -26,7 +27,7 @@ const createArticleSchema = z.object({
   slug: z.string().min(2).max(160).regex(slugRegex),
   title: z.string().min(1).max(200),
   excerpt: z.string().max(400).optional().or(z.literal("")),
-  bodyMdx: z.string().min(1),
+  bodyHtml: z.string().min(1),
   metaTitle: z.string().max(160).optional().or(z.literal("")),
   metaDescription: z.string().max(280).optional().or(z.literal("")),
   difficulty: z.enum(DIFFICULTY).default("BEGINNER"),
@@ -71,7 +72,8 @@ export async function createArticleAction(raw: unknown) {
           slug: parsed.data.slug,
           title: parsed.data.title,
           excerpt: parsed.data.excerpt || null,
-          bodyMdx: parsed.data.bodyMdx,
+          bodyMdx: htmlToMarkdown(parsed.data.bodyHtml),
+          bodyHtml: parsed.data.bodyHtml,
           metaTitle: parsed.data.metaTitle || null,
           metaDescription: parsed.data.metaDescription || null,
           status: "PUBLISHED",
@@ -96,7 +98,7 @@ const updateSourceSchema = z.object({
   slug: z.string().min(2).max(160).regex(slugRegex),
   title: z.string().min(1).max(200),
   excerpt: z.string().max(400).optional().or(z.literal("")),
-  bodyMdx: z.string().min(1),
+  bodyHtml: z.string().min(1),
   metaTitle: z.string().max(160).optional().or(z.literal("")),
   metaDescription: z.string().max(280).optional().or(z.literal("")),
   difficulty: z.enum(DIFFICULTY).optional(),
@@ -117,7 +119,9 @@ export async function updateArticleSourceAction(raw: unknown) {
   const article = await prisma.article.findUnique({
     where: { id: parsed.data.articleId },
     include: {
-      translations: { select: { id: true, locale: true, bodyMdx: true } },
+      translations: {
+        select: { id: true, locale: true, bodyMdx: true, bodyHtml: true },
+      },
     },
   });
   if (!article) return { ok: false as const, error: "Article not found" };
@@ -127,7 +131,8 @@ export async function updateArticleSourceAction(raw: unknown) {
   );
   if (!source) return { ok: false as const, error: "Source translation missing" };
 
-  const bodyChanged = source.bodyMdx.trim() !== parsed.data.bodyMdx.trim();
+  const bodyChanged =
+    (source.bodyHtml ?? "").trim() !== parsed.data.bodyHtml.trim();
   const nextVersion = bodyChanged
     ? article.sourceVersion + 1
     : article.sourceVersion;
@@ -157,7 +162,8 @@ export async function updateArticleSourceAction(raw: unknown) {
         slug: parsed.data.slug,
         title: parsed.data.title,
         excerpt: parsed.data.excerpt || null,
-        bodyMdx: parsed.data.bodyMdx,
+        bodyMdx: htmlToMarkdown(parsed.data.bodyHtml),
+        bodyHtml: parsed.data.bodyHtml,
         metaTitle: parsed.data.metaTitle || null,
         metaDescription: parsed.data.metaDescription || null,
         ogImage: parsed.data.ogImage || null,
@@ -353,6 +359,7 @@ export async function assignTranslatorAction(raw: unknown) {
         title: source.title,
         excerpt: source.excerpt,
         bodyMdx: source.bodyMdx,
+        bodyHtml: source.bodyHtml,
         status: "IN_PROGRESS",
         basedOnSourceVersion: article.sourceVersion,
       },
@@ -377,7 +384,7 @@ const saveTranslationSchema = z.object({
   slug: z.string().min(2).max(160).regex(slugRegex),
   title: z.string().min(1).max(200),
   excerpt: z.string().max(400).optional().or(z.literal("")),
-  bodyMdx: z.string().min(1),
+  bodyHtml: z.string().min(1),
   metaTitle: z.string().max(160).optional().or(z.literal("")),
   metaDescription: z.string().max(280).optional().or(z.literal("")),
   ogImage: z.string().max(2048).optional().or(z.literal("")),
@@ -423,7 +430,8 @@ export async function saveTranslationAction(raw: unknown) {
       slug: parsed.data.slug,
       title: parsed.data.title,
       excerpt: parsed.data.excerpt || null,
-      bodyMdx: parsed.data.bodyMdx,
+      bodyMdx: htmlToMarkdown(parsed.data.bodyHtml),
+      bodyHtml: parsed.data.bodyHtml,
       metaTitle: parsed.data.metaTitle || null,
       metaDescription: parsed.data.metaDescription || null,
       ogImage: parsed.data.ogImage || null,

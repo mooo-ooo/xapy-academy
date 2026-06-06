@@ -431,3 +431,14 @@ body {
   outline: 2px solid hsl(var(--accent-emerald));
   outline-offset: 2px;
 }
+
+.ckeditor-wrap .ck.ck-editor__editable_inline {
+  min-height: 420px;
+}
+.ckeditor-wrap .ck.ck-sticky-panel .ck-sticky-panel__content_sticky {
+  position: static !important;
+  width: auto !important;
+}
+.ckeditor-wrap .ck.ck-sticky-panel .ck-sticky-panel__placeholder {
+  display: none !important;
+}

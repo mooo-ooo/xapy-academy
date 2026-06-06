@@ -20,7 +20,8 @@ import {
 } from "@/lib/data/articles";
 import { listGlossaryEntries } from "@/lib/data/glossary";
 import { ViewTracker } from "@/components/academy/view-tracker";
-import { renderArticleMdx } from "@/lib/mdx";
+import { renderArticleHtml } from "@/lib/html";
+import { markdownToHtml } from "@/lib/content";
 import {
   absoluteUrl,
   buildArticleJsonLd,
@@ -130,8 +131,12 @@ export default async function ArticlePage({
   // client hydration with localStorage dedup, so refreshes / cached
   // ISR responses / bots don't inflate the counter.
 
-  const [{ content, toc }, moduleNav, t, site, session] = await Promise.all([
-    renderArticleMdx(article.bodyMdx),
+  const articleHtmlSource =
+    article.bodyHtml && article.bodyHtml.trim()
+      ? article.bodyHtml
+      : markdownToHtml(article.bodyMdx);
+  const [{ html: bodyHtml, toc }, moduleNav, t, site, session] = await Promise.all([
+    renderArticleHtml(articleHtmlSource),
     listModuleArticleNav(article.moduleId, effective),
     getTranslations({ locale: effective, namespace: "academy" }),
     getSiteSetting(),
@@ -338,9 +343,10 @@ export default async function ArticlePage({
           </div>
 
           {/* Row 2 — body */}
-          <div className="prose-academy w-full max-w-3xl lg:col-start-2 lg:row-start-2">
-            {content}
-          </div>
+          <div
+            className="prose-academy w-full max-w-3xl lg:col-start-2 lg:row-start-2"
+            dangerouslySetInnerHTML={{ __html: bodyHtml }}
+          />
 
           {/* Row 2 — right TOC (sticky lives on the aside itself) */}
           <TocSidebar

@@ -115,9 +115,6 @@ export function TocSidebar({
                     : "text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]"
                 }`}
               >
-                <span className="font-mono text-[10px] tracking-[0.5px] opacity-70">
-                  {e.number}
-                </span>{" "}
                 {e.text}
               </a>
             </li>
