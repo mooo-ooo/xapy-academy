@@ -79,12 +79,7 @@ function moduleNameFor(
 }
 
 function pickTranslation(row: ArticleRow, locale: Locale) {
-  return (
-    row.translations.find((t) => t.locale === locale) ??
-    row.translations.find((t) => t.locale === row.sourceLocale) ??
-    row.translations[0] ??
-    null
-  );
+  return row.translations.find((t) => t.locale === locale) ?? null;
 }
 
 function toItem(
@@ -126,7 +121,7 @@ export async function listUserLikedArticles(
       userId,
       article: {
         status: "PUBLISHED",
-        translations: { some: { status: "PUBLISHED" } },
+        translations: { some: { status: "PUBLISHED", locale } },
       },
     },
     orderBy: { createdAt: "desc" },
@@ -152,7 +147,7 @@ export async function listUserViewedArticles(
       userId,
       article: {
         status: "PUBLISHED",
-        translations: { some: { status: "PUBLISHED" } },
+        translations: { some: { status: "PUBLISHED", locale } },
       },
     },
     orderBy: { viewedAt: "desc" },
