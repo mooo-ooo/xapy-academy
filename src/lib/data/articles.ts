@@ -90,22 +90,17 @@ function moduleNameFor(
 }
 
 /**
- * Pick the translation to render for a list card. Mirrors the
- * fallback rule used by `loadArticleForReading`:
- *   1) requested locale (if PUBLISHED translation exists)
- *   2) article.sourceLocale (the original — usually `en`)
- *   3) any PUBLISHED translation
+ * Pick the translation to render for a list card. Strictly the
+ * requested locale — articles are always filtered by the viewer's
+ * current language, never falling back to another locale. Returns
+ * null when no PUBLISHED translation exists in that locale, so the
+ * card is dropped from the list.
  */
 function pickListTranslation(
   row: ArticleListRow,
   locale: Locale,
 ): ArticleListRow["translations"][number] | null {
-  return (
-    row.translations.find((t) => t.locale === locale) ??
-    row.translations.find((t) => t.locale === row.sourceLocale) ??
-    row.translations[0] ??
-    null
-  );
+  return row.translations.find((t) => t.locale === locale) ?? null;
 }
 
 function toListItem(row: ArticleListRow, locale: Locale): ArticleListItem | null {
@@ -138,7 +133,7 @@ export const listPublishedArticlesInModule = cache(
       where: {
         status: "PUBLISHED",
         moduleId,
-        translations: { some: { status: "PUBLISHED" } },
+        translations: { some: { status: "PUBLISHED", locale } },
       },
       select: ARTICLE_LIST_SELECT,
       orderBy: { publishedAt: "desc" },
@@ -155,7 +150,7 @@ export const listLatestArticles = cache(
     const rows = await prisma.article.findMany({
       where: {
         status: "PUBLISHED",
-        translations: { some: { status: "PUBLISHED" } },
+        translations: { some: { status: "PUBLISHED", locale } },
       },
       select: ARTICLE_LIST_SELECT,
       orderBy: { publishedAt: "desc" },
@@ -218,7 +213,7 @@ export async function listLatestArticlesPage(
   const rows = await prisma.article.findMany({
     where: {
       status: "PUBLISHED",
-      translations: { some: { status: "PUBLISHED" } },
+      translations: { some: { status: "PUBLISHED", locale } },
       ...cursorWhereClause(cursor),
     },
     select: ARTICLE_LIST_SELECT,
@@ -247,7 +242,7 @@ export async function listPublishedArticlesInModulePage(
     where: {
       status: "PUBLISHED",
       moduleId,
-      translations: { some: { status: "PUBLISHED" } },
+      translations: { some: { status: "PUBLISHED", locale } },
       ...(opts.excludeId ? { id: { not: opts.excludeId } } : {}),
       ...cursorWhereClause(cursor),
     },
@@ -320,22 +315,25 @@ export const loadArticleForReading = cache(
     articleSlug: string,
     requestedLocale: Locale,
   ): Promise<LoadedArticle | null> => {
-    // Step 1 — find ANY translation that matches the URL slug, regardless
-    // of locale, so we can resolve the article id even when the user
-    // landed on /en/<vi-slug> or /vi/<en-slug>.
-    const anyMatch = await prisma.articleTranslation.findFirst({
+    // Step 1 — find the PUBLISHED translation that matches the URL slug
+    // IN THE REQUESTED LOCALE. Articles are always filtered by the
+    // viewer's language: a slug that only exists in another locale is a
+    // miss here, so the page 404s instead of falling back to English.
+    const localeMatch = await prisma.articleTranslation.findFirst({
       where: {
         slug: articleSlug,
+        locale: requestedLocale,
         status: "PUBLISHED",
         article: { status: "PUBLISHED", module: { slug: moduleSlug } },
       },
       select: { articleId: true },
     });
-    if (!anyMatch) return null;
+    if (!localeMatch) return null;
 
-    // Step 2 — load the article with ALL its published translations.
+    // Step 2 — load the article with ALL its published translations
+    // (siblings still feed the hreflang/alternates + language switcher).
     const article = await prisma.article.findUnique({
-      where: { id: anyMatch.articleId },
+      where: { id: localeMatch.articleId },
       include: {
         module: true,
         author: {
@@ -347,13 +345,10 @@ export const loadArticleForReading = cache(
     });
     if (!article || article.status !== "PUBLISHED") return null;
 
-    // Step 3 — pick the translation to render. Prefer requestedLocale,
-    // then sourceLocale, then any.
+    // Step 3 — render strictly the requested locale (guaranteed to exist
+    // by step 1). No cross-locale fallback.
     const renderedTr =
-      article.translations.find((t) => t.locale === requestedLocale) ??
-      article.translations.find((t) => t.locale === article.sourceLocale) ??
-      article.translations[0] ??
-      null;
+      article.translations.find((t) => t.locale === requestedLocale) ?? null;
     if (!renderedTr) return null;
 
     // Step 4 — module display name for breadcrumb.
@@ -431,7 +426,7 @@ export const listPublishedArticlesByAuthor = cache(
       where: {
         status: "PUBLISHED",
         authorId,
-        translations: { some: { status: "PUBLISHED" } },
+        translations: { some: { status: "PUBLISHED", locale } },
       },
       select: ARTICLE_LIST_SELECT,
       orderBy: { publishedAt: "desc" },
@@ -454,7 +449,7 @@ export const listModuleArticleNav = cache(
       where: {
         status: "PUBLISHED",
         moduleId,
-        translations: { some: { status: "PUBLISHED" } },
+        translations: { some: { status: "PUBLISHED", locale } },
       },
       orderBy: [{ publishedAt: "asc" }, { createdAt: "asc" }],
       select: {
@@ -467,10 +462,7 @@ export const listModuleArticleNav = cache(
     });
     const out: { slug: string; title: string }[] = [];
     for (const r of rows) {
-      const tr =
-        r.translations.find((t) => t.locale === locale) ??
-        r.translations.find((t) => t.locale === r.sourceLocale) ??
-        r.translations[0];
+      const tr = r.translations.find((t) => t.locale === locale);
       if (tr) out.push({ slug: tr.slug, title: tr.title });
     }
     return out;

@@ -157,6 +157,7 @@ const sanitizeSchema: Schema = {
     "u",
     "s",
     "mark",
+    "label",
   ],
   attributes: {
     ...defaultSchema.attributes,
@@ -210,6 +211,11 @@ const sanitizeSchema: Schema = {
       "className",
       "style",
       ["data-line"],
+    ],
+    input: [
+      ...(defaultSchema.attributes?.input ?? []),
+      "checked",
+      "className",
     ],
   },
 };
