@@ -9,6 +9,7 @@ import { CategoryPill } from "@/components/academy/category-pill";
 import { LikeButton } from "@/components/academy/like-button";
 import { ShareButton } from "@/components/academy/share-button";
 import { TocSidebar } from "@/components/academy/toc-sidebar";
+import { ArticleLightbox } from "@/components/academy/article-lightbox";
 import { JsonLd } from "@/components/seo/json-ld";
 import { auth } from "@/lib/auth";
 import { hasUserLikedArticle } from "@/lib/data/likes";
@@ -344,9 +345,11 @@ export default async function ArticlePage({
 
           {/* Row 2 — body */}
           <div
+            id="article-body"
             className="prose-academy w-full max-w-3xl lg:col-start-2 lg:row-start-2"
             dangerouslySetInnerHTML={{ __html: bodyHtml }}
           />
+          <ArticleLightbox containerId="article-body" />
 
           {/* Row 2 — right TOC (sticky lives on the aside itself) */}
           <TocSidebar

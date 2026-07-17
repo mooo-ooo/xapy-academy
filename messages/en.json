@@ -381,7 +381,17 @@
       },
       "edit": {
         "moduleSettings": "Module settings",
-        "translations": "Translations"
+        "translations": "Translations",
+        "lessons": "Lessons"
+      },
+      "lessons": {
+        "hint": "Drag the order of lessons in this module with the arrows. This controls the order shown on the module page and in the in-article lesson navigation.",
+        "empty": "No lessons in this module yet.",
+        "edit": "Edit",
+        "reorder": {
+          "up": "Move up",
+          "down": "Move down"
+        }
       },
       "form": {
         "slugLabel": "Slug",

@@ -426,6 +426,23 @@ body {
   border: 0;
 }
 
+.prose-academy img {
+  transition: filter 0.2s ease, opacity 0.2s ease;
+}
+.prose-academy img[style*="zoom-in"]:hover {
+  opacity: 0.92;
+  filter: brightness(1.03);
+}
+
+@keyframes lightbox-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 .prose-academy mark { border-radius: 2px; padding: 0 1px; color: #0b0f17; }
 .prose-academy mark.marker-yellow { background-color: #fdfd77; }
 .prose-academy mark.marker-green { background-color: #62f962; }

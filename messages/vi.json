@@ -368,7 +368,17 @@
       },
       "edit": {
         "moduleSettings": "Cài đặt module",
-        "translations": "Bản dịch"
+        "translations": "Bản dịch",
+        "lessons": "Bài học"
+      },
+      "lessons": {
+        "hint": "Sắp xếp thứ tự các bài học trong module bằng các mũi tên. Thứ tự này áp dụng cho trang module và cho phần điều hướng bài học trong bài viết.",
+        "empty": "Module này chưa có bài học nào.",
+        "edit": "Sửa",
+        "reorder": {
+          "up": "Lên",
+          "down": "Xuống"
+        }
       },
       "form": {
         "slugLabel": "Slug",

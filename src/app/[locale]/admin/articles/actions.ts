@@ -56,6 +56,12 @@ export async function createArticleAction(raw: unknown) {
     return { ok: false as const, error: "Slug already used in this locale" };
   }
 
+  const maxRow = await prisma.article.aggregate({
+    where: { moduleId: parsed.data.moduleId },
+    _max: { sortOrder: true },
+  });
+  const sortOrder = ((maxRow._max.sortOrder as number | null) ?? -10) + 10;
+
   const article = await prisma.article.create({
     data: {
       moduleId: parsed.data.moduleId,
@@ -63,6 +69,7 @@ export async function createArticleAction(raw: unknown) {
       sourceLocale: parsed.data.sourceLocale,
       status: "DRAFT",
       sourceVersion: 1,
+      sortOrder,
       difficulty: parsed.data.difficulty,
       coverImage: parsed.data.coverImage || null,
       accentColor: parsed.data.accentColor || null,
@@ -272,6 +279,57 @@ export async function deleteArticleAction(raw: unknown) {
   revalidatePath("/admin/articles");
   revalidatePath("/[locale]/academy", "layout");
   revalidatePath("/sitemap.xml");
+  revalidatePath("/sitemap/[slug]", "page");
+  return { ok: true as const };
+}
+
+const reorderArticleSchema = z.object({
+  id: z.string(),
+  direction: z.enum(["up", "down"]),
+});
+
+export async function reorderArticleAction(raw: unknown) {
+  const session = await requireRole(ADMIN_ROLES);
+  const parsed = reorderArticleSchema.safeParse(raw);
+  if (!parsed.success) return { ok: false as const, error: "Invalid input" };
+
+  const target = await prisma.article.findUnique({
+    where: { id: parsed.data.id },
+    select: { moduleId: true },
+  });
+  if (!target) return { ok: false as const, error: "Article not found" };
+
+  const all = await prisma.article.findMany({
+    where: { moduleId: target.moduleId },
+    orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
+    select: { id: true },
+  });
+  const idx = all.findIndex((a) => a.id === parsed.data.id);
+  if (idx === -1) return { ok: false as const, error: "Article not found" };
+  const swapIdx = parsed.data.direction === "up" ? idx - 1 : idx + 1;
+  if (swapIdx < 0 || swapIdx >= all.length) {
+    return { ok: false as const, error: "Already at edge" };
+  }
+
+  const next = [...all];
+  [next[idx], next[swapIdx]] = [next[swapIdx], next[idx]];
+
+  await prisma.$transaction(
+    next.map((a, i) =>
+      prisma.article.update({
+        where: { id: a.id },
+        data: { sortOrder: i * 10 },
+      }),
+    ),
+  );
+  await logAudit({
+    actorId: session.user.id,
+    action: "ARTICLE_REORDER",
+    target: parsed.data.id,
+    meta: { direction: parsed.data.direction, moduleId: target.moduleId },
+  });
+  revalidatePath(`/admin/modules/${target.moduleId}`);
+  revalidatePath("/[locale]/academy", "layout");
   return { ok: true as const };
 }
 
