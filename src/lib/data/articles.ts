@@ -21,6 +21,7 @@ export type ArticleListItem = {
   difficulty: Difficulty;
   likeCount: number;
   readingTimeMinutes: number;
+  sortOrder: number;
   author: { name: string | null; email: string };
   /** True when the rendered translation locale differs from the
    *  requested locale (e.g. /vi page falling back to an EN-only
@@ -34,6 +35,7 @@ const ARTICLE_LIST_SELECT = {
   publishedAt: true,
   difficulty: true,
   likeCount: true,
+  sortOrder: true,
   sourceLocale: true,
   module: {
     select: {
@@ -61,6 +63,7 @@ type ArticleListRow = {
   publishedAt: Date | null;
   difficulty: Difficulty;
   likeCount: number;
+  sortOrder: number;
   sourceLocale: string;
   module: {
     slug: string;
@@ -119,14 +122,12 @@ function toListItem(row: ArticleListRow, locale: Locale): ArticleListItem | null
     difficulty: row.difficulty,
     likeCount: row.likeCount,
     readingTimeMinutes: computeReadingTimeMinutes(tr.bodyMdx),
+    sortOrder: row.sortOrder,
     author: row.author,
     isFallback: tr.locale !== locale,
   };
 }
 
-/** Published articles in a module, ordered newest first.
- *  Falls back to the article's sourceLocale (EN) when the requested
- *  locale has no PUBLISHED translation yet. */
 export const listPublishedArticlesInModule = cache(
   async (moduleId: string, locale: Locale): Promise<ArticleListItem[]> => {
     const rows = await prisma.article.findMany({
@@ -136,7 +137,7 @@ export const listPublishedArticlesInModule = cache(
         translations: { some: { status: "PUBLISHED", locale } },
       },
       select: ARTICLE_LIST_SELECT,
-      orderBy: { publishedAt: "desc" },
+      orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
     });
     return rows
       .map((r) => toListItem(r as unknown as ArticleListRow, locale))
@@ -204,6 +205,38 @@ function cursorWhereClause(c: ArticleCursor | null) {
 
 const FEED_ORDER = [{ publishedAt: "desc" as const }, { id: "desc" as const }];
 
+type ModuleCursor = { sortOrder: number; id: string };
+
+function encodeModuleCursor(item: ArticleListItem | null): string | null {
+  if (!item) return null;
+  return `${item.sortOrder.toString(36)}:${item.id}`;
+}
+
+function decodeModuleCursor(raw: string | null | undefined): ModuleCursor | null {
+  if (!raw) return null;
+  const idx = raw.indexOf(":");
+  if (idx <= 0) return null;
+  const sortOrder = parseInt(raw.slice(0, idx), 36);
+  const id = raw.slice(idx + 1);
+  if (!Number.isFinite(sortOrder) || !id) return null;
+  return { sortOrder, id };
+}
+
+function moduleCursorWhereClause(c: ModuleCursor | null) {
+  if (!c) return {};
+  return {
+    OR: [
+      { sortOrder: { gt: c.sortOrder } },
+      { AND: [{ sortOrder: c.sortOrder }, { id: { gt: c.id } }] },
+    ],
+  };
+}
+
+const MODULE_FEED_ORDER = [
+  { sortOrder: "asc" as const },
+  { id: "asc" as const },
+];
+
 export async function listLatestArticlesPage(
   locale: Locale,
   opts: { cursor?: string | null; limit?: number } = {},
@@ -237,17 +270,17 @@ export async function listPublishedArticlesInModulePage(
   opts: { cursor?: string | null; limit?: number; excludeId?: string } = {},
 ): Promise<ArticleFeedPage> {
   const limit = Math.min(50, Math.max(1, opts.limit ?? 12));
-  const cursor = decodeArticleCursor(opts.cursor);
+  const cursor = decodeModuleCursor(opts.cursor);
   const rows = await prisma.article.findMany({
     where: {
       status: "PUBLISHED",
       moduleId,
       translations: { some: { status: "PUBLISHED", locale } },
       ...(opts.excludeId ? { id: { not: opts.excludeId } } : {}),
-      ...cursorWhereClause(cursor),
+      ...moduleCursorWhereClause(cursor),
     },
     select: ARTICLE_LIST_SELECT,
-    orderBy: FEED_ORDER,
+    orderBy: MODULE_FEED_ORDER,
     take: limit + 1,
   });
   const hasMore = rows.length > limit;
@@ -257,7 +290,7 @@ export async function listPublishedArticlesInModulePage(
     .filter((x): x is ArticleListItem => x !== null);
   return {
     items,
-    nextCursor: hasMore ? encodeArticleCursor(items[items.length - 1] ?? null) : null,
+    nextCursor: hasMore ? encodeModuleCursor(items[items.length - 1] ?? null) : null,
   };
 }
 
@@ -451,7 +484,7 @@ export const listModuleArticleNav = cache(
         moduleId,
         translations: { some: { status: "PUBLISHED", locale } },
       },
-      orderBy: [{ publishedAt: "asc" }, { createdAt: "asc" }],
+      orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
       select: {
         sourceLocale: true,
         translations: {

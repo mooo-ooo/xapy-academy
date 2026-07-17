@@ -5,6 +5,7 @@ import { Link } from "@/i18n/navigation";
 import { ArrowLeft } from "lucide-react";
 import { ModuleForm } from "@/components/admin/module-form";
 import { ModuleTranslationsEditor } from "@/components/admin/module-translations-editor";
+import { ModuleLessonsList } from "@/components/admin/module-lessons-list";
 import { VerticalTabsShell } from "@/components/admin/vertical-tabs-shell";
 import { routing } from "@/i18n/routing";
 
@@ -70,6 +71,11 @@ export default async function EditModulePage({
                 initialByLocale={byLocale}
               />
             ),
+          },
+          {
+            key: "lessons",
+            label: t("edit.lessons"),
+            content: <ModuleLessonsList moduleId={mod.id} locale={locale} />,
           },
         ]}
       />

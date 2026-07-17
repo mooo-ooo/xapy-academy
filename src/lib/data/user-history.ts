@@ -23,6 +23,7 @@ const ARTICLE_FIELDS = {
   publishedAt: true,
   difficulty: true,
   likeCount: true,
+  sortOrder: true,
   sourceLocale: true,
   module: {
     select: {
@@ -50,6 +51,7 @@ type ArticleRow = {
   publishedAt: Date | null;
   difficulty: Difficulty;
   likeCount: number;
+  sortOrder: number;
   sourceLocale: string;
   module: {
     slug: string;
@@ -103,6 +105,7 @@ function toItem(
     difficulty: row.difficulty,
     likeCount: row.likeCount,
     readingTimeMinutes: computeReadingTimeMinutes(tr.bodyMdx),
+    sortOrder: row.sortOrder,
     author: row.author,
     isFallback: tr.locale !== locale,
     at,

@@ -171,6 +171,7 @@ model Article {
   likeCount     Int           @default(0)
   publishedAt   DateTime?
   viewCount     Int           @default(0)
+  sortOrder     Int           @default(0)
   translations  ArticleTranslation[]
   tags          ArticleTag[]
   likes         ArticleLike[]
@@ -180,6 +181,7 @@ model Article {
 
   @@index([status, publishedAt])
   @@index([authorId])
+  @@index([moduleId, sortOrder])
 }
 
 model ArticleLike {
