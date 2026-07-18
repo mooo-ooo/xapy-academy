@@ -285,6 +285,7 @@ function escapeXml(value: string): string {
 export function renderUrlset(urls: SitemapUrl[]): string {
   const parts: string[] = [
     '<?xml version="1.0" encoding="UTF-8"?>',
+    '<?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>',
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">',
   ];
   for (const url of urls) {
@@ -318,6 +319,7 @@ export function renderSitemapIndex(children: SitemapChild[]): string {
   const o = origin();
   const parts: string[] = [
     '<?xml version="1.0" encoding="UTF-8"?>',
+    '<?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>',
     '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
   ];
   for (const child of children) {
