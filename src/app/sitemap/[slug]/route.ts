@@ -1,6 +1,6 @@
 import { buildChildUrls, renderUrlset } from "@/lib/sitemap";
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 export async function GET(
   _req: Request,

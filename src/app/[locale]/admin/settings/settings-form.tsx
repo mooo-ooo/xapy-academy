@@ -26,6 +26,8 @@ type Initial = {
   siteName: string;
   tagline: string | null;
   logoUrl: string | null;
+  logoUrlLight: string | null;
+  logoUrlDark: string | null;
   faviconUrl: string | null;
   defaultOgImageUrl: string | null;
   defaultMetaDescription: string | null;
@@ -80,6 +82,8 @@ export function SettingsForm({
         siteName: String(fd.get("siteName") ?? ""),
         tagline: String(fd.get("tagline") ?? ""),
         logoUrl: String(fd.get("logoUrl") ?? ""),
+        logoUrlLight: String(fd.get("logoUrlLight") ?? ""),
+        logoUrlDark: String(fd.get("logoUrlDark") ?? ""),
         faviconUrl: String(fd.get("faviconUrl") ?? ""),
         defaultOgImageUrl: String(fd.get("defaultOgImageUrl") ?? ""),
         defaultMetaDescription: String(fd.get("defaultMetaDescription") ?? ""),
@@ -173,10 +177,32 @@ export function SettingsForm({
             title={t("branding.title")}
             description={t("branding.description")}
           >
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+              <Field
+                id="logoUrlLight"
+                label={t("branding.logoLightLabel")}
+                hint={t("branding.logoLightHint")}
+              >
+                <ImageUpload
+                  name="logoUrlLight"
+                  initial={initial.logoUrlLight ?? ""}
+                />
+              </Field>
+              <Field
+                id="logoUrlDark"
+                label={t("branding.logoDarkLabel")}
+                hint={t("branding.logoDarkHint")}
+              >
+                <ImageUpload
+                  name="logoUrlDark"
+                  initial={initial.logoUrlDark ?? ""}
+                />
+              </Field>
+            </div>
             <Field
               id="logoUrl"
               label={t("branding.logoUrlLabel")}
-              hint={t("branding.logoUrlHint")}
+              hint={t("branding.logoFallbackHint")}
             >
               <ImageUpload name="logoUrl" initial={initial.logoUrl ?? ""} />
             </Field>

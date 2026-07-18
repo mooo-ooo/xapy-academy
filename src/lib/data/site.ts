@@ -28,6 +28,8 @@ export type SiteSettingResolved = {
   siteName: string;
   tagline: string | null;
   logoUrl: string | null;
+  logoUrlLight: string | null;
+  logoUrlDark: string | null;
   faviconUrl: string | null;
   defaultOgImageUrl: string | null;
   defaultMetaDescription: string | null;
@@ -178,6 +180,8 @@ export const getSiteSetting = cache(async (): Promise<SiteSettingResolved> => {
       siteName: "Kiyotaka Academy",
       tagline: null,
       logoUrl: null,
+      logoUrlLight: null,
+      logoUrlDark: null,
       faviconUrl: null,
       defaultOgImageUrl: null,
       defaultMetaDescription: null,
@@ -201,6 +205,8 @@ export const getSiteSetting = cache(async (): Promise<SiteSettingResolved> => {
     siteName: row.siteName,
     tagline: row.tagline,
     logoUrl: row.logoUrl,
+    logoUrlLight: row.logoUrlLight,
+    logoUrlDark: row.logoUrlDark,
     faviconUrl: row.faviconUrl,
     defaultOgImageUrl: row.defaultOgImageUrl,
     defaultMetaDescription: row.defaultMetaDescription,

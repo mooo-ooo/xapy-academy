@@ -110,6 +110,8 @@ model SiteSetting {
   siteName               String   @default("Kiyotaka Academy")
   tagline                String?  @db.Text
   logoUrl                String?
+  logoUrlLight           String?
+  logoUrlDark            String?
   faviconUrl             String?
   defaultOgImageUrl      String?
   defaultMetaDescription String?  @db.Text
