@@ -230,6 +230,8 @@ async function deleteOrphanUploads(names: string[]) {
         where: {
           OR: [
             { logoUrl: { contains: name } },
+            { logoUrlLight: { contains: name } },
+            { logoUrlDark: { contains: name } },
             { faviconUrl: { contains: name } },
             { defaultOgImageUrl: { contains: name } },
             { heroImageUrl: { contains: name } },

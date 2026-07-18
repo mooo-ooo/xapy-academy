@@ -1,4 +1,3 @@
-import { Link } from "@/i18n/navigation";
 import { getSiteSetting, resolveFooter } from "@/lib/data/site";
 
 const BRAND_PATHS: Record<string, string> = {
@@ -30,18 +29,14 @@ function SocialIcon({ platform }: { platform: string }) {
   return (
     <svg
       viewBox="0 0 24 24"
-      width="18"
-      height="18"
+      width="15"
+      height="15"
       fill="currentColor"
       aria-hidden="true"
     >
       <path d={path} />
     </svg>
   );
-}
-
-function isExternal(href: string): boolean {
-  return /^(https?:)?\/\//.test(href) || href.startsWith("mailto:");
 }
 
 export async function Footer({ locale }: { locale: string }) {
@@ -56,87 +51,28 @@ export async function Footer({ locale }: { locale: string }) {
   );
 
   return (
-    <footer className="mt-24 border-t border-[hsl(var(--border))] bg-[hsl(var(--card))]">
-      <div className="mx-auto w-full max-w-[1280px] px-6 py-12">
-        <div className="grid grid-cols-1 gap-10 lg:grid-cols-4">
-          <div className="flex flex-col gap-4 lg:col-span-1">
-            {site.logoUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={site.logoUrl}
-                alt={site.siteName}
-                className="h-8 w-auto"
-              />
-            ) : (
-              <span className="text-lg font-bold tracking-tight text-[hsl(var(--foreground))]">
-                {site.siteName}
-              </span>
-            )}
-            {f.intro && (
-              <p className="max-w-xs text-sm leading-relaxed text-[hsl(var(--muted-foreground))]">
-                {f.intro}
-              </p>
-            )}
-            {f.social.length > 0 && (
-              <div className="flex flex-wrap items-center gap-2">
-                {f.social.map((s, i) => (
-                  <a
-                    key={i}
-                    href={s.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={s.platform}
-                    title={s.platform}
-                    className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] transition-colors hover:border-[hsl(var(--accent-emerald))] hover:text-[hsl(var(--foreground))]"
-                  >
-                    <SocialIcon platform={s.platform} />
-                  </a>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {f.columns.length > 0 && (
-            <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:col-span-3">
-              {f.columns.map((col, ci) => (
-                <div key={ci} className="flex flex-col gap-3">
-                  {col.title && (
-                    <h3 className="text-xs font-semibold uppercase tracking-[0.6px] text-[hsl(var(--muted-foreground))]">
-                      {col.title}
-                    </h3>
-                  )}
-                  <ul className="flex flex-col gap-2">
-                    {col.links.map((link, li) => (
-                      <li key={li}>
-                        {isExternal(link.href) ? (
-                          <a
-                            href={link.href}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-sm text-[hsl(var(--muted-foreground))] transition-colors hover:text-[hsl(var(--foreground))]"
-                          >
-                            {link.label}
-                          </a>
-                        ) : (
-                          <Link
-                            href={link.href}
-                            className="text-sm text-[hsl(var(--muted-foreground))] transition-colors hover:text-[hsl(var(--foreground))]"
-                          >
-                            {link.label}
-                          </Link>
-                        )}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        <div className="mt-10 border-t border-[hsl(var(--border))] pt-6 text-sm text-[hsl(var(--muted-foreground))]">
+    <footer className="mt-24 border-t border-[hsl(var(--border))]">
+      <div className="mx-auto flex w-full max-w-[1280px] flex-col-reverse items-center gap-4 px-6 py-6 sm:flex-row sm:justify-between">
+        <p className="text-sm text-[hsl(var(--muted-foreground))]">
           {f.copyright}
-        </div>
+        </p>
+        {f.social.length > 0 && (
+          <div className="flex items-center gap-2.5">
+            {f.social.map((s, i) => (
+              <a
+                key={i}
+                href={s.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={s.platform}
+                title={s.platform}
+                className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] transition-colors hover:border-[hsl(var(--accent-emerald))] hover:text-[hsl(var(--foreground))]"
+              >
+                <SocialIcon platform={s.platform} />
+              </a>
+            ))}
+          </div>
+        )}
       </div>
     </footer>
   );
