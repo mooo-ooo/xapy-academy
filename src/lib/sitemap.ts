@@ -22,6 +22,18 @@ export type SitemapUrl = {
 
 export type SitemapChild = { slug: string; lastModified?: Date };
 
+const RESERVED = new Set(["pages", "modules", "authors"]);
+
+const PUBLISHED_AUTHOR_WHERE = {
+  slug: { not: null },
+  articles: {
+    some: {
+      status: "PUBLISHED" as const,
+      translations: { some: { status: "PUBLISHED" as const } },
+    },
+  },
+};
+
 function origin(): string {
   return siteOrigin().replace(/\/$/, "");
 }
@@ -39,22 +51,33 @@ async function context() {
 export async function getSitemapChildren(): Promise<SitemapChild[]> {
   const children: SitemapChild[] = [{ slug: "pages" }, { slug: "modules" }];
   try {
-    const modules = await prisma.module.findMany({
-      where: { isPublic: true },
-      orderBy: { sortOrder: "asc" },
-      select: {
-        slug: true,
-        articles: {
-          where: { status: "PUBLISHED" },
-          select: {
-            translations: {
-              where: { status: "PUBLISHED" },
-              select: { updatedAt: true },
+    const [modules, authorCount] = await Promise.all([
+      prisma.module.findMany({
+        where: {
+          articles: {
+            some: {
+              status: "PUBLISHED",
+              translations: { some: { status: "PUBLISHED" } },
             },
           },
         },
-      },
-    });
+        orderBy: { sortOrder: "asc" },
+        select: {
+          slug: true,
+          articles: {
+            where: { status: "PUBLISHED" },
+            select: {
+              translations: {
+                where: { status: "PUBLISHED" },
+                select: { updatedAt: true },
+              },
+            },
+          },
+        },
+      }),
+      prisma.user.count({ where: PUBLISHED_AUTHOR_WHERE }),
+    ]);
+    if (authorCount > 0) children.push({ slug: "authors" });
     for (const mod of modules) {
       let last: Date | undefined;
       for (const article of mod.articles) {
@@ -62,7 +85,10 @@ export async function getSitemapChildren(): Promise<SitemapChild[]> {
           if (!last || tr.updatedAt > last) last = tr.updatedAt;
         }
       }
-      children.push({ slug: `module-${mod.slug}`, lastModified: last });
+      const childSlug = RESERVED.has(mod.slug)
+        ? `module-${mod.slug}`
+        : mod.slug;
+      children.push({ slug: childSlug, lastModified: last });
     }
   } catch {
     return children;
@@ -75,10 +101,14 @@ export async function buildChildUrls(
 ): Promise<SitemapUrl[] | null> {
   if (slug === "pages") return buildPageUrls();
   if (slug === "modules") return buildModuleIndexUrls();
-  if (slug.startsWith("module-")) {
+  if (slug === "authors") return buildAuthorUrls();
+  if (
+    slug.startsWith("module-") &&
+    RESERVED.has(slug.slice("module-".length))
+  ) {
     return buildModuleArticleUrls(slug.slice("module-".length));
   }
-  return null;
+  return buildModuleArticleUrls(slug);
 }
 
 async function buildPageUrls(): Promise<SitemapUrl[]> {
@@ -160,18 +190,51 @@ async function buildModuleIndexUrls(): Promise<SitemapUrl[]> {
   return urls;
 }
 
+async function buildAuthorUrls(): Promise<SitemapUrl[]> {
+  const { enabled, publicLocale } = await context();
+  const o = origin();
+  const urls: SitemapUrl[] = [];
+
+  const authors = await prisma.user.findMany({
+    where: PUBLISHED_AUTHOR_WHERE,
+    select: { slug: true, updatedAt: true },
+    orderBy: { createdAt: "asc" },
+  });
+
+  for (const author of authors) {
+    if (!author.slug) continue;
+    const langMap = withXDefault(
+      Object.fromEntries(
+        enabled.map((l) => [l, `${o}/${l}/authors/${author.slug}`]),
+      ),
+      publicLocale,
+    );
+    for (const locale of enabled) {
+      urls.push({
+        loc: `${o}/${locale}/authors/${author.slug}`,
+        lastModified: author.updatedAt,
+        changeFrequency: "monthly",
+        priority: 0.5,
+        alternates: langMap,
+      });
+    }
+  }
+
+  return urls;
+}
+
 async function buildModuleArticleUrls(
   moduleSlug: string,
-): Promise<SitemapUrl[]> {
+): Promise<SitemapUrl[] | null> {
   const { enabledSet, publicLocale } = await context();
   const o = origin();
   const urls: SitemapUrl[] = [];
 
   const mod = await prisma.module.findUnique({
     where: { slug: moduleSlug },
-    select: { isPublic: true },
+    select: { id: true },
   });
-  if (!mod || !mod.isPublic) return urls;
+  if (!mod) return null;
 
   const articles = await prisma.article.findMany({
     where: { status: "PUBLISHED", module: { slug: moduleSlug } },
