@@ -57,6 +57,14 @@
       "namedRegex": "^/api/views/(?<nxtPid>[^/]+?)(?:/)?$"
     },
     {
+      "page": "/sitemap/[slug]",
+      "regex": "^/sitemap/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPslug": "nxtPslug"
+      },
+      "namedRegex": "^/sitemap/(?<nxtPslug>[^/]+?)(?:/)?$"
+    },
+    {
       "page": "/uploads/[...path]",
       "regex": "^/uploads/(.+?)(?:/)?$",
       "routeKeys": {
@@ -71,51 +79,6 @@
         "nxtPlocale": "nxtPlocale"
       },
       "namedRegex": "^/(?<nxtPlocale>[^/]+?)(?:/)?$"
-    },
-    {
-      "page": "/[locale]/academy",
-      "regex": "^/([^/]+?)/academy(?:/)?$",
-      "routeKeys": {
-        "nxtPlocale": "nxtPlocale"
-      },
-      "namedRegex": "^/(?<nxtPlocale>[^/]+?)/academy(?:/)?$"
-    },
-    {
-      "page": "/[locale]/academy/glossary",
-      "regex": "^/([^/]+?)/academy/glossary(?:/)?$",
-      "routeKeys": {
-        "nxtPlocale": "nxtPlocale"
-      },
-      "namedRegex": "^/(?<nxtPlocale>[^/]+?)/academy/glossary(?:/)?$"
-    },
-    {
-      "page": "/[locale]/academy/[moduleSlug]",
-      "regex": "^/([^/]+?)/academy/([^/]+?)(?:/)?$",
-      "routeKeys": {
-        "nxtPlocale": "nxtPlocale",
-        "nxtPmoduleSlug": "nxtPmoduleSlug"
-      },
-      "namedRegex": "^/(?<nxtPlocale>[^/]+?)/academy/(?<nxtPmoduleSlug>[^/]+?)(?:/)?$"
-    },
-    {
-      "page": "/[locale]/academy/[moduleSlug]/[articleSlug]",
-      "regex": "^/([^/]+?)/academy/([^/]+?)/([^/]+?)(?:/)?$",
-      "routeKeys": {
-        "nxtPlocale": "nxtPlocale",
-        "nxtPmoduleSlug": "nxtPmoduleSlug",
-        "nxtParticleSlug": "nxtParticleSlug"
-      },
-      "namedRegex": "^/(?<nxtPlocale>[^/]+?)/academy/(?<nxtPmoduleSlug>[^/]+?)/(?<nxtParticleSlug>[^/]+?)(?:/)?$"
-    },
-    {
-      "page": "/[locale]/academy/[moduleSlug]/[articleSlug]/opengraph-image",
-      "regex": "^/([^/]+?)/academy/([^/]+?)/([^/]+?)/opengraph\\-image(?:/)?$",
-      "routeKeys": {
-        "nxtPlocale": "nxtPlocale",
-        "nxtPmoduleSlug": "nxtPmoduleSlug",
-        "nxtParticleSlug": "nxtParticleSlug"
-      },
-      "namedRegex": "^/(?<nxtPlocale>[^/]+?)/academy/(?<nxtPmoduleSlug>[^/]+?)/(?<nxtParticleSlug>[^/]+?)/opengraph\\-image(?:/)?$"
     },
     {
       "page": "/[locale]/account",
@@ -277,6 +240,14 @@
       "namedRegex": "^/(?<nxtPlocale>[^/]+?)/authors/(?<nxtPslug>[^/]+?)(?:/)?$"
     },
     {
+      "page": "/[locale]/glossary",
+      "regex": "^/([^/]+?)/glossary(?:/)?$",
+      "routeKeys": {
+        "nxtPlocale": "nxtPlocale"
+      },
+      "namedRegex": "^/(?<nxtPlocale>[^/]+?)/glossary(?:/)?$"
+    },
+    {
       "page": "/[locale]/login",
       "regex": "^/([^/]+?)/login(?:/)?$",
       "routeKeys": {
@@ -299,6 +270,35 @@
         "nxtPlocale": "nxtPlocale"
       },
       "namedRegex": "^/(?<nxtPlocale>[^/]+?)/search(?:/)?$"
+    },
+    {
+      "page": "/[locale]/[moduleSlug]",
+      "regex": "^/([^/]+?)/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPlocale": "nxtPlocale",
+        "nxtPmoduleSlug": "nxtPmoduleSlug"
+      },
+      "namedRegex": "^/(?<nxtPlocale>[^/]+?)/(?<nxtPmoduleSlug>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/[locale]/[moduleSlug]/[articleSlug]",
+      "regex": "^/([^/]+?)/([^/]+?)/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPlocale": "nxtPlocale",
+        "nxtPmoduleSlug": "nxtPmoduleSlug",
+        "nxtParticleSlug": "nxtParticleSlug"
+      },
+      "namedRegex": "^/(?<nxtPlocale>[^/]+?)/(?<nxtPmoduleSlug>[^/]+?)/(?<nxtParticleSlug>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/[locale]/[moduleSlug]/[articleSlug]/opengraph-image",
+      "regex": "^/([^/]+?)/([^/]+?)/([^/]+?)/opengraph\\-image(?:/)?$",
+      "routeKeys": {
+        "nxtPlocale": "nxtPlocale",
+        "nxtPmoduleSlug": "nxtPmoduleSlug",
+        "nxtParticleSlug": "nxtParticleSlug"
+      },
+      "namedRegex": "^/(?<nxtPlocale>[^/]+?)/(?<nxtPmoduleSlug>[^/]+?)/(?<nxtParticleSlug>[^/]+?)/opengraph\\-image(?:/)?$"
     }
   ],
   "staticRoutes": [
@@ -373,6 +373,12 @@
       "regex": "^/sitemap\\.xml(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/sitemap\\.xml(?:/)?$"
+    },
+    {
+      "page": "/sitemap.xsl",
+      "regex": "^/sitemap\\.xsl(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/sitemap\\.xsl(?:/)?$"
     }
   ],
   "dataRoutes": [],

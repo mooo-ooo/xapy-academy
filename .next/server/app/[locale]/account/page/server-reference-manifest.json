@@ -1,6 +1,6 @@
 {
   "node": {
-    "4073635d89b728ba8fd51e55d06085597d3bc9ae00": {
+    "40253a12da65e1ffe09d02cb889cff04704da693da": {
       "workers": {
         "app/[locale]/account/page": {
           "moduleId": 244492,
@@ -12,7 +12,7 @@
       "exportedName": "changePasswordAction",
       "filename": "src/app/[locale]/account/actions.ts"
     },
-    "405056ede5fec30d94e562d65cfbdefd7a84accbbb": {
+    "40c3f0ac0e3902cca3c2c6f92253472381cb81dfc6": {
       "workers": {
         "app/[locale]/account/page": {
           "moduleId": 244492,

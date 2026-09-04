@@ -1,18 +1,10 @@
 {
   "app": {
-    "[project]/src/app/[locale]/academy/[moduleSlug]/[articleSlug]/page": [
+    "[project]/src/app/[locale]/[moduleSlug]/[articleSlug]/page": [
       "static/media/2bbe8d2671613f1f-s.p.067x_6k0k23tk.woff2",
       "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2"
     ],
-    "[project]/src/app/[locale]/academy/[moduleSlug]/page": [
-      "static/media/2bbe8d2671613f1f-s.p.067x_6k0k23tk.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2"
-    ],
-    "[project]/src/app/[locale]/academy/glossary/page": [
-      "static/media/2bbe8d2671613f1f-s.p.067x_6k0k23tk.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2"
-    ],
-    "[project]/src/app/[locale]/academy/page": [
+    "[project]/src/app/[locale]/[moduleSlug]/page": [
       "static/media/2bbe8d2671613f1f-s.p.067x_6k0k23tk.woff2",
       "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2"
     ],
@@ -89,6 +81,10 @@
       "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2"
     ],
     "[project]/src/app/[locale]/authors/[slug]/page": [
+      "static/media/2bbe8d2671613f1f-s.p.067x_6k0k23tk.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2"
+    ],
+    "[project]/src/app/[locale]/glossary/page": [
       "static/media/2bbe8d2671613f1f-s.p.067x_6k0k23tk.woff2",
       "static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2"
     ],

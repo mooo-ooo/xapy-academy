@@ -10,7 +10,7 @@
         }
       ]
     },
-    "/[locale]/academy/[moduleSlug]/[articleSlug]/opengraph-image": {},
+    "/[locale]/[moduleSlug]/[articleSlug]/opengraph-image": {},
     "/api/feed": {},
     "/api/views/[id]": {},
     "/api/vitals": {},

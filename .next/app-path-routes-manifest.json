@@ -1,9 +1,7 @@
 {
-  "/[locale]/academy/[moduleSlug]/[articleSlug]/opengraph-image/route": "/[locale]/academy/[moduleSlug]/[articleSlug]/opengraph-image",
-  "/[locale]/academy/[moduleSlug]/[articleSlug]/page": "/[locale]/academy/[moduleSlug]/[articleSlug]",
-  "/[locale]/academy/[moduleSlug]/page": "/[locale]/academy/[moduleSlug]",
-  "/[locale]/academy/glossary/page": "/[locale]/academy/glossary",
-  "/[locale]/academy/page": "/[locale]/academy",
+  "/[locale]/[moduleSlug]/[articleSlug]/opengraph-image/route": "/[locale]/[moduleSlug]/[articleSlug]/opengraph-image",
+  "/[locale]/[moduleSlug]/[articleSlug]/page": "/[locale]/[moduleSlug]/[articleSlug]",
+  "/[locale]/[moduleSlug]/page": "/[locale]/[moduleSlug]",
   "/[locale]/account/page": "/[locale]/account",
   "/[locale]/admin/articles/[id]/edit/page": "/[locale]/admin/articles/[id]/edit",
   "/[locale]/admin/articles/[id]/translate/[lang]/page": "/[locale]/admin/articles/[id]/translate/[lang]",
@@ -23,6 +21,7 @@
   "/[locale]/admin/users/new/page": "/[locale]/admin/users/new",
   "/[locale]/admin/users/page": "/[locale]/admin/users",
   "/[locale]/authors/[slug]/page": "/[locale]/authors/[slug]",
+  "/[locale]/glossary/page": "/[locale]/glossary",
   "/[locale]/login/page": "/[locale]/login",
   "/[locale]/page": "/[locale]",
   "/[locale]/register/page": "/[locale]/register",
@@ -43,5 +42,7 @@
   "/opengraph-image/route": "/opengraph-image",
   "/robots.txt/route": "/robots.txt",
   "/sitemap.xml/route": "/sitemap.xml",
+  "/sitemap.xsl/route": "/sitemap.xsl",
+  "/sitemap/[slug]/route": "/sitemap/[slug]",
   "/uploads/[...path]/route": "/uploads/[...path]"
 }

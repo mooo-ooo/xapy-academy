@@ -1,6 +1,6 @@
 {
   "node": {
-    "401ac8593b2b41017b391fd384bbec0779f6da5019": {
+    "40677fbf70af738cb5f730d284bee9c8195bf6ce4e": {
       "workers": {
         "app/[locale]/admin/modules/new/page": {
           "moduleId": 580808,

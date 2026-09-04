@@ -1,9 +1,7 @@
 {
-  "/[locale]/academy/[moduleSlug]/[articleSlug]/opengraph-image/route": "app/[locale]/academy/[moduleSlug]/[articleSlug]/opengraph-image/route.js",
-  "/[locale]/academy/[moduleSlug]/[articleSlug]/page": "app/[locale]/academy/[moduleSlug]/[articleSlug]/page.js",
-  "/[locale]/academy/[moduleSlug]/page": "app/[locale]/academy/[moduleSlug]/page.js",
-  "/[locale]/academy/glossary/page": "app/[locale]/academy/glossary/page.js",
-  "/[locale]/academy/page": "app/[locale]/academy/page.js",
+  "/[locale]/[moduleSlug]/[articleSlug]/opengraph-image/route": "app/[locale]/[moduleSlug]/[articleSlug]/opengraph-image/route.js",
+  "/[locale]/[moduleSlug]/[articleSlug]/page": "app/[locale]/[moduleSlug]/[articleSlug]/page.js",
+  "/[locale]/[moduleSlug]/page": "app/[locale]/[moduleSlug]/page.js",
   "/[locale]/account/page": "app/[locale]/account/page.js",
   "/[locale]/admin/articles/[id]/edit/page": "app/[locale]/admin/articles/[id]/edit/page.js",
   "/[locale]/admin/articles/[id]/translate/[lang]/page": "app/[locale]/admin/articles/[id]/translate/[lang]/page.js",
@@ -23,6 +21,7 @@
   "/[locale]/admin/users/new/page": "app/[locale]/admin/users/new/page.js",
   "/[locale]/admin/users/page": "app/[locale]/admin/users/page.js",
   "/[locale]/authors/[slug]/page": "app/[locale]/authors/[slug]/page.js",
+  "/[locale]/glossary/page": "app/[locale]/glossary/page.js",
   "/[locale]/login/page": "app/[locale]/login/page.js",
   "/[locale]/page": "app/[locale]/page.js",
   "/[locale]/register/page": "app/[locale]/register/page.js",
@@ -43,5 +42,7 @@
   "/opengraph-image/route": "app/opengraph-image/route.js",
   "/robots.txt/route": "app/robots.txt/route.js",
   "/sitemap.xml/route": "app/sitemap.xml/route.js",
+  "/sitemap.xsl/route": "app/sitemap.xsl/route.js",
+  "/sitemap/[slug]/route": "app/sitemap/[slug]/route.js",
   "/uploads/[...path]/route": "app/uploads/[...path]/route.js"
 }
