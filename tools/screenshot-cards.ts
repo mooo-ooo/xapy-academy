@@ -11,7 +11,7 @@ async function main() {
     viewport: { width: 1440, height: 1200 },
   });
   const page = await ctx.newPage();
-  await page.goto("http://localhost:3000/en/academy", {
+  await page.goto("http://localhost:3000/en", {
     waitUntil: "networkidle",
   });
   await page.waitForTimeout(2000);

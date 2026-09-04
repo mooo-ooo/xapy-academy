@@ -85,12 +85,12 @@ export async function generateMetadata({
     title,
     description,
     alternates: {
-      canonical: absoluteUrl(`/${effective}/academy/${mod.slug}`),
+      canonical: absoluteUrl(`/${effective}/${mod.slug}`),
       languages: withXDefault(
         Object.fromEntries(
           site.supportedLocales.map((l) => [
             l,
-            absoluteUrl(`/${l}/academy/${mod.slug}`),
+            absoluteUrl(`/${l}/${mod.slug}`),
           ]),
         ),
         site.publicLocale,
@@ -101,7 +101,7 @@ export async function generateMetadata({
       description,
       type: "website",
       locale: effective,
-      url: absoluteUrl(`/${effective}/academy/${mod.slug}`),
+      url: absoluteUrl(`/${effective}/${mod.slug}`),
     },
   };
 }
@@ -123,11 +123,11 @@ export default async function ModulePage({
   if (!mod) notFound();
 
   const moduleArticles = await listPublishedArticlesInModule(mod.id, effective);
-  const modulePath = `/${effective}/academy/${mod.slug}`;
+  const modulePath = `/${effective}/${mod.slug}`;
   const moduleAbs = absoluteUrl(modulePath);
   const breadcrumbJsonLd = buildBreadcrumbJsonLd(
     [
-      { name: t("breadcrumb.academy"), url: `/${effective}/academy` },
+      { name: t("breadcrumb.academy"), url: `/${effective}` },
       { name: mod.translation?.name ?? mod.slug, url: modulePath },
     ],
     { id: `${moduleAbs}#breadcrumb` },
@@ -146,7 +146,7 @@ export default async function ModulePage({
     inLanguage: effective,
     hasBreadcrumb: true,
     collection: moduleArticles.slice(0, 50).map((a) => ({
-      url: `/${effective}/academy/${mod.slug}/${a.slug}`,
+      url: `/${effective}/${mod.slug}/${a.slug}`,
       name: a.title,
     })),
   });

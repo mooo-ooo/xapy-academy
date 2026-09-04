@@ -25,9 +25,9 @@ export function absoluteUrl(path: string): string {
  * Example:
  *   buildAlternates({
  *     rendered: 'vi',
- *     canonicalPath: '/vi/academy/order-flow-footprints/delta-la-gi',
- *     alternates: { en: '/en/academy/order-flow-footprints/delta-explained',
- *                   vi: '/vi/academy/order-flow-footprints/delta-la-gi' },
+ *     canonicalPath: '/vi/order-flow-footprints/delta-la-gi',
+ *     alternates: { en: '/en/order-flow-footprints/delta-explained',
+ *                   vi: '/vi/order-flow-footprints/delta-la-gi' },
  *   })
  */
 export function buildAlternates({

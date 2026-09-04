@@ -62,14 +62,14 @@ export async function generateMetadata({
   const languages: Record<string, string> = {};
   for (const [lang, slug] of Object.entries(article.alternates)) {
     if (site.supportedLocales.includes(lang as typeof effective)) {
-      languages[lang] = absoluteUrl(`/${lang}/academy/${moduleSlug}/${slug}`);
+      languages[lang] = absoluteUrl(`/${lang}/${moduleSlug}/${slug}`);
     }
   }
 
   const title = article.metaTitle ?? article.title;
   const description = article.metaDescription ?? article.excerpt ?? undefined;
   const canonical = absoluteUrl(
-    `/${article.renderedLocale}/academy/${moduleSlug}/${article.slug}`,
+    `/${article.renderedLocale}/${moduleSlug}/${article.slug}`,
   );
 
   return {
@@ -124,7 +124,7 @@ export default async function ArticlePage({
   // Prevents two URLs serving the same content (rank dilution).
   if (article.slug !== articleSlug) {
     nextRedirect(
-      `/${effective}/academy/${article.moduleSlug}/${article.slug}`,
+      `/${effective}/${article.moduleSlug}/${article.slug}`,
     );
   }
 
@@ -148,7 +148,7 @@ export default async function ArticlePage({
     article.id,
   );
 
-  const articleUrl = `/${article.renderedLocale}/academy/${moduleSlug}/${article.slug}`;
+  const articleUrl = `/${article.renderedLocale}/${moduleSlug}/${article.slug}`;
   const authorUrl = article.authorSlug
     ? `/${article.renderedLocale}/authors/${article.authorSlug}`
     : undefined;
@@ -161,7 +161,7 @@ export default async function ArticlePage({
   // Entity-link glossary terms that actually appear in the body (word-bounded,
   // diacritic-aware) → DefinedTerm about/mentions sharing the glossary @ids.
   const glossaryBase = absoluteUrl(
-    `/${article.renderedLocale}/academy/glossary`,
+    `/${article.renderedLocale}/glossary`,
   );
   const matchedTerms = listGlossaryEntries(article.renderedLocale).filter((e) =>
     [e.term, ...(e.aliases ?? [])].some((n) => {
@@ -204,16 +204,16 @@ export default async function ArticlePage({
     mentions: definedTerms,
     modulePath: {
       name: article.moduleName,
-      url: `/${article.renderedLocale}/academy/${article.moduleSlug}`,
+      url: `/${article.renderedLocale}/${article.moduleSlug}`,
     },
   });
   const canonicalAbs = absoluteUrl(articleUrl);
   const breadcrumbJsonLd = buildBreadcrumbJsonLd(
     [
-      { name: t("breadcrumb.academy"), url: `/${article.renderedLocale}/academy` },
+      { name: t("breadcrumb.academy"), url: `/${article.renderedLocale}` },
       {
         name: article.moduleName,
-        url: `/${article.renderedLocale}/academy/${article.moduleSlug}`,
+        url: `/${article.renderedLocale}/${article.moduleSlug}`,
       },
       { name: article.title, url: articleUrl },
     ],
@@ -236,7 +236,7 @@ export default async function ArticlePage({
       />
       <div className="mx-auto w-full max-w-[1280px] px-6 pt-16 pb-16 sm:pt-24 lg:pt-32">
         <Link
-          href={`/academy`}
+          href={`/`}
           className="mb-6 inline-flex items-center gap-1.5 text-sm text-[hsl(var(--muted-foreground))] transition-colors hover:text-[hsl(var(--foreground))]"
         >
           <ArrowLeft size={14} />

@@ -117,12 +117,12 @@ async function buildPageUrls(): Promise<SitemapUrl[]> {
   const urls: SitemapUrl[] = [];
 
   const landingLangs = withXDefault(
-    Object.fromEntries(enabled.map((l) => [l, `${o}/${l}/academy`])),
+    Object.fromEntries(enabled.map((l) => [l, `${o}/${l}`])),
     publicLocale,
   );
   for (const locale of enabled) {
     urls.push({
-      loc: `${o}/${locale}/academy`,
+      loc: `${o}/${locale}`,
       changeFrequency: "daily",
       priority: 1.0,
       alternates: landingLangs,
@@ -131,13 +131,13 @@ async function buildPageUrls(): Promise<SitemapUrl[]> {
 
   const glossaryLangs = withXDefault(
     Object.fromEntries(
-      enabled.map((l) => [l, `${o}/${l}/academy/glossary`]),
+      enabled.map((l) => [l, `${o}/${l}/glossary`]),
     ),
     publicLocale,
   );
   for (const locale of enabled) {
     urls.push({
-      loc: `${o}/${locale}/academy/glossary`,
+      loc: `${o}/${locale}/glossary`,
       changeFrequency: "monthly",
       priority: 0.5,
       alternates: glossaryLangs,
@@ -173,13 +173,13 @@ async function buildModuleIndexUrls(): Promise<SitemapUrl[]> {
     }
     const langMap = withXDefault(
       Object.fromEntries(
-        [...present].map((l) => [l, `${o}/${l}/academy/${mod.slug}`]),
+        [...present].map((l) => [l, `${o}/${l}/${mod.slug}`]),
       ),
       publicLocale,
     );
     for (const locale of present) {
       urls.push({
-        loc: `${o}/${locale}/academy/${mod.slug}`,
+        loc: `${o}/${locale}/${mod.slug}`,
         changeFrequency: "weekly",
         priority: 0.7,
         alternates: langMap,
@@ -254,14 +254,14 @@ async function buildModuleArticleUrls(
       Object.fromEntries(
         trs.map((t) => [
           t.locale,
-          `${o}/${t.locale}/academy/${moduleSlug}/${t.slug}`,
+          `${o}/${t.locale}/${moduleSlug}/${t.slug}`,
         ]),
       ),
       publicLocale,
     );
     for (const tr of trs) {
       urls.push({
-        loc: `${o}/${tr.locale}/academy/${moduleSlug}/${tr.slug}`,
+        loc: `${o}/${tr.locale}/${moduleSlug}/${tr.slug}`,
         lastModified: tr.updatedAt,
         changeFrequency: "weekly",
         priority: 0.8,

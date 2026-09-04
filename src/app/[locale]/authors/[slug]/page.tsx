@@ -102,7 +102,7 @@ export default async function AuthorPage({
   });
   const breadcrumbJsonLd = buildBreadcrumbJsonLd(
     [
-      { name: "Academy", url: `/${effective}/academy` },
+      { name: "Academy", url: `/${effective}` },
       { name: author.name, url: authorPath },
     ],
     { id: `${authorUrl}#breadcrumb` },
@@ -116,7 +116,7 @@ export default async function AuthorPage({
 
       <div className="mx-auto w-full max-w-[1280px] px-6 pt-16 pb-24">
         <Link
-          href="/academy"
+          href="/"
           className="mb-6 inline-flex items-center gap-1.5 text-sm text-[hsl(var(--muted-foreground))] transition-colors hover:text-[hsl(var(--foreground))]"
         >
           <ArrowLeft size={14} />

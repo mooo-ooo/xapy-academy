@@ -68,7 +68,7 @@ export async function Logo() {
 
   return (
     <Link
-      href="/academy"
+      href="/"
       className="inline-flex items-center"
       aria-label={`${site.siteName} home`}
     >

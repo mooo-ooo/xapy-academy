@@ -10,7 +10,7 @@ export function SearchResultCard({
 }) {
   return (
     <Link
-      href={`/academy/${hit.moduleSlug}/${hit.slug}`}
+      href={`/${hit.moduleSlug}/${hit.slug}`}
       className="block rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-5 transition-colors hover:border-[hsl(var(--border-strong))] hover:bg-[hsl(var(--card-hover))]"
     >
       <div className="mb-1.5 text-xs font-medium uppercase tracking-[0.6px] text-[hsl(var(--muted-foreground))]">

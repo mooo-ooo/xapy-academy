@@ -1,7 +1,7 @@
 /**
  * Crawl 2 additional kiyotaka.ai surfaces:
  *   1. The article-detail page so we can compare title/meta/body
- *      typography against our /[locale]/academy/[m]/[s].
+ *      typography against our /[locale]/[m]/[s].
  *   2. The site footer (if any) — most of our layout has none yet.
  *
  * Targets the first guide link found on the academy index, then walks.

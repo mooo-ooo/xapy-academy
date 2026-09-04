@@ -12,7 +12,7 @@ async function main() {
   });
   const page = await ctx.newPage();
 
-  await page.goto("http://localhost:3000/en/academy", {
+  await page.goto("http://localhost:3000/en", {
     waitUntil: "networkidle",
   });
   await page.waitForTimeout(1500);
@@ -22,7 +22,7 @@ async function main() {
   });
 
   await page.goto(
-    "http://localhost:3000/en/academy/order-flow-footprints/delta-explained",
+    "http://localhost:3000/en/order-flow-footprints/delta-explained",
     { waitUntil: "networkidle" },
   );
   await page.waitForTimeout(1500);

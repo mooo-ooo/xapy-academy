@@ -11,7 +11,7 @@ export function ModuleCard({
 }) {
   return (
     <Link
-      href={`/academy/${module.slug}`}
+      href={`/${module.slug}`}
       className="group relative flex h-full flex-col gap-4 overflow-hidden rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-6 transition-colors hover:border-[hsl(var(--border-strong))] hover:bg-[hsl(var(--card-hover))]"
     >
       <div className="absolute right-5 top-5 text-[hsl(var(--muted-foreground))] transition-colors group-hover:text-[hsl(var(--foreground))]">

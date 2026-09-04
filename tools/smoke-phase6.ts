@@ -4,11 +4,11 @@
  * 1. /sitemap.xml has every article × locale URL + xhtml:link alternates.
  * 2. /robots.txt allows GPTBot/ClaudeBot/PerplexityBot, disallows /admin.
  * 3. /llms.txt is valid Markdown listing modules + articles.
- * 4. /en/academy/order-flow-footprints/delta-explained.md returns Markdown
+ * 4. /en/order-flow-footprints/delta-explained.md returns Markdown
  *    with YAML frontmatter.
  * 5. Article HTML contains Article + BreadcrumbList JSON-LD <script> tags.
  * 6. /opengraph-image returns 200 image.
- * 7. /en/academy/.../delta-explained/opengraph-image returns 200 image.
+ * 7. /en/.../delta-explained/opengraph-image returns 200 image.
  */
 
 export {}; // module scope — avoids global redeclare clash with other smoke scripts
@@ -33,11 +33,11 @@ async function main() {
     check("sitemap status 200", status === 200, String(status));
     check(
       "sitemap contains article URL",
-      body.includes("/academy/order-flow-footprints/delta-explained"),
+      body.includes("/order-flow-footprints/delta-explained"),
     );
     check(
       "sitemap contains VI article URL",
-      body.includes("/vi/academy/order-flow-footprints/delta-la-gi"),
+      body.includes("/vi/order-flow-footprints/delta-la-gi"),
     );
     check("sitemap has hreflang alternates", body.includes("xhtml:link"));
   }
@@ -95,7 +95,7 @@ async function main() {
   // 5 — article HTML JSON-LD
   {
     const { status, body } = await fetchText(
-      "/en/academy/order-flow-footprints/delta-explained",
+      "/en/order-flow-footprints/delta-explained",
     );
     check("article HTML status 200", status === 200, String(status));
     check(
@@ -131,7 +131,7 @@ async function main() {
   // 7 — article OG
   {
     const res = await fetch(
-      `${BASE}/en/academy/order-flow-footprints/delta-explained/opengraph-image`,
+      `${BASE}/en/order-flow-footprints/delta-explained/opengraph-image`,
     );
     check("article OG status 200", res.status === 200, String(res.status));
     check(

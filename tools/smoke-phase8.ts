@@ -18,7 +18,7 @@
 export {}; // module scope — avoids global redeclare clash with other smoke scripts
 
 const BASE = "http://localhost:3000";
-const ART = "/en/academy/order-flow-footprints/delta-explained";
+const ART = "/en/order-flow-footprints/delta-explained";
 const MIRROR = "/api/articles/en/order-flow-footprints/delta-explained";
 const AUTHOR = "/en/authors/markets-desk";
 
@@ -56,7 +56,7 @@ async function main() {
   // 2 — sitemap
   {
     const { body } = await fetchRes("/sitemap.xml");
-    check("sitemap includes glossary", body.includes("/academy/glossary"));
+    check("sitemap includes glossary", body.includes("/glossary"));
     check("sitemap has x-default hreflang", /hreflang="x-default"/.test(body));
   }
 
@@ -139,7 +139,7 @@ async function main() {
 
   // 8 — landing CollectionPage
   {
-    const { body } = await fetchRes("/en/academy");
+    const { body } = await fetchRes("/en");
     check("landing emits CollectionPage", body.includes('"CollectionPage"'));
     check("landing emits ItemList", body.includes('"ItemList"'));
   }

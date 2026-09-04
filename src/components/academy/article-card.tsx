@@ -33,7 +33,7 @@ export function ArticleCard({
 
   return (
     <Link
-      href={`/academy/${moduleSlug}/${article.slug}`}
+      href={`/${moduleSlug}/${article.slug}`}
       className="group flex h-full flex-col overflow-hidden rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] transition-colors hover:border-[hsl(var(--border-strong))] hover:bg-[hsl(var(--card-hover))]"
     >
       {/* Cover — a real <img> (alt + lazy) when uploaded so it's crawlable

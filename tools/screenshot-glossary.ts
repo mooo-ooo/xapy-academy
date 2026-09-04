@@ -11,7 +11,7 @@ async function main() {
     colorScheme: "dark",
   });
   const page = await ctx.newPage();
-  await page.goto("http://localhost:3000/en/academy/glossary", {
+  await page.goto("http://localhost:3000/en/glossary", {
     waitUntil: "networkidle",
   });
   await page.waitForTimeout(1000);

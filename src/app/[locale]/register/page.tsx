@@ -26,7 +26,7 @@ export default async function RegisterPage({
 
   const session = await auth();
   if (session) {
-    redirect({ href: "/academy", locale });
+    redirect({ href: "/", locale });
   }
 
   // Hard-block when admin has disabled self-signup. Mirrors the

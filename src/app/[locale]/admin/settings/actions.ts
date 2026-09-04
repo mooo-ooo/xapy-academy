@@ -231,7 +231,7 @@ export async function updateSiteSettingAction(raw: unknown) {
     target: "site",
     meta: data,
   });
-  revalidatePath("/[locale]/academy", "layout");
+  revalidatePath("/[locale]", "layout");
   revalidatePath("/admin/settings");
   // Locale changes shape the sitemap + hreflang too.
   revalidatePath("/sitemap.xml");

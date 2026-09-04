@@ -45,7 +45,7 @@ Bar C:    -420Δ  close -0.75  ← confirmation
 
 ## Where to go next
 
-If you found this useful, the [TPO & Profile](/academy/tpo-profile) module pairs naturally with order-flow reading — profile gives you the *where*, footprints give you the *who*.
+If you found this useful, the [TPO & Profile](/tpo-profile) module pairs naturally with order-flow reading — profile gives you the *where*, footprints give you the *who*.
 `;
 
 const VIETNAMESE_BODY = `## Delta đo cái gì
@@ -78,7 +78,7 @@ Bar C:    -420Δ  đóng -0.75  ← xác nhận
 
 ## Đọc tiếp gì
 
-Nếu bạn thấy bài này hữu ích, module [TPO & Profile](/academy/tpo-profile) đi rất ăn ý với việc đọc order flow — profile cho bạn biết *ở đâu*, footprint cho bạn biết *ai*.
+Nếu bạn thấy bài này hữu ích, module [TPO & Profile](/tpo-profile) đi rất ăn ý với việc đọc order flow — profile cho bạn biết *ở đâu*, footprint cho bạn biết *ai*.
 `;
 
 const TAGS: Array<{

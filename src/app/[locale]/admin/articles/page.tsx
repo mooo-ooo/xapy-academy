@@ -151,7 +151,7 @@ export default async function ArticlesPage({
                 )?.locale ?? a.sourceLocale
               }`;
           const publicUrl = source
-            ? `/${a.sourceLocale}/academy/${a.module.slug}/${source.slug}`
+            ? `/${a.sourceLocale}/${a.module.slug}/${source.slug}`
             : null;
           return (
             <tr

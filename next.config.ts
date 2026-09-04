@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
   // output so the ImageResponse routes find them in standalone/serverless.
   outputFileTracingIncludes: {
     "/opengraph-image": ["./src/lib/og/fonts/*.ttf"],
-    "/[locale]/academy/[moduleSlug]/[articleSlug]/opengraph-image": [
+    "/[locale]/[moduleSlug]/[articleSlug]/opengraph-image": [
       "./src/lib/og/fonts/*.ttf",
     ],
   },

@@ -49,7 +49,7 @@ pnpm db:seed:demo        # optional: 1 demo article (EN+VI) + trending tags
 pnpm dev
 ```
 
-Open http://localhost:3000 — it redirects to `/en/academy`. Sign in at
+Open http://localhost:3000 — it redirects to `/en`. Sign in at
 `/en/login` with the seeded admin to reach `/en/admin`.
 
 ## Environment variables

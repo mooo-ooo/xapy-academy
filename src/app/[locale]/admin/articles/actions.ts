@@ -203,7 +203,7 @@ export async function updateArticleSourceAction(raw: unknown) {
   });
   revalidatePath("/admin/articles");
   revalidatePath(`/admin/articles/${article.id}/edit`);
-  revalidatePath("/[locale]/academy", "layout");
+  revalidatePath("/[locale]", "layout");
   return { ok: true as const, sourceVersion: nextVersion, bodyChanged };
 }
 
@@ -279,7 +279,7 @@ export async function deleteArticleAction(raw: unknown) {
     meta: { images: [...new Set(names.map((n) => basename(n)))] },
   });
   revalidatePath("/admin/articles");
-  revalidatePath("/[locale]/academy", "layout");
+  revalidatePath("/[locale]", "layout");
   revalidatePath("/sitemap.xml");
   revalidatePath("/sitemap/[slug]", "page");
   return { ok: true as const };
@@ -331,7 +331,7 @@ export async function reorderArticleAction(raw: unknown) {
     meta: { direction: parsed.data.direction, moduleId: target.moduleId },
   });
   revalidatePath(`/admin/modules/${target.moduleId}`);
-  revalidatePath("/[locale]/academy", "layout");
+  revalidatePath("/[locale]", "layout");
   return { ok: true as const };
 }
 
@@ -358,7 +358,7 @@ export async function setArticleStatusAction(raw: unknown) {
     meta: { status: parsed.data.status },
   });
   revalidatePath("/admin/articles");
-  revalidatePath("/[locale]/academy", "layout");
+  revalidatePath("/[locale]", "layout");
   return { ok: true as const };
 }
 
@@ -545,7 +545,7 @@ export async function setTranslationStatusAction(raw: unknown) {
   });
   revalidatePath("/admin/articles");
   revalidatePath("/admin/translations");
-  revalidatePath("/[locale]/academy", "layout");
+  revalidatePath("/[locale]", "layout");
   return { ok: true as const };
 }
 

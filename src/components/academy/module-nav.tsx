@@ -59,14 +59,14 @@ export function ModuleNav({
     >
       <ul className="flex items-center gap-2 overflow-x-auto">
         <li>
-          <Chip href="/academy" active={!activeSlug} iconName="globe">
+          <Chip href="/" active={!activeSlug} iconName="globe">
             {labels.all}
           </Chip>
         </li>
         {inline.map((m) => (
           <li key={m.id}>
             <Chip
-              href={`/academy/${m.slug}`}
+              href={`/${m.slug}`}
               active={activeSlug === m.slug}
               iconName={m.icon}
             >
@@ -119,7 +119,7 @@ export function ModuleNav({
 
               <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 <TopicCard
-                  href="/academy"
+                  href="/"
                   active={!activeSlug}
                   iconName="globe"
                   title={labels.all}
@@ -131,7 +131,7 @@ export function ModuleNav({
                 {modules.map((m) => (
                   <TopicCard
                     key={m.id}
-                    href={`/academy/${m.slug}`}
+                    href={`/${m.slug}`}
                     active={activeSlug === m.slug}
                     iconName={m.icon}
                     title={m.name}

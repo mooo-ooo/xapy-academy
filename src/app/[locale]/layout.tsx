@@ -81,10 +81,10 @@ export async function generateMetadata(props: {
       },
     },
     alternates: {
-      canonical: absoluteUrl(`/${locale}/academy`),
+      canonical: absoluteUrl(`/${locale}`),
       languages: withXDefault(
         Object.fromEntries(
-          enabled.map((l) => [l, absoluteUrl(`/${l}/academy`)]),
+          enabled.map((l) => [l, absoluteUrl(`/${l}`)]),
         ),
         site.publicLocale,
       ),

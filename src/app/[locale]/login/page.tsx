@@ -30,7 +30,7 @@ export default async function LoginPage({
   const session = await auth();
   if (session) {
     const sp = await searchParams;
-    redirect({ href: sp.next ?? "/academy", locale });
+    redirect({ href: sp.next ?? "/", locale });
   }
 
   const sp = await searchParams;

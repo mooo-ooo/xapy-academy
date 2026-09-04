@@ -27,12 +27,12 @@ export async function generateMetadata({
     title: t("title"),
     description: t("subtitle"),
     alternates: {
-      canonical: absoluteUrl(`/${effective}/academy/glossary`),
+      canonical: absoluteUrl(`/${effective}/glossary`),
       languages: withXDefault(
         Object.fromEntries(
           site.supportedLocales.map((l) => [
             l,
-            absoluteUrl(`/${l}/academy/glossary`),
+            absoluteUrl(`/${l}/glossary`),
           ]),
         ),
         site.publicLocale,
@@ -62,7 +62,7 @@ export default async function GlossaryPage({
     namespace: "glossary",
   });
 
-  const glossaryPath = `/${effective}/academy/glossary`;
+  const glossaryPath = `/${effective}/glossary`;
   const glossaryAbs = absoluteUrl(glossaryPath);
   // DefinedTermSet schema — one DefinedTerm per entry, all under one
   // pillar set so AI agents can ingest them as a coherent glossary.
@@ -75,19 +75,19 @@ export default async function GlossaryPage({
     url: glossaryAbs,
     hasDefinedTerm: entries.map((e) => ({
       "@type": "DefinedTerm",
-      "@id": absoluteUrl(`/${effective}/academy/glossary#${e.slug}`),
+      "@id": absoluteUrl(`/${effective}/glossary#${e.slug}`),
       name: e.term,
       description: e.short,
       alternateName: e.aliases,
-      inDefinedTermSet: absoluteUrl(`/${effective}/academy/glossary`),
-      url: absoluteUrl(`/${effective}/academy/glossary#${e.slug}`),
+      inDefinedTermSet: absoluteUrl(`/${effective}/glossary`),
+      url: absoluteUrl(`/${effective}/glossary#${e.slug}`),
       inLanguage: effective,
     })),
   };
 
   const breadcrumbJsonLd = buildBreadcrumbJsonLd(
     [
-      { name: "Academy", url: `/${effective}/academy` },
+      { name: "Academy", url: `/${effective}` },
       { name: t("title"), url: glossaryPath },
     ],
     { id: `${glossaryAbs}#breadcrumb` },

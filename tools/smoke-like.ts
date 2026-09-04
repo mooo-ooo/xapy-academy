@@ -34,7 +34,7 @@ async function loginAsAdmin(req: APIRequestContext) {
     email: ADMIN_EMAIL,
     password: ADMIN_PASSWORD,
     csrfToken: csrfBody.csrfToken,
-    callbackUrl: `${BASE}/en/academy`,
+    callbackUrl: `${BASE}/en`,
     json: "true",
   });
   const resp = await req.post(
