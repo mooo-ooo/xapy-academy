@@ -55,7 +55,7 @@ export async function GET() {
     lines.push("");
     for (const mod of modules) {
       const tr = mod.translations[0];
-      const url = `${origin}/${locale}/academy/${mod.slug}`;
+      const url = `${origin}/${locale}/${mod.slug}`;
       const name = tr?.name ?? mod.slug;
       const desc = tr?.description ? `: ${tr.description}` : "";
       lines.push(`- [${name}](${url})${desc}`);
@@ -77,7 +77,7 @@ export async function GET() {
   lines.push("## Glossary");
   lines.push("");
   lines.push(
-    `- [Trading terminology](${origin}/${locale}/academy/glossary): canonical definitions for the vocabulary used across the Academy`,
+    `- [Trading terminology](${origin}/${locale}/glossary): canonical definitions for the vocabulary used across the Academy`,
   );
   lines.push("");
 
@@ -85,7 +85,7 @@ export async function GET() {
   lines.push("## Localized indexes");
   lines.push("");
   for (const l of routing.locales) {
-    lines.push(`- ${l.toUpperCase()}: ${origin}/${l}/academy`);
+    lines.push(`- ${l.toUpperCase()}: ${origin}/${l}`);
   }
   lines.push("");
 

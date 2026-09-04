@@ -22,7 +22,7 @@ export function ModuleArticleNav({
           return (
             <li key={it.slug}>
               <Link
-                href={`/academy/${moduleSlug}/${it.slug}`}
+                href={`/${moduleSlug}/${it.slug}`}
                 aria-current={active ? "page" : undefined}
                 title={it.title}
                 className={

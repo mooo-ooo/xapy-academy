@@ -44,7 +44,7 @@ export function LoginForm({
         setError(t("error.invalid"));
         return;
       }
-      router.replace(next || "/academy");
+      router.replace(next || "/");
       router.refresh();
     });
   }
@@ -58,7 +58,7 @@ export function LoginForm({
               <button
                 type="button"
                 onClick={() =>
-                  signIn("google", { callbackUrl: next || `/${locale}/academy` })
+                  signIn("google", { callbackUrl: next || `/${locale}` })
                 }
                 className="inline-flex h-11 items-center justify-center gap-2.5 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-4 text-sm font-medium text-[hsl(var(--foreground))] transition-colors hover:bg-[hsl(var(--hover))]"
               >

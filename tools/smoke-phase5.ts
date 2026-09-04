@@ -4,7 +4,7 @@
  * 1. /en/search?q=delta returns hits with the demo article (FULLTEXT).
  * 2. /en/search?q=footprint also returns hits (token deep in bodyMdx).
  * 3. /en/search?q=zzznoresult shows the empty-state copy.
- * 4. Submitting the search form on /en/academy navigates to /en/search?q=...
+ * 4. Submitting the search form on /en navigates to /en/search?q=...
  * 5. Clicking a trending pill on landing navigates to /en/search?q=DELTA.
  * 6. /vi/search?q=delta works for authed VI user (after login).
  */
@@ -78,7 +78,7 @@ async function main() {
   );
 
   // 4 — submit search from landing
-  await page.goto(`${BASE}/en/academy`, { waitUntil: "networkidle" });
+  await page.goto(`${BASE}/en`, { waitUntil: "networkidle" });
   await page.waitForTimeout(500);
   await page.fill('input[placeholder*="Search"]', "delta");
   await Promise.all([
@@ -94,7 +94,7 @@ async function main() {
   );
 
   // 5 — trending pill navigates
-  await page.goto(`${BASE}/en/academy`, { waitUntil: "networkidle" });
+  await page.goto(`${BASE}/en`, { waitUntil: "networkidle" });
   await page.waitForTimeout(500);
   await Promise.all([
     page.waitForURL((u) => new URL(u).pathname.endsWith("/search"), {

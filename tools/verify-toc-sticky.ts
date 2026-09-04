@@ -12,7 +12,7 @@ async function main() {
   });
   const page = await ctx.newPage();
   await page.goto(
-    "http://localhost:3000/vi/academy/options-greeks/options-greeks-a-simple-introduction-mjwwr6ird8t799",
+    "http://localhost:3000/vi/options-greeks/options-greeks-a-simple-introduction-mjwwr6ird8t799",
     { waitUntil: "networkidle" },
   );
   await page.waitForTimeout(1500);

@@ -67,7 +67,7 @@ export function RegisterForm({
         setSuccess({ email: res.email, requiresApproval: false });
         return;
       }
-      router.replace("/academy");
+      router.replace("/");
       router.refresh();
     });
   }
@@ -104,7 +104,7 @@ export function RegisterForm({
               <OAuthButton
                 label={t("oauth.google")}
                 onClick={() =>
-                  signIn("google", { callbackUrl: `/${locale}/academy` })
+                  signIn("google", { callbackUrl: `/${locale}` })
                 }
               />
             )}

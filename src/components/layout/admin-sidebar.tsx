@@ -48,7 +48,7 @@ export function AdminSidebar({ role }: { role: AppRole }) {
   return (
     <aside className="hidden w-60 shrink-0 border-r border-[hsl(var(--border))] bg-[hsl(var(--inset))] py-6 lg:block">
       <Link
-        href="/academy"
+        href="/"
         className="mx-4 mb-8 flex items-center gap-2 text-sm text-[hsl(var(--muted-foreground))] transition-colors hover:text-[hsl(var(--foreground))]"
       >
         <BookOpen size={14} /> {t("backToAcademy")}

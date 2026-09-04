@@ -10,7 +10,7 @@ const SOURCE = `
 <span style="font-size:20px">bigger text</span>.</p>
 <p style="text-align:center">Centered paragraph.</p>
 <p>Link to <a href="https://example.com">an external site</a> and an
-<a href="/academy/foo">internal one</a>.</p>
+<a href="/foo">internal one</a>.</p>
 <h3>A subsection</h3>
 <ul><li>bullet one</li><li>bullet two</li></ul>
 <ol><li>first</li><li>second</li></ol>
@@ -73,7 +73,7 @@ async function main() {
   const iframeCount = (html.match(/<iframe/g) || []).length;
   check("bare youtube url -> iframe too (2 embeds)", iframeCount >= 2, `iframes=${iframeCount}`);
   check("no raw <script>", !/<script/i.test(html));
-  check("internal link kept", html.includes('href="/academy/foo"'));
+  check("internal link kept", html.includes('href="/foo"'));
   check("TOC built (h2+h3)", toc.length >= 3, `toc=${JSON.stringify(toc.map((t) => t.number + " " + t.slug))}`);
 
   console.log("\n--- rendered html (first 1200 chars) ---");

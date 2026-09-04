@@ -19,6 +19,8 @@ const PUBLIC_LOCALE = (process.env.PUBLIC_LOCALE ?? "en") as
 
 const PROTECTED_PREFIXES = ["/admin"];
 
+const LEGACY_ACADEMY_PREFIX = "/academy";
+
 function isProtected(pathnameWithoutLocale: string) {
   return PROTECTED_PREFIXES.some(
     (p) =>
@@ -46,6 +48,15 @@ export const proxy = auth(async (req) => {
   const { pathname, search } = req.nextUrl;
   const { locale, rest } = stripLocale(pathname);
   const session = req.auth;
+
+  if (
+    rest === LEGACY_ACADEMY_PREFIX ||
+    rest.startsWith(`${LEGACY_ACADEMY_PREFIX}/`)
+  ) {
+    const legacyUrl = new URL(req.nextUrl);
+    legacyUrl.pathname = `/${locale}${rest.slice(LEGACY_ACADEMY_PREFIX.length)}`;
+    return NextResponse.redirect(legacyUrl, 301);
+  }
 
   // 1. Guard admin routes — must be authenticated
   if (isProtected(rest)) {

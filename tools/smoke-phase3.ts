@@ -1,9 +1,9 @@
 /**
  * Phase 3 smoke test:
- * 1. Guest /en/academy/order-flow-footprints/delta-explained renders MDX.
- * 2. Login as admin (preferredLang=vi). Visit /vi/academy/order-flow-footprints/delta-la-gi
+ * 1. Guest /en/order-flow-footprints/delta-explained renders MDX.
+ * 2. Login as admin (preferredLang=vi). Visit /vi/order-flow-footprints/delta-la-gi
  *    → renders VI content, no fallback banner.
- * 3. Visit /en/academy/order-flow-footprints/delta-la-gi (en URL + vi slug)
+ * 3. Visit /en/order-flow-footprints/delta-la-gi (en URL + vi slug)
  *    → fallback banner appears, content stays readable.
  * 4. Screenshots saved for visual verification.
  */
@@ -39,7 +39,7 @@ async function main() {
   const page = await ctx.newPage();
 
   console.log("\n[1] Guest landing — modules + trending");
-  await page.goto(`${BASE}/en/academy`, { waitUntil: "networkidle" });
+  await page.goto(`${BASE}/en`, { waitUntil: "networkidle" });
   await page.waitForTimeout(1500);
   await page.screenshot({
     path: join(OUT, "p3-1-landing-en.png"),
@@ -57,7 +57,7 @@ async function main() {
   check("Trending DELTA pill visible", hasDeltaTrending, "");
 
   console.log("\n[2] Guest module page");
-  await page.goto(`${BASE}/en/academy/order-flow-footprints`, {
+  await page.goto(`${BASE}/en/order-flow-footprints`, {
     waitUntil: "networkidle",
   });
   await page.waitForTimeout(1000);
@@ -73,7 +73,7 @@ async function main() {
 
   console.log("\n[3] Guest article detail");
   await page.goto(
-    `${BASE}/en/academy/order-flow-footprints/delta-explained`,
+    `${BASE}/en/order-flow-footprints/delta-explained`,
     { waitUntil: "networkidle" },
   );
   await page.waitForTimeout(1000);
@@ -102,7 +102,7 @@ async function main() {
     }),
     page.click('button[type="submit"]'),
   ]);
-  await page.goto(`${BASE}/vi/academy/order-flow-footprints/delta-la-gi`, {
+  await page.goto(`${BASE}/vi/order-flow-footprints/delta-la-gi`, {
     waitUntil: "networkidle",
   });
   await page.waitForTimeout(1000);
@@ -124,7 +124,7 @@ async function main() {
   check("VI page has no fallback banner", noFallback, "");
 
   console.log("\n[5] Canonical redirect — VI slug on /en URL");
-  await page.goto(`${BASE}/en/academy/order-flow-footprints/delta-la-gi`, {
+  await page.goto(`${BASE}/en/order-flow-footprints/delta-la-gi`, {
     waitUntil: "networkidle",
   });
   await page.waitForTimeout(800);
@@ -135,7 +135,7 @@ async function main() {
   const finalPath = new URL(page.url()).pathname;
   check(
     "VI slug on /en URL redirects to canonical EN slug",
-    finalPath === "/en/academy/order-flow-footprints/delta-explained",
+    finalPath === "/en/order-flow-footprints/delta-explained",
     `landed on ${finalPath}`,
   );
 

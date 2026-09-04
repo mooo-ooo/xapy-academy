@@ -22,7 +22,7 @@ export default async function AdminLayout({
     redirect({ href: "/login", locale });
   }
   if (!isAdminLevel(session!.user.role) && session!.user.role !== "CTV") {
-    redirect({ href: "/academy", locale });
+    redirect({ href: "/", locale });
   }
 
   return (

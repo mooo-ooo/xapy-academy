@@ -144,7 +144,7 @@ export default async function AccountPage({
             emptyLabel={t("likes.empty")}
             emptyAction={
               <Link
-                href="/academy"
+                href="/"
                 className="text-sm font-medium text-[hsl(var(--accent-emerald))] hover:underline"
               >
                 {t("likes.browse")}
@@ -160,7 +160,7 @@ export default async function AccountPage({
             emptyLabel={t("history.empty")}
             emptyAction={
               <Link
-                href="/academy"
+                href="/"
                 className="text-sm font-medium text-[hsl(var(--accent-emerald))] hover:underline"
               >
                 {t("history.browse")}

@@ -38,7 +38,7 @@ export async function createTagAction(raw: unknown) {
     target: created.id,
   });
   revalidatePath("/admin/tags");
-  revalidatePath("/[locale]/academy", "layout");
+  revalidatePath("/[locale]", "layout");
   return { ok: true as const, id: created.id };
 }
 
@@ -70,7 +70,7 @@ export async function upsertTagTranslationAction(raw: unknown) {
     meta: { locale: parsed.data.locale },
   });
   revalidatePath(`/admin/tags/${parsed.data.tagId}`);
-  revalidatePath("/[locale]/academy", "layout");
+  revalidatePath("/[locale]", "layout");
   return { ok: true as const };
 }
 
@@ -91,7 +91,7 @@ export async function toggleTrendingAction(raw: unknown) {
     meta: { isTrending: parsed.data.isTrending },
   });
   revalidatePath("/admin/tags");
-  revalidatePath("/[locale]/academy", "layout");
+  revalidatePath("/[locale]", "layout");
   return { ok: true as const };
 }
 
@@ -117,7 +117,7 @@ export async function deleteTagAction(raw: unknown) {
     target: parsed.data.id,
   });
   revalidatePath("/admin/tags");
-  revalidatePath("/[locale]/academy", "layout");
+  revalidatePath("/[locale]", "layout");
   return { ok: true as const };
 }
 
@@ -148,6 +148,6 @@ export async function setArticleTagsAction(raw: unknown) {
     meta: { count: tagIds.length },
   });
   revalidatePath(`/admin/articles/${articleId}/edit`);
-  revalidatePath("/[locale]/academy", "layout");
+  revalidatePath("/[locale]", "layout");
   return { ok: true as const };
 }

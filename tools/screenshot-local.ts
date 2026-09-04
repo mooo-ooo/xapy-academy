@@ -14,7 +14,7 @@ async function main() {
   });
   const page = await ctx.newPage();
 
-  for (const route of ["/en/academy", "/vi/academy"]) {
+  for (const route of ["/en", "/vi"]) {
     const url = `http://localhost:3000${route}`;
     console.log(`[shot] ${url}`);
     await page.goto(url, { waitUntil: "networkidle", timeout: 30_000 });

@@ -10,13 +10,28 @@ import { routing } from "@/i18n/routing";
 
 const slugRegex = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
+const RESERVED_MODULE_SLUGS = new Set([
+  "academy",
+  "account",
+  "admin",
+  "authors",
+  "glossary",
+  "login",
+  "register",
+  "search",
+]);
+
 const upsertModuleSchema = z.object({
   id: z.string().optional(),
   slug: z
     .string()
     .min(2)
     .max(80)
-    .regex(slugRegex, "Use lowercase letters, digits and dashes only"),
+    .regex(slugRegex, "Use lowercase letters, digits and dashes only")
+    .refine(
+      (slug) => !RESERVED_MODULE_SLUGS.has(slug),
+      "This slug is reserved by a site route",
+    ),
   icon: z.string().max(40).optional().or(z.literal("")),
   // sortOrder is now managed by the ▲▼ reorder action — the form no longer
   // submits it. Optional here so existing callers can still pass a value.
@@ -78,7 +93,7 @@ export async function upsertModuleAction(raw: unknown) {
     });
   }
   revalidatePath("/admin/modules");
-  revalidatePath("/[locale]/academy", "layout");
+  revalidatePath("/[locale]", "layout");
   return { ok: true as const, id };
 }
 
@@ -126,7 +141,7 @@ export async function upsertModuleTranslationAction(raw: unknown) {
     meta: { locale: parsed.data.locale },
   });
   revalidatePath(`/admin/modules/${parsed.data.moduleId}`);
-  revalidatePath("/[locale]/academy", "layout");
+  revalidatePath("/[locale]", "layout");
   return { ok: true as const };
 }
 
@@ -198,6 +213,6 @@ export async function reorderModuleAction(raw: unknown) {
     meta: { direction: parsed.data.direction },
   });
   revalidatePath("/admin/modules");
-  revalidatePath("/[locale]/academy", "layout");
+  revalidatePath("/[locale]", "layout");
   return { ok: true as const };
 }

@@ -6,9 +6,9 @@ const BASE = "http://localhost:3000";
 const OUT = join(process.cwd(), "tools", "output");
 
 const ROUTES = [
-  "/en/academy",
-  "/en/academy/order-flow-footprints",
-  "/en/academy/order-flow-footprints/delta-explained",
+  "/en",
+  "/en/order-flow-footprints",
+  "/en/order-flow-footprints/delta-explained",
   "/en/login",
   "/en/search?q=delta",
 ];

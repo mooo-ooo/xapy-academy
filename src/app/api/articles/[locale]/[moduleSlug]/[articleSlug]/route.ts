@@ -11,7 +11,7 @@ import { routing } from "@/i18n/routing";
  * to ingest content without parsing HTML.
  *
  * Lives under /api/ to avoid the dynamic-segment-with-extension routing
- * collision with the page route at /[locale]/academy/[moduleSlug]/[articleSlug].
+ * collision with the page route at /[locale]/[moduleSlug]/[articleSlug].
  */
 export const revalidate = 300;
 
@@ -51,7 +51,7 @@ export async function GET(
       ? `keywords: ${yaml(article.keywords.join(", "))}`
       : null,
     `reading_time: ${article.readingTimeMinutes} min`,
-    `canonical: /${article.renderedLocale}/academy/${article.moduleSlug}/${article.slug}`,
+    `canonical: /${article.renderedLocale}/${article.moduleSlug}/${article.slug}`,
     "---",
     "",
   ]

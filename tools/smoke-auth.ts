@@ -1,11 +1,11 @@
 /**
  * Phase 2 smoke test — verifies the auth contract end-to-end.
  *
- * 1. Guest hitting /vi/academy is redirected to /en/academy (PUBLIC_LOCALE rule).
+ * 1. Guest hitting /vi is redirected to /en (PUBLIC_LOCALE rule).
  * 2. Guest hitting /en/admin is redirected to /en/login.
  * 3. Login with seeded admin credentials succeeds.
  * 4. After login, /en/admin no longer redirects.
- * 5. After login, /vi/academy stays /vi/academy (no public-locale forcing).
+ * 5. After login, /vi stays /vi (no public-locale forcing).
  *
  * Run with: pnpm tsx tools/smoke-auth.ts
  */
@@ -47,9 +47,9 @@ async function main() {
   });
   const page = await ctx.newPage();
 
-  console.log("\n[1] Guest /vi/academy should be forced to /en/academy");
-  await page.goto(`${BASE}/vi/academy`, { waitUntil: "networkidle" });
-  check("guest /vi/academy URL", new URL(page.url()).pathname, "/en/academy");
+  console.log("\n[1] Guest /vi should be forced to /en");
+  await page.goto(`${BASE}/vi`, { waitUntil: "networkidle" });
+  check("guest /vi URL", new URL(page.url()).pathname, "/en");
   await page.screenshot({ path: join(OUT, "smoke-1-guest-vi-redirect.png") });
 
   console.log("\n[2] Guest /en/admin should redirect to /en/login");
@@ -85,12 +85,12 @@ async function main() {
   );
   await page.screenshot({ path: join(OUT, "smoke-4-authed-admin.png") });
 
-  console.log("\n[5] Authed /vi/academy stays /vi/academy");
-  await page.goto(`${BASE}/vi/academy`, { waitUntil: "networkidle" });
+  console.log("\n[5] Authed /vi stays /vi");
+  await page.goto(`${BASE}/vi`, { waitUntil: "networkidle" });
   check(
-    "authed /vi/academy URL",
+    "authed /vi URL",
     new URL(page.url()).pathname,
-    "/vi/academy",
+    "/vi",
   );
   await page.screenshot({ path: join(OUT, "smoke-5-authed-vi.png") });
 
