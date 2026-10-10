@@ -1,6 +1,6 @@
 {
   "node": {
-    "405477a25ac4815131df89540936f1b87537ac103d": {
+    "40bd10dc5acdd80583fdacc9710d024cdf66610813": {
       "workers": {
         "app/[locale]/admin/tags/[id]/page": {
           "moduleId": 646645,
@@ -12,7 +12,7 @@
       "exportedName": "upsertTagTranslationAction",
       "filename": "src/app/[locale]/admin/tags/actions.ts"
     },
-    "4027bf4577c1b0df678451014cc8be130c9e580e9b": {
+    "40461afbcb1412dd78c9f5477e15a34c83be254b90": {
       "workers": {
         "app/[locale]/admin/tags/[id]/page": {
           "moduleId": 646645,
@@ -24,7 +24,7 @@
       "exportedName": "deleteTagAction",
       "filename": "src/app/[locale]/admin/tags/actions.ts"
     },
-    "406c05b4d4bec32f046f78680c78eb691646fb522f": {
+    "40666d4a2ff97a77443beb33dd6049dc6ede37271f": {
       "workers": {
         "app/[locale]/admin/tags/[id]/page": {
           "moduleId": 646645,
