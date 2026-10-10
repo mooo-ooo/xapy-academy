@@ -6,6 +6,7 @@ import { ArrowLeft, ExternalLink } from "lucide-react";
 import { ArticleCard } from "@/components/academy/article-card";
 import { JsonLd } from "@/components/seo/json-ld";
 import { resolveLocaleForRequest } from "@/lib/data/locale-policy";
+import { indexableLocales } from "@/lib/data/site";
 import { getAuthorBySlug } from "@/lib/data/authors";
 import { listPublishedArticlesByAuthor } from "@/lib/data/articles";
 import {
@@ -46,7 +47,7 @@ export async function generateMetadata({
       canonical,
       languages: withXDefault(
         Object.fromEntries(
-          site.supportedLocales.map((l) => [
+          indexableLocales(site).map((l) => [
             l,
             absoluteUrl(`/${l}/authors/${author.slug}`),
           ]),

@@ -1,5 +1,4 @@
 import { prisma } from "@/lib/db";
-import { routing } from "@/i18n/routing";
 import { siteOrigin } from "@/lib/seo";
 import { getSiteSetting } from "@/lib/data/site";
 
@@ -79,14 +78,6 @@ export async function GET() {
   lines.push(
     `- [Trading terminology](${origin}/${locale}/glossary): canonical definitions for the vocabulary used across the Academy`,
   );
-  lines.push("");
-
-  // Index of supported locales — AI agents can fetch alternates.
-  lines.push("## Localized indexes");
-  lines.push("");
-  for (const l of routing.locales) {
-    lines.push(`- ${l.toUpperCase()}: ${origin}/${l}`);
-  }
   lines.push("");
 
   return new Response(lines.join("\n"), {

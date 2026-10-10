@@ -18,7 +18,11 @@ import {
   siteOrigin,
   withXDefault,
 } from "@/lib/seo";
-import { getEnabledLocales, getSiteSetting } from "@/lib/data/site";
+import {
+  getEnabledLocales,
+  getSiteSetting,
+  indexableLocales,
+} from "@/lib/data/site";
 import "../globals.css";
 
 const inter = Inter({
@@ -84,7 +88,7 @@ export async function generateMetadata(props: {
       canonical: absoluteUrl(`/${locale}`),
       languages: withXDefault(
         Object.fromEntries(
-          enabled.map((l) => [l, absoluteUrl(`/${l}`)]),
+          indexableLocales(site).map((l) => [l, absoluteUrl(`/${l}`)]),
         ),
         site.publicLocale,
       ),

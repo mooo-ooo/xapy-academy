@@ -20,6 +20,7 @@ import {
   buildWebPageJsonLd,
   withXDefault,
 } from "@/lib/seo";
+import { indexableLocales } from "@/lib/data/site";
 import type { Locale } from "@/i18n/routing";
 
 export const revalidate = 60;
@@ -88,7 +89,7 @@ export async function generateMetadata({
       canonical: absoluteUrl(`/${effective}/${mod.slug}`),
       languages: withXDefault(
         Object.fromEntries(
-          site.supportedLocales.map((l) => [
+          indexableLocales(site).map((l) => [
             l,
             absoluteUrl(`/${l}/${mod.slug}`),
           ]),

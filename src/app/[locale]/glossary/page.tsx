@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { resolveLocaleForRequest } from "@/lib/data/locale-policy";
+import { indexableLocales } from "@/lib/data/site";
 import { listGlossaryEntries } from "@/lib/data/glossary";
 import { JsonLd } from "@/components/seo/json-ld";
 import {
@@ -30,7 +31,7 @@ export async function generateMetadata({
       canonical: absoluteUrl(`/${effective}/glossary`),
       languages: withXDefault(
         Object.fromEntries(
-          site.supportedLocales.map((l) => [
+          indexableLocales(site).map((l) => [
             l,
             absoluteUrl(`/${l}/glossary`),
           ]),
