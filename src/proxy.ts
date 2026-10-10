@@ -76,8 +76,10 @@ export const proxy = auth(async (req) => {
     locale !== PUBLIC_LOCALE
   ) {
     const url = new URL(req.nextUrl);
-    url.pathname = `/${PUBLIC_LOCALE}${rest}`;
-    return NextResponse.redirect(url);
+    url.pathname = rest === "/" ? `/${PUBLIC_LOCALE}` : `/${PUBLIC_LOCALE}${rest}`;
+    const res = NextResponse.redirect(url, 301);
+    res.headers.set("Cache-Control", "no-store");
+    return res;
   }
 
   return intlResponse;

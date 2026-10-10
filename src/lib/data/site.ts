@@ -244,3 +244,7 @@ export const getPublicLocale = cache(async (): Promise<Locale> => {
   const s = await getSiteSetting();
   return s.publicLocale;
 });
+
+export function indexableLocales(site: { publicLocale: Locale }): Locale[] {
+  return [site.publicLocale];
+}

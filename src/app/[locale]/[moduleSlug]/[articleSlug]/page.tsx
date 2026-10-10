@@ -31,7 +31,7 @@ import {
   buildWebPageJsonLd,
   withXDefault,
 } from "@/lib/seo";
-import { getSiteSetting } from "@/lib/data/site";
+import { getSiteSetting, indexableLocales } from "@/lib/data/site";
 
 export const revalidate = 60;
 
@@ -61,7 +61,7 @@ export async function generateMetadata({
 
   const languages: Record<string, string> = {};
   for (const [lang, slug] of Object.entries(article.alternates)) {
-    if (site.supportedLocales.includes(lang as typeof effective)) {
+    if (indexableLocales(site).includes(lang as typeof effective)) {
       languages[lang] = absoluteUrl(`/${lang}/${moduleSlug}/${slug}`);
     }
   }

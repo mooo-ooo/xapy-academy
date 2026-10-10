@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/db";
 import { routing } from "@/i18n/routing";
 import { siteOrigin, withXDefault } from "@/lib/seo";
-import { getEnabledLocales, getSiteSetting } from "@/lib/data/site";
+import { getSiteSetting, indexableLocales } from "@/lib/data/site";
 
 export type ChangeFreq =
   | "always"
@@ -39,25 +39,30 @@ function origin(): string {
 }
 
 async function context() {
-  const enabled = (await getEnabledLocales()) as unknown as string[];
-  const { publicLocale } = await getSiteSetting();
+  const site = await getSiteSetting();
+  const indexable = indexableLocales(site) as string[];
   return {
-    enabled,
-    enabledSet: new Set<string>(enabled),
-    publicLocale: publicLocale as string,
+    indexable,
+    indexableSet: new Set<string>(indexable),
+    publicLocale: site.publicLocale as string,
   };
 }
 
 export async function getSitemapChildren(): Promise<SitemapChild[]> {
   const children: SitemapChild[] = [{ slug: "pages" }, { slug: "modules" }];
   try {
+    const { indexable } = await context();
+    const indexableTranslation = {
+      status: "PUBLISHED" as const,
+      locale: { in: indexable },
+    };
     const [modules, authorCount] = await Promise.all([
       prisma.module.findMany({
         where: {
           articles: {
             some: {
               status: "PUBLISHED",
-              translations: { some: { status: "PUBLISHED" } },
+              translations: { some: indexableTranslation },
             },
           },
         },
@@ -68,7 +73,7 @@ export async function getSitemapChildren(): Promise<SitemapChild[]> {
             where: { status: "PUBLISHED" },
             select: {
               translations: {
-                where: { status: "PUBLISHED" },
+                where: indexableTranslation,
                 select: { updatedAt: true },
               },
             },
@@ -112,15 +117,15 @@ export async function buildChildUrls(
 }
 
 async function buildPageUrls(): Promise<SitemapUrl[]> {
-  const { enabled, publicLocale } = await context();
+  const { indexable, publicLocale } = await context();
   const o = origin();
   const urls: SitemapUrl[] = [];
 
   const landingLangs = withXDefault(
-    Object.fromEntries(enabled.map((l) => [l, `${o}/${l}`])),
+    Object.fromEntries(indexable.map((l) => [l, `${o}/${l}`])),
     publicLocale,
   );
-  for (const locale of enabled) {
+  for (const locale of indexable) {
     urls.push({
       loc: `${o}/${locale}`,
       changeFrequency: "daily",
@@ -131,11 +136,11 @@ async function buildPageUrls(): Promise<SitemapUrl[]> {
 
   const glossaryLangs = withXDefault(
     Object.fromEntries(
-      enabled.map((l) => [l, `${o}/${l}/glossary`]),
+      indexable.map((l) => [l, `${o}/${l}/glossary`]),
     ),
     publicLocale,
   );
-  for (const locale of enabled) {
+  for (const locale of indexable) {
     urls.push({
       loc: `${o}/${locale}/glossary`,
       changeFrequency: "monthly",
@@ -148,7 +153,7 @@ async function buildPageUrls(): Promise<SitemapUrl[]> {
 }
 
 async function buildModuleIndexUrls(): Promise<SitemapUrl[]> {
-  const { enabledSet, publicLocale } = await context();
+  const { indexableSet, publicLocale } = await context();
   const o = origin();
   const urls: SitemapUrl[] = [];
 
@@ -162,10 +167,10 @@ async function buildModuleIndexUrls(): Promise<SitemapUrl[]> {
     const present = new Set(
       mod.translations
         .map((t) => t.locale)
-        .filter((l) => enabledSet.has(l)),
+        .filter((l) => indexableSet.has(l)),
     );
     if (present.size === 0) {
-      if (enabledSet.has(routing.defaultLocale)) {
+      if (indexableSet.has(routing.defaultLocale)) {
         present.add(routing.defaultLocale);
       } else {
         continue;
@@ -191,7 +196,7 @@ async function buildModuleIndexUrls(): Promise<SitemapUrl[]> {
 }
 
 async function buildAuthorUrls(): Promise<SitemapUrl[]> {
-  const { enabled, publicLocale } = await context();
+  const { indexable, publicLocale } = await context();
   const o = origin();
   const urls: SitemapUrl[] = [];
 
@@ -205,11 +210,11 @@ async function buildAuthorUrls(): Promise<SitemapUrl[]> {
     if (!author.slug) continue;
     const langMap = withXDefault(
       Object.fromEntries(
-        enabled.map((l) => [l, `${o}/${l}/authors/${author.slug}`]),
+        indexable.map((l) => [l, `${o}/${l}/authors/${author.slug}`]),
       ),
       publicLocale,
     );
-    for (const locale of enabled) {
+    for (const locale of indexable) {
       urls.push({
         loc: `${o}/${locale}/authors/${author.slug}`,
         lastModified: author.updatedAt,
@@ -226,7 +231,7 @@ async function buildAuthorUrls(): Promise<SitemapUrl[]> {
 async function buildModuleArticleUrls(
   moduleSlug: string,
 ): Promise<SitemapUrl[] | null> {
-  const { enabledSet, publicLocale } = await context();
+  const { indexableSet, publicLocale } = await context();
   const o = origin();
   const urls: SitemapUrl[] = [];
 
@@ -248,7 +253,7 @@ async function buildModuleArticleUrls(
   });
 
   for (const article of articles) {
-    const trs = article.translations.filter((t) => enabledSet.has(t.locale));
+    const trs = article.translations.filter((t) => indexableSet.has(t.locale));
     if (trs.length === 0) continue;
     const langMap = withXDefault(
       Object.fromEntries(
